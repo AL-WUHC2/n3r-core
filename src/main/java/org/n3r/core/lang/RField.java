@@ -10,12 +10,21 @@ public class RField {
         return field.getName().startsWith("$") || field.getName().equals("serialVersionUID");
     }
 
-    //Returns generic type of any field
-    public static Class<?> getFieldGenericType(Type genericType) {
+    /**
+     * Returns actual type argument of a generic type.
+     * @param genericType
+     * @return Void.class if it's N/A.
+     */
+    public static Class<?> getActualTypeArgument(Type genericType) {
         Class<? extends Type> genericTypeClass = genericType.getClass();
         if (!ParameterizedType.class.isAssignableFrom(genericTypeClass)) return Void.class;
 
         ParameterizedType parameterizedType = (ParameterizedType) genericType;
-        return (Class<?>) parameterizedType.getActualTypeArguments()[0];
+        try {
+            return (Class<?>) parameterizedType.getActualTypeArguments()[0];
+        }
+        catch (ClassCastException ex) {
+            return Void.class;
+        }
     }
 }
