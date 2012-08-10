@@ -3,7 +3,7 @@ package org.n3r.core.collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RMaps {
+public class RMap {
     public static <K, V> Map<K, V> of(K k1, V v1) {
         Map<K, V> map = newHashMap();
         map.put(k1, v1);
