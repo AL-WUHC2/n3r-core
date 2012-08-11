@@ -1,6 +1,6 @@
 package org.n3r.core.lang;
 
-import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang3.ClassUtils;
 
 public class RClass {
 
