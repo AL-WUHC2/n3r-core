@@ -9,7 +9,6 @@ public class RVersionTest {
     public void testGetVersion() {
         assertNotNull(new RVersion());
 
-        double version = RVersion.getVersion();
-        assertEquals(1.6, version, 0.01);
+        assertEquals(1.6, RVersion.getVersion(), 0.01);
     }
 }

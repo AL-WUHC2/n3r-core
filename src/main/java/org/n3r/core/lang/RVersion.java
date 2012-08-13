@@ -1,18 +1,21 @@
 package org.n3r.core.lang;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class RVersion {
-    public static double JAVA_VERSION = getVersion();
+    public static double JAVA_VERSION;
+    static {
+        String version = System.getProperty("java.version");
+        int pos = StringUtils.ordinalIndexOf(version, ".", 2);
+
+        JAVA_VERSION = Double.parseDouble(version.substring(0, pos));
+    }
 
     /**
      * Get current java vm's version.
      * @return double presentation of java version.
      */
     public static double getVersion() {
-        String version = System.getProperty("java.version");
-        int pos = 0, count = 0;
-        for (; pos < version.length() && count < 2;) {
-            if (version.charAt(pos++) == '.') count++;
-        }
-        return Double.parseDouble(version.substring(0, pos - 1));
+        return JAVA_VERSION;
     }
 }

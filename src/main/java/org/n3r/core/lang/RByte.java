@@ -135,9 +135,14 @@ public class RByte {
      * @param b Presumed UTF-8 encoded byte array.
      * @return String made from <code>b</code>
      */
-    public static String toString(final byte[] b) {
+    public static String toStr(final byte[] b) {
         if (b == null) { return null; }
-        return toString(b, 0, b.length);
+        return toStr(b, 0, b.length);
+    }
+
+    public static String toStr(byte[] b, String charsetName) {
+        if (b == null) { return null; }
+        return toStr(b, 0, b.length, charsetName);
     }
 
     /**
@@ -146,10 +151,10 @@ public class RByte {
      * @param sep The separator to use.
      * @param b2 The second byte array.
      */
-    public static String toString(final byte[] b1,
+    public static String toStr(final byte[] b1,
             String sep,
             final byte[] b2) {
-        return toString(b1, 0, b1.length) + sep + toString(b2, 0, b2.length);
+        return toStr(b1, 0, b1.length) + sep + toStr(b2, 0, b2.length);
     }
 
     /**
@@ -162,7 +167,7 @@ public class RByte {
      * @param len length of utf-8 sequence
      * @return String made from <code>b</code> or null
      */
-    public static String toString(final byte[] b, int off, int len) {
+    public static String toStr(final byte[] b, int off, int len) {
         if (b == null) { return null; }
         if (len == 0) { return ""; }
         try {
@@ -170,6 +175,18 @@ public class RByte {
         }
         catch (UnsupportedEncodingException e) {
             LOG.error("UTF-8 not supported?", e);
+            return null;
+        }
+    }
+
+    public static String toStr(byte[] b, int off, int len, String charsetName) {
+        if (b == null) { return null; }
+        if (len == 0) { return ""; }
+        try {
+            return new String(b, off, len, charsetName);
+        }
+        catch (UnsupportedEncodingException e) {
+            LOG.error(charsetName + " not supported?", e);
             return null;
         }
     }
@@ -399,9 +416,9 @@ public class RByte {
     }
 
     private static IllegalArgumentException explainWrongLengthOrOffset(final byte[] bytes,
-                    final int offset,
-                    final int length,
-                    final int expectedLength) {
+            final int offset,
+            final int length,
+            final int expectedLength) {
         String reason;
         if (length != expectedLength) {
             reason = "Wrong length: " + length + ", expected " + expectedLength;
@@ -795,8 +812,7 @@ public class RByte {
                 Class<?> theClass = Class.forName(UNSAFE_COMPARER_NAME);
 
                 // yes, UnsafeComparer does implement Comparer<byte[]>
-                @SuppressWarnings("unchecked")
-                Comparer<byte[]> comparer =
+                @SuppressWarnings("unchecked") Comparer<byte[]> comparer =
                         (Comparer<byte[]>) theClass.getEnumConstants()[0];
                 return comparer;
             }
@@ -1331,7 +1347,7 @@ public class RByte {
         while (n > 0 && b[n - 1] == 0)
             --n;
 
-        return toString(b, 0, n);
+        return toStr(b, 0, n);
     }
 
     public static byte[] repeat(byte b, int times) {
@@ -1357,18 +1373,6 @@ public class RByte {
 
     public static byte[] parseBytes(String byteStr) {
         return DatatypeConverter.parseHexBinary(byteStr);
-    }
-
-    public static String toString(byte[] b, int off, int len, String charsetName) {
-        if (b == null) { return null; }
-        if (len == 0) { return ""; }
-        try {
-            return new String(b, off, len, charsetName);
-        }
-        catch (UnsupportedEncodingException e) {
-            LOG.error(charsetName + " not supported?", e);
-            return null;
-        }
     }
 
 }
