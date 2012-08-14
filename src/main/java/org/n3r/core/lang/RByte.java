@@ -812,7 +812,8 @@ public class RByte {
                 Class<?> theClass = Class.forName(UNSAFE_COMPARER_NAME);
 
                 // yes, UnsafeComparer does implement Comparer<byte[]>
-                @SuppressWarnings("unchecked") Comparer<byte[]> comparer =
+                @SuppressWarnings("unchecked")
+                Comparer<byte[]> comparer =
                         (Comparer<byte[]>) theClass.getEnumConstants()[0];
                 return comparer;
             }
@@ -1065,10 +1066,16 @@ public class RByte {
      * @return Value in <code>a</code> plus <code>length</code> prepended 0 bytes
      */
     public static byte[] padHead(final byte[] a, final int length) {
-        byte[] padding = new byte[length - a.length];
-        for (int i = 0; i < length - a.length; i++) {
-            padding[i] = 0;
-        }
+        return padHead(a, length, (byte) 0);
+    }
+
+    /**
+     * @param a array
+     * @param length result array size
+     * @return Value in <code>a</code> plus <code>length</code> prepended 0 bytes
+     */
+    public static byte[] padHead(final byte[] a, final int length, final byte pad) {
+        byte[] padding = repeat(pad, length - a.length);
         return add(padding, a);
     }
 
@@ -1078,11 +1085,7 @@ public class RByte {
      * @return Value in <code>a</code> plus <code>length</code> appended 0 bytes
      */
     public static byte[] padTail(final byte[] a, final int length) {
-        byte[] padding = new byte[length - a.length];
-        for (int i = 0; i < length - a.length; i++) {
-            padding[i] = 0;
-        }
-        return add(a, padding);
+        return padTail(a, length, (byte) 0);
     }
 
     /**
@@ -1091,10 +1094,7 @@ public class RByte {
      * @return Value in <code>a</code> plus <code>length</code> appended 0 bytes
      */
     public static byte[] padTail(final byte[] a, final int length, final byte pad) {
-        byte[] padding = new byte[length - a.length];
-        for (int i = 0; i < length - a.length; i++) {
-            padding[i] = pad;
-        }
+        byte[] padding = repeat(pad, length - a.length);
         return add(a, padding);
     }
 
@@ -1350,6 +1350,10 @@ public class RByte {
         return toStr(b, 0, n);
     }
 
+    public static byte[] repeat(int times) {
+        return repeat((byte) 0, times);
+    }
+
     public static byte[] repeat(byte b, int times) {
         byte[] ret = new byte[times];
         for (int i = 0; i < times; ++i) {
@@ -1375,4 +1379,12 @@ public class RByte {
         return DatatypeConverter.parseHexBinary(byteStr);
     }
 
+    public static byte[] insertBytes(byte[] bytes, int offset, int length) {
+        return insertBytes(bytes, offset, length, (byte) 0);
+    }
+
+    public static byte[] insertBytes(byte[] bytes, int offset, int length, byte ins) {
+        byte[] insert = repeat(ins, length);
+        return add(subBytes(bytes, 0, offset), insert, subBytes(bytes, offset));
+    }
 }
