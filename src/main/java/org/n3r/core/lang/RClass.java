@@ -12,4 +12,13 @@ public class RClass {
         return false;
     }
 
+    public static <T> T newInstance(Class<T> clazz) {
+        try {
+            return clazz.newInstance();
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
 }
