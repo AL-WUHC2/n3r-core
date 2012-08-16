@@ -3,6 +3,30 @@ package org.n3r.core.lang;
 import org.apache.commons.lang3.StringUtils;
 
 public class RStr {
+    public static boolean isNull(Object obj) {
+        return obj == null;
+    }
+
+    public static boolean isNotNull(Object obj) {
+        return obj != null;
+    }
+
+    public static boolean isEmpty(Object obj) {
+        return isNull(obj) ? true : obj.toString().equals("");
+    }
+
+    public static boolean isNotEmpty(Object obj) {
+        return isNotNull(obj) ? !obj.toString().equals("") : false;
+    }
+
+    public static String toString(Object obj) {
+        return isNotEmpty(obj) ? obj.toString() : "";
+    }
+
+    public static String toString(Object obj, String defStr) {
+        return isNotEmpty(obj) ? obj.toString() : defStr;
+    }
+
     public static StringBuilder removeTail(StringBuilder sb, String suffix) {
         if (!StringUtils.endsWith(sb, suffix)) return sb;
 
@@ -47,14 +71,6 @@ public class RStr {
 
     public static StringBuilder append(StringBuilder sb, float b) {
         return sb == null ? sb : sb.append(b);
-    }
-
-    public static String toStr(Object object) {
-        if (object == null) return "";
-
-        if (object instanceof String) return (String) object;
-
-        return object.toString();
     }
 
 }

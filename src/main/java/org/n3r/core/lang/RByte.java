@@ -1037,6 +1037,18 @@ public class RByte {
     }
 
     /**
+     * @param bytes
+     * @return New array made from bytes
+     */
+    public static byte[] add(final byte[]... bytes) {
+        byte[] result = new byte[0];
+        for (byte[] bs : bytes) {
+            result = add(result, bs);
+        }
+        return result;
+    }
+
+    /**
      * @param a array
      * @param length amount of bytes to grab
      * @return First <code>length</code> bytes from <code>a</code>
