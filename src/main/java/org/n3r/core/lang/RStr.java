@@ -19,11 +19,11 @@ public class RStr {
         return isNotNull(obj) ? !obj.toString().equals("") : false;
     }
 
-    public static String toString(Object obj) {
+    public static String toStr(Object obj) {
         return isNotEmpty(obj) ? obj.toString() : "";
     }
 
-    public static String toString(Object obj, String defStr) {
+    public static String toStr(Object obj, String defStr) {
         return isNotEmpty(obj) ? obj.toString() : defStr;
     }
 
