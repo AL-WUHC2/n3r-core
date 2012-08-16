@@ -16,14 +16,16 @@ import org.n3r.core.patchca.word.WordFactory;
 @CaptchaWordFactoryConfig
 public class MyPatchcaConfig {
     public List<WordFactory> configMathExprFactories() {
+        // 这里演示，把所有已经定义的工厂实例都加入。
+        // 实际业务，可以从配置中读取相关配置，加入相关工厂实例。
         ArrayList<WordFactory> factories = new ArrayList<WordFactory>();
-        factories.add(new MathExprFactory());
-        factories.add(new MathArithmeticFactory());
-        factories.add(new ChineseIdiomFactory());
-        factories.add(new ChineseIdiomGuessFactory());
-        factories.add(new EnglishWordFactory());
-        factories.add(new AdaptiveRandomWordFactory());
-        factories.add(new RandomWordFactory());
+        factories.add(new MathExprFactory()); // 三个单数运算
+        factories.add(new MathArithmeticFactory()); // 四则运算
+        factories.add(new ChineseIdiomFactory()); // 成语
+        factories.add(new ChineseIdiomGuessFactory()); // 成语猜字
+        factories.add(new EnglishWordFactory()); // 常见2000英语单词
+        factories.add(new AdaptiveRandomWordFactory()); // 自适应随机
+        factories.add(new RandomWordFactory()); // 随机
 
         return factories;
     }

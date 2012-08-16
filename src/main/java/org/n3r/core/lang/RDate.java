@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.n3r.core.date4j.DateTime;
-import org.n3r.core.lang3.time.DateFormatUtils;
 
 /**
  * 时间日期相关的操作小函数。
@@ -36,16 +35,28 @@ public class RDate {
      * 得到用缺省方式格式化的当前日期 
      * @return 当前日期 
      */
-    public static String getDate() {
-        return getDateTime(Calendar.getInstance().getTime(), DEFAULT_DATE_FORMAT);
+    public static String toDateStr() {
+        return toStr(Calendar.getInstance().getTime(), DEFAULT_DATE_FORMAT);
+    }
+
+    public static String toDateStr(String pattern) {
+        return toStr(Calendar.getInstance().getTime(), pattern);
+    }
+
+    public static String toDateStr(Date date) {
+        return toStr(date, DEFAULT_DATE_FORMAT);
     }
 
     /** 
      * 得到用缺省方式格式化的当前日期及时间 
      * @return 当前日期及时间 
      */
-    public static String getDateTime() {
-        return getDateTime(Calendar.getInstance().getTime(), DEFAULT_DATETIME_FORMAT);
+    public static String toDateTimeStr() {
+        return toStr(Calendar.getInstance().getTime(), DEFAULT_DATETIME_FORMAT);
+    }
+
+    public static String toDateTimeStr(Date date) {
+        return toStr(date, DEFAULT_DATETIME_FORMAT);
     }
 
     /** 
@@ -53,9 +64,9 @@ public class RDate {
      * @param pattern 显示格式 
      * @return 当前日期及时间 
      */
-    public static String getDateTime(String pattern) {
+    public static String toDateTimeStr(String pattern) {
         Date datetime = Calendar.getInstance().getTime();
-        return getDateTime(datetime, pattern);
+        return toStr(datetime, pattern);
     }
 
     /** 
@@ -64,12 +75,12 @@ public class RDate {
      * @param pattern 显示格式 
      * @return 日期时间字符串 
      */
-    public static String getDateTime(Date date, String pattern) {
+    public static String toStr(Date date, String pattern) {
         if (null == pattern || "".equals(pattern)) {
             pattern = DEFAULT_DATETIME_FORMAT;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        return dateFormat.format(date);
+
+        return new SimpleDateFormat(pattern).format(date);
     }
 
     /** 
@@ -91,21 +102,21 @@ public class RDate {
     }
 
     /** 
-     * 得到当前月份(0-11)。
+     * 得到当前月份(1-12)。
      * @return 当前月份 
      */
     public static int getMonth() {
-        return Calendar.getInstance().get(Calendar.MONTH);
+        return Calendar.getInstance().get(Calendar.MONTH) + 1;
     }
 
     /**
-     * 得到指定日期的月份(0-11).
+     * 得到指定日期的月份(1-12).
      * 
      * @param date Date to get mont from.
-     * @return Month (0-11) for given date.
+     * @return Month (1-12) for given date.
      */
     public static int getMonth(Date date) {
-        return getCalendar(date).get(Calendar.MONTH);
+        return getCalendar(date).get(Calendar.MONTH) + 1;
     }
 
     /** 
@@ -128,8 +139,8 @@ public class RDate {
      * 得到当月第一天。
      * @return
      */
-    public static Date getFirstDateOfMonth() {
-        return getFirstDateOfMonth(new Date());
+    public static Date getBeginOfMonth() {
+        return getBeginOfMonth(new Date());
     }
 
     /**
@@ -137,7 +148,7 @@ public class RDate {
      * @param date 当月
      * @return
      */
-    public static Date getFirstDateOfMonth(Date date) {
+    public static Date getBeginOfMonth(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -153,8 +164,8 @@ public class RDate {
      * 得到当月最后一天所在的日期。
      * @return
      */
-    public static Date getLastDateOfMonth() {
-        return getLastDateOfMonth(new Date());
+    public static Date getEndOfMonth() {
+        return getEndOfMonth(new Date());
     }
 
     /**
@@ -162,7 +173,7 @@ public class RDate {
      * @param date 当月
      * @return
      */
-    public static Date getLastDateOfMonth(Date date) {
+    public static Date getEndOfMonth(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         final int lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -393,10 +404,15 @@ public class RDate {
      * @param strDate
      * @return
      */
-    public static Date tryParse(String strDate) {
+    public static Date parse(String strDate) {
         DateTime dt = new DateTime(strDate);
         Calendar cal = Calendar.getInstance();
-        cal.set(dt.getYear(), dt.getMonth(), dt.getDay(), dt.getHour(), dt.getMinute(), dt.getSecond());
+        cal.set(dt.getYear() != null ? dt.getYear() : 1970,
+                dt.getMonth() != null ? dt.getMonth() - 1 : 0,
+                dt.getDay() != null ? dt.getDay() : 1,
+                dt.getHour() != null ? dt.getHour() : 0,
+                dt.getMinute() != null ? dt.getMinute() : 0,
+                dt.getSecond() != null ? dt.getSecond() : 0);
         return cal.getTime();
     }
 
@@ -428,15 +444,6 @@ public class RDate {
 
     public static boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-    }
-
-    /**
-     * 把日期格式化
-     * @param dateformat 如:yyyy-MM-dd HH:mm:ss
-     * @return
-     */
-    public static String format(Date date, String dateformat) {
-        return DateFormatUtils.format(date, dateformat);
     }
 
     /**
@@ -584,6 +591,12 @@ public class RDate {
      * @param seconds Seconds as integer (0-59)
      * @return new Date.
      */
+    public static Date toDate(int year, int month, int day) {
+        final Calendar c = Calendar.getInstance();
+        c.set(year, month, day);
+        return c.getTime();
+    }
+
     public static Date toDate(int year, int month, int day, int hours, int minutes, int seconds) {
         final Calendar c = Calendar.getInstance();
         c.set(year, month, day, hours, minutes, seconds);

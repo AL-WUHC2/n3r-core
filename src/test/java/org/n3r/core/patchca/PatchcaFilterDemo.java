@@ -59,7 +59,7 @@ public class PatchcaFilterDemo extends JDialog implements ActionListener {
     public void createImage() {
         Captcha captcha = RCaptchca.createCaptchca();
         img = captcha.getImage();
-        reloadButton.setText("Q:" + captcha.getWord() + " A:" + captcha.getChallenge());
+        reloadButton.setText("问题:" + captcha.getWord() + " 答案:" + captcha.getChallenge());
     }
 
     @Override
