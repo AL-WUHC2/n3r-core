@@ -10,7 +10,7 @@ public class MockNativeMethodTest {
     public void mockNativeMethod() {
         new MockUp<Runtime>() {
             @Mock
-            int availableProcessors() {
+            public int availableProcessors() {
                 return 999;
             }
         };

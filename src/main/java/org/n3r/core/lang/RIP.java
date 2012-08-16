@@ -8,10 +8,9 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
+import org.n3r.core.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * Get local IP address for Linux / Windows.
@@ -41,7 +40,7 @@ public class RIP {
                 if (ia instanceof Inet6Address) continue;
 
                 inetAddress = ia;
-                ip = left(ia.getHostAddress(), 20);
+                ip = StringUtils.left(ia.getHostAddress(), 20);
 
                 break;
             }
@@ -56,7 +55,7 @@ public class RIP {
             }
         }
 
-        hostname = left(inetAddress.getHostName(), 50);
+        hostname = StringUtils.left(inetAddress.getHostName(), 50);
     }
 
     public static String getIp() {

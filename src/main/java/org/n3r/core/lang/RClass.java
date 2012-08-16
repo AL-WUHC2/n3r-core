@@ -1,6 +1,6 @@
 package org.n3r.core.lang;
 
-import org.apache.commons.lang3.ClassUtils;
+import org.n3r.core.lang3.ClassUtils;
 
 public class RClass {
 
@@ -11,4 +11,5 @@ public class RClass {
 
         return false;
     }
+
 }

@@ -1,7 +1,5 @@
 package org.n3r.core.xml;
 
-import static org.joor.Reflect.*;
-
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 
@@ -13,11 +11,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import org.n3r.core.joor.Reflect;
 import org.n3r.core.lang.RField;
-
-import com.mycila.xmltool.XMLDoc;
-import com.mycila.xmltool.XMLDocumentException;
-import com.mycila.xmltool.XMLTag;
+import org.n3r.core.xmltool.XMLDoc;
+import org.n3r.core.xmltool.XMLDocumentException;
+import org.n3r.core.xmltool.XMLTag;
 
 public class RXml {
     /**
@@ -40,7 +38,8 @@ public class RXml {
         for (Field f : bean.getClass().getDeclaredFields()) {
             if (RField.isNotNormal(f)) continue;
 
-            xmlTag.addTag(f.getName()).addText("" + on(bean).get(f.getName()));
+            String fieldValue = "" + Reflect.on(bean).get(f.getName());
+            xmlTag.addTag(f.getName()).addText(fieldValue);
         }
 
         return toXML(xmlTag);

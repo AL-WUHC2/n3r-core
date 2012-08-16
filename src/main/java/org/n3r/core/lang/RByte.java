@@ -812,8 +812,7 @@ public class RByte {
                 Class<?> theClass = Class.forName(UNSAFE_COMPARER_NAME);
 
                 // yes, UnsafeComparer does implement Comparer<byte[]>
-                @SuppressWarnings("unchecked")
-                Comparer<byte[]> comparer =
+                @SuppressWarnings("unchecked") Comparer<byte[]> comparer =
                         (Comparer<byte[]>) theClass.getEnumConstants()[0];
                 return comparer;
             }
