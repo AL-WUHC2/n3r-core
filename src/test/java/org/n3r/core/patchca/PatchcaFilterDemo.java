@@ -26,13 +26,13 @@ public class PatchcaFilterDemo extends JDialog implements ActionListener {
     public PatchcaFilterDemo() {
         super.setTitle("Patchca demo");
         setResizable(false);
-        setSize(200, 140);
+        setSize(300, 140);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (dim.width - this.getSize().width) / 2;
         int y = (dim.height - this.getSize().height) / 2;
         setLocation(x, y);
         JPanel bottom = new JPanel();
-        reloadButton = new JButton("Next filter");
+        reloadButton = new JButton("Next");
         reloadButton.addActionListener(this);
         bottom.add(reloadButton);
         add(BorderLayout.SOUTH, bottom);
@@ -58,8 +58,15 @@ public class PatchcaFilterDemo extends JDialog implements ActionListener {
 
     public void createImage() {
         Captcha captcha = RCaptchca.createCaptchca();
+        if (captcha.getWord().equals(captcha.getChallenge())) {
+            setTitle(captcha.getTips() + " 问题:" + captcha.getWord() + " 答案:" + captcha.getChallenge());
+        }
+        else {
+            setTitle(captcha.getTips() + " 答案:" + captcha.getChallenge());
+
+        }
+       
         img = captcha.getImage();
-        reloadButton.setText("问题:" + captcha.getWord() + " 答案:" + captcha.getChallenge());
     }
 
     @Override

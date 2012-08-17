@@ -20,7 +20,11 @@ package org.n3r.core.patchca.font;
 
 import java.awt.Font;
 
+import org.n3r.core.patchca.word.WordFactory;
+
 public interface FontFactory {
 
 	Font getFont(int index);
+
+    void setWordFactory(WordFactory wordFactory);
 }

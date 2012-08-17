@@ -1,7 +1,6 @@
 package org.n3r.core.patchca.custom;
 
 import java.awt.Color;
-import java.util.Random;
 
 import org.n3r.core.patchca.color.SingleColorFactory;
 import org.n3r.core.patchca.filter.predefined.CurvesRippleFilterFactory;
@@ -10,6 +9,7 @@ import org.n3r.core.patchca.filter.predefined.DoubleRippleFilterFactory;
 import org.n3r.core.patchca.filter.predefined.MarbleRippleFilterFactory;
 import org.n3r.core.patchca.filter.predefined.WobbleRippleFilterFactory;
 import org.n3r.core.patchca.service.Captcha;
+import org.n3r.core.text.RRand;
 
 public class RCaptchca {
     private static ConfigurableCaptchaService cs = new ConfigurableCaptchaService();
@@ -18,7 +18,7 @@ public class RCaptchca {
     }
 
     public static Captcha createCaptchca() {
-        switch (new Random().nextInt(5)) {
+        switch (RRand.randInt(5)) {
         case 0:
             cs.setFilterFactory(new CurvesRippleFilterFactory(cs.getColorFactory()));
             break;

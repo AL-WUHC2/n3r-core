@@ -29,7 +29,7 @@ public class AdaptiveRandomWordFactory extends RandomWordFactory {
     }
 
     public AdaptiveRandomWordFactory() {
-        characters = "absdegkmnopwx23456789";
+        characters = "absdegkmnpwx23456789";
         wideCharacters = "mw";
     }
 
@@ -54,7 +54,7 @@ public class AdaptiveRandomWordFactory extends RandomWordFactory {
         }
         String answer = sb.toString();
 
-        return new WordBean(answer, answer);
+        return new WordBean(answer, answer, "请输入图片中的文字");
     }
 
 

@@ -24,11 +24,13 @@ public class Captcha {
     private String word;
     private String challenge;
     private BufferedImage image;
+    private String tips;
 
-    public Captcha(String word, String challenge, BufferedImage image) {
+    public Captcha(String word, String challenge, BufferedImage image, String tips) {
         this.word = word;
         this.challenge = challenge;
         this.image = image;
+        this.tips = tips;
     }
 
     public String getChallenge() {
@@ -53,6 +55,14 @@ public class Captcha {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public String getTips() {
+        return tips;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
     }
 
 }

@@ -13,7 +13,7 @@ public class ChineseIdiomGuessFactory extends ChineseIdiomFactory {
         int pos = random.nextInt(word.length());
 
         return new WordBean(word.substring(0, pos) + "?" + word.substring(pos + 1),
-                word.substring(pos, pos + 1));
+                word.substring(pos, pos + 1), "请输入图片中?的代表的汉字");
 
     }
 

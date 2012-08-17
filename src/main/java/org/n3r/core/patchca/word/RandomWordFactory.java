@@ -38,9 +38,9 @@ public class RandomWordFactory implements WordFactory {
     }
 
     public RandomWordFactory() {
-        characters = "absdegkmnopwx23456789";
+        characters = "absdegkmnpwx23456789";
         minLength = 6;
-        maxLength = 6;
+        maxLength = 10;
     }
 
     @Override
@@ -53,7 +53,28 @@ public class RandomWordFactory implements WordFactory {
             sb.append(characters.charAt(j));
         }
         String answer = sb.toString();
-        return new WordBean(answer, answer);
+        return new WordBean(answer, answer, "请输入图片中的文字");
+    }
+
+    private static  char ch = '\u2600';
+    public String transformString() {
+        //  0x2700 to 0x27be, U+2600 - 0x41 ('A')
+        // Unicode Dingbats range in 0x2700 to 0x27be - you should get the right glyphs to display.
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            System.err.print(Integer.toString(ch, 16));
+            System.err.print("-");
+            sb.append(ch);
+            ch++;
+        }
+        System.err.println();
+        return sb.toString();
+    }
+
+    @Override
+    public String[] getSupportedFontFamilies() {
+        return null;
     }
 
 }

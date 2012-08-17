@@ -9,6 +9,7 @@ import org.n3r.core.patchca.word.WordFactory;
 public class RandomFactoryWordFactory implements WordFactory {
     private static Random random = new Random();
     private List<WordFactory> factories;
+    private static ThreadLocal<WordFactory> wordFactory = new ThreadLocal<WordFactory>();
 
     public RandomFactoryWordFactory(List<WordFactory> factories) {
         this.factories = factories;
@@ -16,8 +17,16 @@ public class RandomFactoryWordFactory implements WordFactory {
 
     @Override
     public WordBean getNextWord() {
-        WordFactory wordFactory = factories.get(random.nextInt(factories.size()));
-        return wordFactory.getNextWord();
+        WordFactory value = factories.get(random.nextInt(factories.size()));
+        wordFactory.set(value);
+        return value.getNextWord();
     }
+
+    @Override
+    public String[] getSupportedFontFamilies() {
+        WordFactory wf = wordFactory.get();
+        return wf.getSupportedFontFamilies();
+    }
+
 
 }

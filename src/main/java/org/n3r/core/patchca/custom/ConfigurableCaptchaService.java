@@ -82,6 +82,7 @@ public class ConfigurableCaptchaService extends AbstractCaptchaService {
         backgroundFactory = new SingleColorBackgroundFactory();
         wordFactory = new RandomFactoryWordFactory(wordFactories);
         fontFactory = new RandomFontFactory();
+        fontFactory.setWordFactory(wordFactory);
         textRenderer = new BestFitTextRenderer();
         colorFactory = new SingleColorFactory();
         filterFactory = new CurvesRippleFilterFactory(colorFactory);

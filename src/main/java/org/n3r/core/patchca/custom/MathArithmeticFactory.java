@@ -95,6 +95,11 @@ public class MathArithmeticFactory implements WordFactory {
             }
         }
 
-        return new WordBean(result, "" + expected);
+        return new WordBean(result, "" + expected, "请输入图片中?代表的数字");
+    }
+
+    @Override
+    public String[] getSupportedFontFamilies() {
+        return new String[]{"宋体"};
     }
 }

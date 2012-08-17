@@ -19,10 +19,13 @@
 package org.n3r.core.patchca.font;
 
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+
+import org.n3r.core.patchca.word.WordFactory;
+import org.n3r.core.text.RRand;
 
 public class RandomFontFactory implements FontFactory {
 
@@ -30,29 +33,21 @@ public class RandomFontFactory implements FontFactory {
     protected int minSize;
     protected int maxSize;
     protected boolean randomStyle;
+    private WordFactory wordFactory;
 
     public RandomFontFactory() {
         families = new ArrayList<String>();
-        families.add("方正舒体");
-        families.add("方正姚体");
-        families.add("仿宋");
-        families.add("黑体");
-//        families.add("华文彩云");
-//        families.add("华文仿宋");
-//        families.add("华文行楷");
-//        families.add("华文琥珀");
-//        families.add("华文楷体");
-//        families.add("华文隶书");
-//        families.add("华文宋体");
-//        families.add("华文细黑");
-//        families.add("华文新魏");
-//        families.add("华文中宋");
-        families.add("楷体");
-        families.add("隶书");
-        families.add("宋体"); //可以
-        //        families.add("微软雅黑"); // 不支持㈦
-        families.add("新宋体");
-        families.add("幼圆");
+        String[] fontNames = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getAvailableFontFamilyNames();
+        for (String fontName : fontNames) {
+            Font f = new Font(fontName, Font.PLAIN, 12);
+            if (f.canDisplay('a')) {
+                //... Display only fonts that have the alphabetic characters.
+                families.add(fontName);
+            }
+        }
+
         minSize = 45;
         maxSize = 45;
     }
@@ -95,16 +90,27 @@ public class RandomFontFactory implements FontFactory {
 
     @Override
     public Font getFont(int index) {
-        Random r = new Random();
-        String family = families.get(r.nextInt(families.size()));
-        boolean bold = r.nextBoolean() && randomStyle;
+        boolean bold = RRand.randBoolean() && randomStyle;
         int size = minSize;
         if (maxSize - minSize > 0) {
-            size += r.nextInt(maxSize - minSize);
+            size += RRand.randInt(maxSize - minSize);
         }
 
-        //System.out.println(family);
-        return new Font(family, bold ? Font.BOLD : Font.PLAIN, size);
+        String[] supportedFamilies = wordFactory.getSupportedFontFamilies();
+        if (supportedFamilies != null && supportedFamilies.length > 0) 
+            return new Font(supportedFamilies[RRand.randInt(supportedFamilies.length)],
+                bold ? Font.BOLD : Font.PLAIN, size); 
+
+        String family = families.get(RRand.randInt(families.size()));
+
+        Font font = new Font(family, bold ? Font.BOLD : Font.PLAIN, size);
+
+        return font;
+    }
+
+    @Override
+    public void setWordFactory(WordFactory wordFactory) {
+        this.wordFactory = wordFactory;
     }
 
 }

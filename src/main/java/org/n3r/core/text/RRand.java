@@ -27,6 +27,10 @@ public class RRand {
     public static int randInt() {
         return RANDOM.nextInt();
     }
+    
+    public static int randInt(int n) {
+        return RANDOM.nextInt(n);
+    }
 
     public static long randLong() {
         return RANDOM.nextLong();

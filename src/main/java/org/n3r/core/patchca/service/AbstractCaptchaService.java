@@ -110,7 +110,7 @@ public abstract class AbstractCaptchaService implements CaptchaService {
         WordBean wordBean = wordFactory.getNextWord();
         textRenderer.draw(wordBean.getWord(), bufImage, fontFactory, colorFactory);
         bufImage = filterFactory.applyFilters(bufImage);
-        return new Captcha(wordBean.getWord(), wordBean.getAnswer(), bufImage);
+        return new Captcha(wordBean.getWord(), wordBean.getAnswer(), bufImage, wordBean.getTips());
     }
 
 }

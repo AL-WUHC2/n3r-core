@@ -49,9 +49,14 @@ public class MathExprFactory implements WordFactory {
 
         StringBuilder word = new StringBuilder();
         word.append(MathArithmeticFactory.rand(a)).append(getOperation(op1)).append(b).append(getOperation(op2))
-                .append(c);
+                .append(c).append("=?");
 
-        return new WordBean(word.toString(), answer);
+        return new WordBean(word.toString(), answer,"请输入图片中?代表的数字");
+    }
+
+    @Override
+    public String[] getSupportedFontFamilies() {
+        return new String[]{"宋体"};
     }
 
 }

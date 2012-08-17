@@ -28,7 +28,12 @@ public class EnglishWordFactory implements WordFactory {
     public WordBean getNextWord() {
         int nextInt = new Random().nextInt(idioms.length);
         String answer = idioms[nextInt];
-        return new WordBean(answer, answer);
+        return new WordBean(answer, answer,"请输入图片中的英文单词");
+    }
+
+    @Override
+    public String[] getSupportedFontFamilies() {
+        return null;
     }
 
 }

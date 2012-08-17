@@ -76,7 +76,7 @@ public class RStr {
     }
 
     public static String repeat(String s, int count) {
-        if (s == null || count < 1) return null;
+        if (s == null || count < 1) return "";
 
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < count; i++) {

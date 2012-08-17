@@ -19,6 +19,7 @@
 package org.n3r.core.patchca.word;
 
 public interface WordFactory {
-
     WordBean getNextWord();
+
+    String[] getSupportedFontFamilies();
 }
