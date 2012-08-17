@@ -1,10 +1,9 @@
 package org.n3r.core.patchca.custom;
 
-import java.util.Random;
-
 import org.n3r.core.lang.RClassPath;
 import org.n3r.core.patchca.word.WordBean;
 import org.n3r.core.patchca.word.WordFactory;
+import org.n3r.core.text.RRand;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -20,8 +19,7 @@ public class ChineseIdiomFactory implements WordFactory {
     }
 
     public WordBean getNextWord() {
-        Random random = new Random();
-        int nextInt = random.nextInt(idioms.length);
+        int nextInt = RRand.randInt(idioms.length);
         String answer = idioms[nextInt];
 
         return new WordBean(answer, answer, "请输入图片中的文字");

@@ -1,22 +1,20 @@
 package org.n3r.core.patchca.custom;
 
-import java.util.Random;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.n3r.core.patchca.word.WordBean;
 import org.n3r.core.patchca.word.WordFactory;
+import org.n3r.core.text.RRand;
 
 public class MathExprFactory implements WordFactory {
-    private static Random random = new Random();
     private static String[] operations = new String[] { "加+", "减", "乘X" };
     private static char[] exprOperations = new char[] { '+', '-', '*' };
 
     public char getOperation(int index) {
         String operation = operations[index];
-        return operation.charAt(random.nextInt(operation.length()));
+        return operation.charAt(RRand.randInt(operation.length()));
     }
 
     private static ScriptEngine engine;
@@ -36,12 +34,12 @@ public class MathExprFactory implements WordFactory {
 
     @Override
     public WordBean getNextWord() {
-        int a = random.nextInt(9) + 1;
-        int b = random.nextInt(9) + 1;
-        int c = random.nextInt(9) + 1;
+        int a = RRand.randInt(9) + 1;
+        int b = RRand.randInt(9) + 1;
+        int c = RRand.randInt(9) + 1;
 
-        int op1 = random.nextInt(operations.length);
-        int op2 = random.nextInt(operations.length);
+        int op1 = RRand.randInt(operations.length);
+        int op2 = RRand.randInt(operations.length);
 
         StringBuilder answerExpr = new StringBuilder();
         answerExpr.append(a).append(exprOperations[op1]).append(b).append(exprOperations[op2]).append(c);

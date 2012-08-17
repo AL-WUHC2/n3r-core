@@ -1,13 +1,12 @@
 package org.n3r.core.patchca.custom;
 
 import java.util.List;
-import java.util.Random;
 
 import org.n3r.core.patchca.word.WordBean;
 import org.n3r.core.patchca.word.WordFactory;
+import org.n3r.core.text.RRand;
 
 public class RandomFactoryWordFactory implements WordFactory {
-    private static Random random = new Random();
     private List<WordFactory> factories;
     private static ThreadLocal<WordFactory> wordFactory = new ThreadLocal<WordFactory>();
 
@@ -17,7 +16,7 @@ public class RandomFactoryWordFactory implements WordFactory {
 
     @Override
     public WordBean getNextWord() {
-        WordFactory value = factories.get(random.nextInt(factories.size()));
+        WordFactory value = factories.get(RRand.randInt(factories.size()));
         wordFactory.set(value);
         return value.getNextWord();
     }

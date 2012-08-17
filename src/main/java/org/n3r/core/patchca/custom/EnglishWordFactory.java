@@ -1,13 +1,13 @@
 package org.n3r.core.patchca.custom;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.n3r.core.lang.RClassPath;
 import org.n3r.core.patchca.word.WordBean;
 import org.n3r.core.patchca.word.WordFactory;
+import org.n3r.core.text.RRand;
 
 public class EnglishWordFactory implements WordFactory {
     private static String[] idioms;
@@ -26,7 +26,7 @@ public class EnglishWordFactory implements WordFactory {
 
     @Override
     public WordBean getNextWord() {
-        int nextInt = new Random().nextInt(idioms.length);
+        int nextInt = RRand.randInt(idioms.length);
         String answer = idioms[nextInt];
         return new WordBean(answer, answer,"请输入图片中的英文单词");
     }
