@@ -98,10 +98,7 @@ public class RStr {
             Arrays.fill(ca, padchar);
             return s.concat(String.valueOf(ca));
         }
-        else {
-            return s;
-        }
-
+        return s;
     }
 
     public static String lpad(String s, int n) {
@@ -116,10 +113,7 @@ public class RStr {
             Arrays.fill(ca, padchar);
             return String.valueOf(ca).concat(s);
         }
-        else {
-            return s;
-        }
-
+        return s;
     }
 
     public static boolean exists(String value, String valueList) {
@@ -243,7 +237,7 @@ public class RStr {
 
         }
 
-        return (retValue == null ? defaultValue : retValue);
+        return retValue == null ? defaultValue : retValue;
 
     }
 

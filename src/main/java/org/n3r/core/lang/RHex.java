@@ -19,6 +19,9 @@ public class RHex {
      * @return byte array
      */
     public static byte[] decode(String hexStr) {
+        if (hexStr.startsWith("0x") || hexStr.startsWith("0X")) {
+            hexStr = hexStr.substring(2);
+        }
         return DatatypeConverter.parseHexBinary(hexStr);
     }
 }
