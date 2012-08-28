@@ -4,7 +4,7 @@ import org.n3r.core.patchca.word.WordBean;
 import org.n3r.core.patchca.word.WordFactory;
 import org.n3r.core.text.RRand;
 
-public class GeoLoactionWordFactory implements WordFactory {
+public class KnowledgeWordFactory implements WordFactory {
     private static WordBean[] wordBeans = new WordBean[] {
         new WordBean("故宫在？市", "北京", "你知道吗?"),
         new WordBean("伦敦在？国", "英", "你知道吗?"),

@@ -22,9 +22,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.n3r.core.joor.Reflect;
+import org.n3r.core.lang.RClassPath;
 import org.n3r.core.lang.RMethod;
 import org.n3r.core.lang.RType;
 import org.n3r.core.patchca.background.SingleColorBackgroundFactory;
@@ -35,15 +35,11 @@ import org.n3r.core.patchca.service.AbstractCaptchaService;
 import org.n3r.core.patchca.text.renderer.BestFitTextRenderer;
 import org.n3r.core.patchca.word.AdaptiveRandomWordFactory;
 import org.n3r.core.patchca.word.WordFactory;
-import org.reflections.Reflections;
 
 public class ConfigurableCaptchaService extends AbstractCaptchaService {
     private static ArrayList<WordFactory> wordFactories = new ArrayList<WordFactory>();
     static {
-        Reflections reflections = new Reflections("org.n3r.core.patchca.config");
-        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(CaptchaWordFactoryConfig.class);
-
-        for (Class<?> class1 : classes) {
+        for (Class<?> class1 : RClassPath.getAnnotatedClasses("org.n3r.core.patchca.config", CaptchaWordFactoryConfig.class)) {
             Object configObject = null;
             Method[] methods = class1.getMethods();
             for (Method method : methods) {

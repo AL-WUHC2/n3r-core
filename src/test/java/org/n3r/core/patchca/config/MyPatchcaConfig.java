@@ -7,7 +7,7 @@ import org.n3r.core.patchca.custom.CaptchaWordFactoryConfig;
 import org.n3r.core.patchca.custom.ChineseIdiomFactory;
 import org.n3r.core.patchca.custom.ChineseIdiomGuessFactory;
 import org.n3r.core.patchca.custom.EnglishWordFactory;
-import org.n3r.core.patchca.custom.GeoLoactionWordFactory;
+import org.n3r.core.patchca.custom.KnowledgeWordFactory;
 import org.n3r.core.patchca.custom.MathArithmeticFactory;
 import org.n3r.core.patchca.custom.MathExprFactory;
 import org.n3r.core.patchca.custom.SymbolDiffFactory;
@@ -29,7 +29,7 @@ public class MyPatchcaConfig {
         factories.add(new AdaptiveRandomWordFactory()); // 宽字符只会有一个的随机
         factories.add(new RandomWordFactory()); // 随机
         factories.add(new SymbolDiffFactory()); // 符号找不同
-        factories.add(new GeoLoactionWordFactory()); // 地理知识
+        factories.add(new KnowledgeWordFactory()); // 地理知识
 
         return factories;
     }

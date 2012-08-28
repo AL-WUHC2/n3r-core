@@ -6,9 +6,133 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.n3r.core.lang3.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class RStr {
+    /**
+     * 确定一个对象是不是在后续的可变参数列表中。
+     * @param target 目标对象。
+     * @param compares 比较对象。
+     * @return true在列表中
+     */
+    public static <T> boolean in(T target, T... compares) {
+        for (T compare : compares) {
+            if (ObjectUtils.equals(target, compare)) return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 保证字符串为一固定长度。超过长度，切除，否则补字符。
+     *
+     * @param s
+     *            字符串
+     * @param width
+     *            长度
+     * @param c
+     *            补字符
+     * @return 修饰后的字符串
+     */
+    public static String cutRight(String s, int width, char c) {
+        if (null == s) return null;
+        int len = s.length();
+        if (len == width) return s;
+        if (len < width) return StringUtils.repeat(c, width - len) + s;
+        return s.substring(len - width, len);
+    }
+
+    /**
+     * 在字符串左侧填充一定数量的特殊字符.
+     *
+     * @param cs
+     *            字符串
+     * @param width
+     *            字符数量
+     * @param c
+     *            字符
+     * @return 新字符串
+     */
+    public static String alignRight(CharSequence cs, int width, char c) {
+        if (null == cs) return null;
+        int len = cs.length();
+        if (len >= width) return cs.toString();
+        return StringUtils.repeat(c, width - len) + cs;
+    }
+
+    /**
+     * 在字符串左侧侧填充一定数量的特殊字符.
+     *
+     * @param cs
+     *            字符串
+     * @param width
+     *            字符数量
+     * @param c
+     *            字符
+     * @return 新字符串
+     */
+    public static String alignLeft(CharSequence cs, int width, char c) {
+        if (null == cs) return null;
+        int length = cs.length();
+        if (length >= width) { return cs.toString(); }
+        return cs + StringUtils.repeat(c, width - length);
+    }
+
+    /**
+     * Convert a name in camelCase to an underscored name in lower case.
+     * Any upper case letters are converted to lower case with a preceding underscore.
+     * @param name the string containing original name
+     * @return the converted name
+     */
+    public static String underscore(String name) {
+        StringBuilder result = new StringBuilder();
+        if (name != null && name.length() > 0) {
+            result.append(name.substring(0, 1).toLowerCase());
+            for (int i = 1; i < name.length(); i++) {
+                String s = name.substring(i, i + 1);
+                if (s.equals(s.toUpperCase())) {
+                    result.append("_");
+                    result.append(s.toLowerCase());
+                }
+                else {
+                    result.append(s);
+                }
+            }
+        }
+
+        return result.toString();
+    }
+
+    public static String convertUnderscoreNameToPropertyName(String name) {
+        StringBuilder result = new StringBuilder();
+        boolean nextIsUpper = false;
+        if (name != null && name.length() > 0) {
+            if (name.length() > 1 && name.substring(1, 2).equals("_")) {
+                result.append(name.substring(0, 1).toUpperCase());
+            }
+            else {
+                result.append(name.substring(0, 1).toLowerCase());
+            }
+            for (int i = 1; i < name.length(); i++) {
+                String s = name.substring(i, i + 1);
+                if (s.equals("_")) {
+                    nextIsUpper = true;
+                }
+                else {
+                    if (nextIsUpper) {
+                        result.append(s.toUpperCase());
+                        nextIsUpper = false;
+                    }
+                    else {
+                        result.append(s.toLowerCase());
+                    }
+                }
+            }
+        }
+        return result.toString();
+    }
+
     public static boolean isNull(Object obj) {
         return obj == null;
     }
@@ -98,7 +222,10 @@ public class RStr {
             Arrays.fill(ca, padchar);
             return s.concat(String.valueOf(ca));
         }
-        return s;
+        else {
+            return s;
+        }
+
     }
 
     public static String lpad(String s, int n) {
@@ -113,7 +240,10 @@ public class RStr {
             Arrays.fill(ca, padchar);
             return String.valueOf(ca).concat(s);
         }
-        return s;
+        else {
+            return s;
+        }
+
     }
 
     public static boolean exists(String value, String valueList) {
@@ -237,7 +367,7 @@ public class RStr {
 
         }
 
-        return retValue == null ? defaultValue : retValue;
+        return (retValue == null ? defaultValue : retValue);
 
     }
 
@@ -251,5 +381,26 @@ public class RStr {
         }
 
         return s;
+    }
+
+    public static int indexOfBlank(CharSequence cs) {
+        int sz = cs.length();
+        for (int i = 0; i < sz; i++) {
+            if (Character.isWhitespace(cs.charAt(i))) return i;
+        }
+
+        return -1;
+    }
+
+    public static String trimRight(String original) {
+        return original.replaceAll("\\s+$", "");
+    }
+
+    public static boolean isQuoted(String str, String leftQuote, String rightQuote) {
+        return StringUtils.startsWith(str, leftQuote) && StringUtils.endsWith(str, rightQuote);
+    }
+
+    public static StringBuilder clear(StringBuilder sql) {
+        return sql.replace(0, sql.length(), "");
     }
 }

@@ -135,6 +135,66 @@ public class RDate {
         return getCalendar(date).get(Calendar.DATE);
     }
 
+    /** 
+     * 得到当前小时
+     * @return 当前日 
+     */
+    public static int getHourOfDay() {
+        return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+    }
+
+    /** 
+     * 得到当前小时 
+     * @return 当前日 
+     */
+    public static int getHourOfDay(Date date) {
+        return getCalendar(date).get(Calendar.HOUR_OF_DAY);
+    }
+
+    /** 
+     * 得到当前分
+     * @return 当前日 
+     */
+    public static int getMinute() {
+        return Calendar.getInstance().get(Calendar.MINUTE);
+    }
+
+    /** 
+     * 得到当前小时 
+     * @return 当前日 
+     */
+    public static int getMinute(Date date) {
+        return getCalendar(date).get(Calendar.MINUTE);
+    }
+
+    /** 
+     * 得到当前秒
+     * @return 当前日 
+     */
+    public static int getSecond() {
+        return Calendar.getInstance().get(Calendar.SECOND);
+    }
+
+    /** 
+     * 得到当前小秒
+     * @return 当前日 
+     */
+    public static int getSecond(Date date) {
+        return getCalendar(date).get(Calendar.SECOND);
+    }
+
+    /**
+     * 得到从零点开始当天经过多少秒。
+     * @return
+     */
+    public static int getSecondsFromMidnight() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60
+                + calendar.get(Calendar.MINUTE) * 60
+                + calendar.get(Calendar.SECOND);
+
+    }
+
     /**
      * 得到当月第一天。
      * @return

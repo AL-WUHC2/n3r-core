@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import org.n3r.core.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

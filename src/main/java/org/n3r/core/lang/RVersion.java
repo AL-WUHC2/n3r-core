@@ -1,6 +1,6 @@
 package org.n3r.core.lang;
 
-import org.n3r.core.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class RVersion {
     public static double JAVA_VERSION;
