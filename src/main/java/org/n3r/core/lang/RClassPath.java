@@ -23,6 +23,7 @@ import org.springframework.util.SystemPropertyUtils;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.base.Throwables;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
@@ -75,10 +76,11 @@ public class RClassPath {
     }
 
     public static List<Class<?>> getClasses(String basePackage, Predicate<Class<?>> predicate) {
-        return getClasses(basePackage, "**/*.class", predicate);
+        return getClasses(basePackage, "**/*.class", predicate, null);
     }
 
-    public static List<Class<?>> getClasses(String basePackage, String pattern, Predicate<Class<?>> predicate) {
+    public static List<Class<?>> getClasses(String basePackage, String pattern, Predicate<Class<?>> classPredicate,
+            Predicate<String> classNamePredicate) {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         MetadataReaderFactory metaFactory = new CachingMetadataReaderFactory(resolver);
 
@@ -93,8 +95,9 @@ public class RClassPath {
 
                 MetadataReader metadataReader = metaFactory.getMetadataReader(res);
                 String className = metadataReader.getClassMetadata().getClassName();
+                if (classNamePredicate != null && !classNamePredicate.apply(className)) continue;
                 Class<?> clazz = RClass.findClass(className);
-                if (clazz != null && predicate.apply(clazz)) clazzArr.add(clazz);
+                if (clazz != null && classPredicate.apply(clazz)) clazzArr.add(clazz);
             }
             return clazzArr;
         }
@@ -117,22 +120,33 @@ public class RClassPath {
             public boolean apply(@Nullable Class<?> input) {
                 return superClass.isAssignableFrom(input);
             }
-        });
+        }, null);
     }
 
-    public static List<Class<?>> getAnnotatedClasses(String basePackage, final Class<? extends Annotation> annClass) {
-        return getAnnotatedClasses(basePackage, "**/*.class", annClass);
+    public static List<Class<?>> getAnnotatedClasses(String basePackage, final Class<? extends Annotation> annClass,
+             final Class<?>... excludesClasses) {
+        return getAnnotatedClasses(basePackage, "**/*.class", annClass, excludesClasses);
     }
 
     public static List<Class<?>> getAnnotatedClasses(String basePackage, String pattern,
-            final Class<? extends Annotation> annClass) {
+            final Class<? extends Annotation> annClass, final Class<?>... excludesClasses) {
         return getClasses(basePackage, pattern, new Predicate<Class<?>>() {
 
             @Override
             public boolean apply(@Nullable Class<?> input) {
                 return input.isAnnotationPresent(annClass);
             }
-        });
+        }, Predicates.not(new Predicate<String>() {
+
+            @Override
+            public boolean apply(String input) {
+                for (Class<?> class1 : excludesClasses) {
+                    if (input.equals(class1.getName()))
+                        return true;
+                    }
+                    return false;
+                }
+        }));
     }
 
     public static Resource getResource(String classPathPattern) {
