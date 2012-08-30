@@ -36,7 +36,7 @@ public class RStr {
      * @return 修饰后的字符串
      */
     public static String cutRight(String s, int width, char c) {
-        if (null == s) return null;
+        if (null == s) return StringUtils.repeat(c, width);
         int len = s.length();
         if (len == width) return s;
         if (len < width) return StringUtils.repeat(c, width - len) + s;
@@ -367,7 +367,7 @@ public class RStr {
 
         }
 
-        return (retValue == null ? defaultValue : retValue);
+        return retValue == null ? defaultValue : retValue;
 
     }
 
