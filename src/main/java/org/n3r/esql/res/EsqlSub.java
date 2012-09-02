@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.n3r.esql.param.EsqlParamPlaceholder;
+import org.n3r.esql.param.EsqlParamPlaceholder.InOut;
 import org.n3r.esql.param.EsqlPlaceholderType;
 
 import com.google.common.base.Throwables;
 
 public class EsqlSub implements Cloneable {
     public static enum EsqlType {
-        SELECT, UPDATE, INSERT, MERGE, DROP, CREATE, TRUNCATE
+        SELECT, UPDATE, INSERT, MERGE, DROP, CREATE, TRUNCATE, CALL
     }
 
     private EsqlItem esqlItem;
@@ -18,12 +19,14 @@ public class EsqlSub implements Cloneable {
     private int placeholderNum;
     private EsqlParamPlaceholder[] placeHolders;
     private EsqlPlaceholderType placeHolderType;
+    private EsqlPlaceholderType placeHolderOutType;
     private List<EsqlPart> sqlParts = new ArrayList<EsqlPart>();
     private EsqlType sqlType;
     private boolean lastSelectSql;
     private boolean willReturnOnlyOneRow;
     private Object[] extraBindParams;
     private EsqlDynamic esqlDynamic;
+    private int outCount;
 
     @Override
     public EsqlSub clone() {
@@ -45,6 +48,9 @@ public class EsqlSub implements Cloneable {
 
     public void setPlaceHolders(EsqlParamPlaceholder[] placeHolders) {
         this.placeHolders = placeHolders;
+        this.outCount = 0;
+        for (EsqlParamPlaceholder placeHolder : placeHolders)
+            if (placeHolder.getInOut() != InOut.IN) ++outCount;
     }
 
     public String getSql() {
@@ -121,6 +127,18 @@ public class EsqlSub implements Cloneable {
 
     public EsqlDynamic getEsqlDynamic() {
         return esqlDynamic;
+    }
+
+    public int getOutCount() {
+        return outCount;
+    }
+
+    public EsqlPlaceholderType getPlaceHolderOutType() {
+        return placeHolderOutType;
+    }
+
+    public void setPlaceHolderOutType(EsqlPlaceholderType placeHolderOutType) {
+        this.placeHolderOutType = placeHolderOutType;
     }
 
 }

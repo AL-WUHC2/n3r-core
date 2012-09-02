@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.core.lang.RStr;
 import org.n3r.esql.ex.EsqlConfigException;
+import org.n3r.esql.param.EsqlParamPlaceholder.InOut;
 import org.n3r.esql.res.EsqlItem;
 import org.n3r.esql.res.EsqlSub;
 import org.n3r.esql.res.EsqlSub.EsqlType;
@@ -31,13 +32,23 @@ public class EsqlParamsParser {
 
         Matcher matcher = PARAM_PATTERN.matcher(rawSql);
         List<String> placeHolders = new ArrayList<String>();
+        List<String> placeHolderOptions = new ArrayList<String>();
         StringBuilder sql = new StringBuilder();
         int startPos = 0;
         while (matcher.find()) {
             String placeHolder = matcher.group(1).trim();
+            String paramOptions = "";
+            int colonPos = placeHolder.indexOf(':');
+            if (colonPos >= 0) {
+                paramOptions = placeHolder.substring(colonPos + 1).trim();
+                placeHolder = placeHolder.substring(0, colonPos).trim();
+            }
+
             if ("?".equals(placeHolder))
                 placeHolder = inferVarName(subSql.getSqlType(), rawSql, startPos, matcher.start());
+
             placeHolders.add(placeHolder);
+            placeHolderOptions.add(paramOptions);
 
             sql.append(rawSql.substring(startPos, matcher.start())).append('?');
             startPos = matcher.end();
@@ -48,7 +59,7 @@ public class EsqlParamsParser {
         subSql.setEsqlItem(sqlItem);
         subSql.setPlaceholderNum(placeHolders.size());
 
-        parsePlaceholders(placeHolders);
+        parsePlaceholders(placeHolders, placeHolderOptions);
 
         return subSql;
     }
@@ -133,14 +144,17 @@ public class EsqlParamsParser {
         return variableName;
     }
 
-    private void parsePlaceholders(List<String> placeHolders) {
+    private void parsePlaceholders(List<String> placeHolders, List<String> placeHolderOptions) {
         List<EsqlParamPlaceholder> paramPlaceholders = new ArrayList<EsqlParamPlaceholder>();
 
-        EsqlPlaceholderType placeHoldertype = EsqlPlaceholderType.UNSET;
-        for (String placeHolder : placeHolders) {
+        for (int i = 0, ii = placeHolders.size(); i < ii; ++i) {
+            String placeHolder = placeHolders.get(i);
+            String placeHolderOption = placeHolderOptions.get(i);
+
             EsqlParamPlaceholder paramPlaceholder = new EsqlParamPlaceholder();
             paramPlaceholders.add(paramPlaceholder);
             paramPlaceholder.setPlaceholder(placeHolder);
+            paramPlaceholder.setOption(placeHolderOption);
 
             if (placeHolder.length() == 0) paramPlaceholder.setPlaceholderType(EsqlPlaceholderType.AUTO_SEQ);
             else if (StringUtils.isNumeric(placeHolder)) {
@@ -148,17 +162,30 @@ public class EsqlParamsParser {
                 paramPlaceholder.setSeq(Integer.valueOf(placeHolder));
             }
             else paramPlaceholder.setPlaceholderType(EsqlPlaceholderType.VAR_NAME);
-
-            placeHoldertype = paramPlaceholder.getPlaceholderType();
         }
 
-        for (EsqlParamPlaceholder paramPlaceholder : paramPlaceholders)
-            if (placeHoldertype != paramPlaceholder.getPlaceholderType())
-                throw new EsqlConfigException("["
-                        + sqlItem != null ? sqlItem.getSqlId() : rawSql + "]中定义的SQL绑定参数设置类型不一致");
-
-        subSql.setPlaceHolderType(placeHoldertype);
+        subSql.setPlaceHolderType(setAndCheckPlaceholderInType(paramPlaceholders, InOut.OUT));
+        subSql.setPlaceHolderOutType(setAndCheckPlaceholderInType(paramPlaceholders, InOut.IN));
         subSql.setPlaceHolders(paramPlaceholders.toArray(new EsqlParamPlaceholder[0]));
     }
 
+    private EsqlPlaceholderType setAndCheckPlaceholderInType(List<EsqlParamPlaceholder> paramPlaceholders, InOut inOut) {
+        EsqlPlaceholderType placeHolderInType = EsqlPlaceholderType.UNSET;
+        for (EsqlParamPlaceholder paramPlaceholder : paramPlaceholders)
+            if (placeHolderInType != paramPlaceholder.getPlaceholderType()
+                    && paramPlaceholder.getInOut() != inOut) {
+                if (placeHolderInType != EsqlPlaceholderType.UNSET)
+                    throw new EsqlConfigException("["
+                            + (sqlItem != null ? sqlItem.getSqlId() : rawSql) + "]中定义的SQL绑定参数设置类型不一致");
+
+                placeHolderInType = paramPlaceholder.getPlaceholderType();
+            }
+
+        if (placeHolderInType == EsqlPlaceholderType.MANU_SEQ
+                && subSql.getSqlType() == EsqlType.CALL)
+            throw new EsqlConfigException("["
+                    + (sqlItem != null ? sqlItem.getSqlId() : rawSql) + "]是存储过程，不支持手工设定参数顺序");
+
+        return placeHolderInType;
+    }
 }

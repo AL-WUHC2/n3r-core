@@ -1,19 +1,21 @@
 package org.n3r.esql.util;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.n3r.core.lang.RClose;
-import org.n3r.core.lang.RDate;
 import org.n3r.core.lang.RStr;
-import org.n3r.esql.Esql;
 import org.n3r.esql.EsqlTransaction;
 import org.n3r.esql.config.EsqlConfigManager;
-import org.n3r.esql.ex.EsqlExecuteException;
 import org.n3r.esql.param.EsqlParamsParser;
 import org.n3r.esql.res.EsqlItem;
 import org.n3r.esql.res.EsqlPart;
@@ -21,22 +23,17 @@ import org.n3r.esql.res.EsqlSub;
 import org.n3r.esql.res.EsqlSub.EsqlType;
 
 public class EsqlUtils {
-    public static EsqlType parseSqlType(String rawSql) {
-        String prefix = RStr.substringBeforeFirstBlank(StringUtils.trim(rawSql));
-        return EsqlType.valueOf(StringUtils.upperCase(prefix));
-    }
+    private static Pattern FIRST_WORD = Pattern.compile("\\b(\\w+)\\b");
 
-    public static boolean executeImmedate(Connection conn, String sql) {
-        Statement stmt = null;
+    public static EsqlType parseSqlType(String rawSql) {
+        Matcher matcher = FIRST_WORD.matcher(rawSql);
+        matcher.find();
         try {
-            stmt = conn.createStatement();
-            return stmt.execute(sql);
+            String firstWord = matcher.group(1).toUpperCase();
+            return EsqlType.valueOf(firstWord);
         }
-        catch (SQLException ex) {
-            throw new EsqlExecuteException(ex);
-        }
-        finally {
-            RClose.closeQuiety(stmt);
+        catch (IllegalStateException ex) {
+            throw ex;
         }
     }
 
@@ -44,24 +41,6 @@ public class EsqlUtils {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         String callerClassName = stackTraceElements[num].getClassName();
         return "/" + callerClassName.replace('.', '/') + ".esql";
-    }
-
-    public static boolean executeImmedate(String sql) {
-        return executeImmedate(sql, Esql.DEFAULT_CONNECTION_NAME);
-    }
-
-    public static boolean executeImmedate(String sql, String connectionName) {
-        EsqlTransaction tran = null;
-        try {
-            tran = getConfigTran(connectionName);
-            tran.start();
-            boolean ret = EsqlUtils.executeImmedate(tran.getConnection(), sql);
-            tran.commit();
-            return ret;
-        }
-        finally {
-            RClose.closeQuiety(tran);
-        }
     }
 
     public static EsqlTransaction getConfigTran(String connectionName) {
@@ -87,23 +66,6 @@ public class EsqlUtils {
         for (EsqlPart sqlPart : sqlSub)
             sql.append(sqlPart.getSqlPart(bean)).append("\r\n");
         return StringUtils.trim(sql.toString());
-    }
-
-    public static void setParam(StringBuilder boundParams, PreparedStatement ps, int index, Object value) {
-        try {
-            if (value instanceof Date) {
-                java.sql.Date date = new java.sql.Date(((Date) value).getTime());
-                ps.setDate(index, date);
-                boundParams.append('[').append(RDate.toDateTimeStr(date)).append(']');
-            }
-            else {
-                ps.setObject(index, value);
-                boundParams.append('[').append(value).append(']');
-            }
-        }
-        catch (SQLException e) {
-            throw new EsqlExecuteException("set parameters fail", e);
-        }
     }
 
     public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex) throws SQLException {

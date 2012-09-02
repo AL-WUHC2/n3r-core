@@ -1,14 +1,13 @@
 package org.n3r.esql;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,13 @@ import org.n3r.esql.impl.EsqlExecInfo;
 import org.n3r.esql.impl.SelectType;
 import org.n3r.esql.map.AfterProperitesSet;
 import org.n3r.esql.map.EsqlBeanRowMapper;
+import org.n3r.esql.map.EsqlCallableResultBeanMapper;
+import org.n3r.esql.map.EsqlCallableReturnMapMapper;
+import org.n3r.esql.map.EsqlCallableReturnMapper;
+import org.n3r.esql.map.EsqlMapMapper;
 import org.n3r.esql.map.EsqlRowMapper;
+import org.n3r.esql.param.EsqlParamPlaceholder;
+import org.n3r.esql.param.EsqlParamPlaceholder.InOut;
 import org.n3r.esql.param.EsqlParamsBinder;
 import org.n3r.esql.param.EsqlParamsParser;
 import org.n3r.esql.parser.EsqlDynamicReplacer;
@@ -86,6 +91,10 @@ public class Esql {
         execContext.set(newEsqlExecInfo);
     }
 
+    public Connection getConnection() {
+        return getConfigTran(connectionName).getConnection();
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T execute(String... directSqls) {
         checkPreconditions(directSqls);
@@ -129,6 +138,21 @@ public class Esql {
         }
 
         return 0;
+    }
+
+    private boolean executeImmedate(Connection conn, String sql) {
+        Statement stmt = null;
+        logger.info("sql:{}", sql);
+        try {
+            stmt = conn.createStatement();
+            return stmt.execute(sql);
+        }
+        catch (SQLException ex) {
+            throw new EsqlExecuteException(ex);
+        }
+        finally {
+            RClose.closeQuiety(stmt);
+        }
     }
 
     private Object pageExecute(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
@@ -181,13 +205,22 @@ public class Esql {
             if (!this.inBatchMode) {
                 String realSql = getRealSql(subSql);
                 logger.info("sql:{}", realSql);
-                ps = conn.prepareStatement(realSql);
-                logger.info("bind parameters:{}", new EsqlParamsBinder().bindParams(ps, subSql, params));
+                ps = prepareSql(conn, subSql, realSql);
+                String bindParams = new EsqlParamsBinder().bindParams(ps, subSql, params);
+                logger.info("bind parameters:{}", bindParams);
             }
             switch (subSql.getSqlType()) {
             case SELECT:
                 rs = ps.executeQuery();
                 execRet = convert(rs, subSql);
+                break;
+            case CALL:
+                if (!this.inBatchMode) {
+                    CallableStatement cs = (CallableStatement) ps;
+                    cs.execute();
+                    execRet = retrieveProcedureRet(subSql, cs);
+                }
+                else execRet = processBatchUpdate(conn, subSql);
                 break;
             default:
                 if (!this.inBatchMode) execRet = ps.executeUpdate();
@@ -203,12 +236,49 @@ public class Esql {
         }
     }
 
+    private Object retrieveProcedureRet(EsqlSub subSql, CallableStatement cs) throws SQLException {
+        if (subSql.getOutCount() == 1)
+            for (int i = 0, ii = subSql.getPlaceHolders().length; i < ii; ++i) {
+                EsqlParamPlaceholder placeholder = subSql.getPlaceHolders()[i];
+                if (placeholder.getInOut() != InOut.IN) return cs.getObject(i + 1);
+            }
+
+        Object ret = null;
+        switch (subSql.getPlaceHolderOutType()) {
+        case AUTO_SEQ:
+            List<Object> objects1 = Lists.newArrayList();
+            for (int i = 0, ii = subSql.getPlaceHolders().length; i < ii; ++i) {
+                EsqlParamPlaceholder placeholder = subSql.getPlaceHolders()[i];
+                if (placeholder.getInOut() != InOut.IN) {
+                    Object object = cs.getObject(i + 1);
+                    objects1.add(object);
+                }
+            }
+            ret = objects1;
+            break;
+        case VAR_NAME:
+            EsqlCallableReturnMapper mapper = getCallableReturnMapper();
+            ret = mapper.mapResult(subSql, cs);
+            break;
+        default:
+            break;
+        }
+
+        return ret;
+    }
+
+    private PreparedStatement prepareSql(Connection conn, EsqlSub subSql, String realSql) throws SQLException {
+        return subSql.getSqlType() == EsqlType.CALL
+                ? conn.prepareCall(realSql)
+                : conn.prepareStatement(realSql);
+    }
+
     private int processBatchUpdate(Connection conn, EsqlSub subSql) throws SQLException {
         String realSql = getRealSql(subSql);
         PreparedStatement ps = batchedMap.get(realSql);
         if (ps == null) {
             logger.info("sql:{}", realSql);
-            ps = conn.prepareStatement(realSql);
+            ps = prepareSql(conn, subSql, realSql);
             batchedMap.put(realSql, ps);
             batchedPs.add(ps);
         }
@@ -258,42 +328,34 @@ public class Esql {
     }
 
     private Object rowBeanCreate(ResultSet rs, int rowNum) throws SQLException {
-        Object rowBean = convertToRow(rs, rowNum);
+        EsqlRowMapper rowMapper = getRowMapper();
+        Object rowBean = rowMapper.mapRow(rs, rowNum);
         if (rowBean instanceof AfterProperitesSet)
             ((AfterProperitesSet) rowBean).afterPropertiesSet();
 
         return rowBean;
     }
 
-    private Object convertToRow(ResultSet rs, int rowNum) throws SQLException {
+    private EsqlRowMapper getRowMapper() throws SQLException {
         if (returnType == null && esqlItem != null) returnType = esqlItem.getReturnType();
 
-        if (returnType != null && EsqlRowMapper.class.isAssignableFrom(returnType)) {
-            EsqlRowMapper mapper = Reflect.on(returnType).create().get();
-            return mapper.mapRow(rs, rowNum);
-        }
+        if (returnType != null && EsqlRowMapper.class.isAssignableFrom(returnType))
+            return Reflect.on(returnType).create().get();
 
-        if (returnType != null) return new EsqlBeanRowMapper(returnType).mapRow(rs, rowNum);
+        if (returnType != null) return new EsqlBeanRowMapper(returnType);
 
-        return result2Map(rs);
+        return new EsqlMapMapper();
     }
 
-    private Map<String, String> result2Map(ResultSet rs) throws SQLException {
-        Map<String, String> row = new HashMap<String, String>();
-        ResultSetMetaData metaData = rs.getMetaData();
-        for (int i = 1; i <= metaData.getColumnCount(); ++i) {
-            String column = lookupColumnName(metaData, i);
-            Object value = getResultSetValue(rs, i, String.class);
-            row.put(column, toStr(value));
-        }
+    private EsqlCallableReturnMapper getCallableReturnMapper() {
+        if (returnType == null && esqlItem != null) returnType = esqlItem.getReturnType();
 
-        return row;
-    }
+        if (returnType != null && EsqlCallableReturnMapper.class.isAssignableFrom(returnType))
+            return Reflect.on(returnType).create().get();
 
-    private String toStr(Object object) {
-        if (object == null) return null;
+        if (returnType != null) return new EsqlCallableResultBeanMapper(returnType);
 
-        return object.toString().trim();
+        return new EsqlCallableReturnMapMapper();
     }
 
     public Esql returnType(Class<?> returnType) {
@@ -406,6 +468,11 @@ public class Esql {
     public Esql selectFirst(String sqlId) {
         initSqlId(sqlId, sqlClassPath);
         this.selectType = SelectType.FIRST;
+        return this;
+    }
+
+    public Esql procedure(String sqlId) {
+        initSqlId(sqlId, sqlClassPath);
         return this;
     }
 
@@ -526,4 +593,5 @@ public class Esql {
 
         return this;
     }
+
 }

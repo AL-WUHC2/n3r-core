@@ -128,4 +128,29 @@ VALUES(##, ##, ##, ##, SYSDATE)
 INSERT INTO PRIZE_$$(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
 VALUES(##, ##, ##, ##, SYSDATE)
 
+[createSpEsql split=/]
+CREATE OR REPLACE PROCEDURE SP_ESQL(A VARCHAR, B OUT VARCHAR) IS
+BEGIN
+  B := 'HELLO ' || A;
+END;
+
+[callSpEsql]
+{call SP_ESQL(##, #:OUT#)}
+
+[createSpEsql2 split=/]
+CREATE OR REPLACE PROCEDURE SP_ESQL2(A VARCHAR, B OUT VARCHAR, C OUT VARCHAR) IS
+BEGIN
+  B := 'HELLO ' || A;
+  C := 'WORLD ' || A;
+END;
+
+[callSpEsql2]
+{call SP_ESQL2(##, #:OUT#, #:OUT#)}
+
+[callSpEsql3]
+{call SP_ESQL2(##, #a:OUT#, #b:OUT#)}
+
+[callSpEsql4 returnType=org.n3r.esql.demo.EsqlDemoTest$Ab]
+{call SP_ESQL2(##, #a:OUT#, #b:OUT#)}
+
 [emptysql]

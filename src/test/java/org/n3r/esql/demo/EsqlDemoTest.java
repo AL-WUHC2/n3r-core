@@ -1,21 +1,22 @@
 package org.n3r.esql.demo;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Test;
 import org.n3r.core.collection.RMap;
+import org.n3r.core.lang.RClose;
 import org.n3r.core.lang.RDate;
 import org.n3r.core.text.RRand;
 import org.n3r.esql.Esql;
 import org.n3r.esql.EsqlPage;
-import org.n3r.esql.EsqlTransaction;
 import org.n3r.esql.parser.EsqlTableSqlMapper;
-import org.n3r.esql.util.EsqlUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -223,24 +224,28 @@ public class EsqlDemoTest {
 
     @Test
     public void batch() throws SQLException {
-        EsqlTransaction configTran = EsqlUtils.getConfigTran(Esql.DEFAULT_CONNECTION_NAME);
-        Connection connection = configTran.getConnection();
-        PreparedStatement ps = connection
-                .prepareStatement("INSERT INTO PRIZE_BINGOO(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME) VALUES(?, ?, ?, ?, SYSDATE)");
-        for (int i = 0; i < 10; ++i) {
-            String orderNo = RRand.randLetters(10);
-            String userId = RRand.randLetters(10);
-            int prizeItem = RRand.randInt(10);
-            ps.setString(1, orderNo);
-            ps.setString(2, "Olympic");
-            ps.setString(3, "" + prizeItem);
-            ps.setString(4, userId);
-            ps.addBatch();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        try {
+            connection = new Esql().getConnection();
+            ps = connection.prepareStatement("INSERT INTO PRIZE_BINGOO(ORDER_NO, " +
+                    "ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME) VALUES(?, ?, ?, ?, SYSDATE)");
+            for (int i = 0; i < 10; ++i) {
+                String orderNo = RRand.randLetters(10);
+                String userId = RRand.randLetters(10);
+                int prizeItem = RRand.randInt(10);
+                ps.setString(1, orderNo);
+                ps.setString(2, "Olympic");
+                ps.setString(3, "" + prizeItem);
+                ps.setString(4, userId);
+                ps.addBatch();
+            }
+            int[] executeBatch = ps.executeBatch();
+            System.out.println(ArrayUtils.toString(executeBatch));
         }
-        int[] executeBatch = ps.executeBatch();
-        System.out.println(ArrayUtils.toString(executeBatch));
-        ps.close();
-        connection.close();
+        finally {
+            RClose.closeQuiety(ps, connection);
+        }
 
     }
 
@@ -270,5 +275,81 @@ public class EsqlDemoTest {
                 .dynamics("BINGOO")
                 .execute();
         assertEquals(1, row);
+    }
+
+    @Test
+    public void procedure1() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("createSpEsql").execute();
+        Connection connection = null;
+        CallableStatement cs = null;
+        try {
+            connection = new Esql().getConnection();
+            cs = connection.prepareCall("{call SP_ESQL(?, ?)}");
+            cs.setString(1, "hjb");
+            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.execute();
+            System.out.println(cs.getString(2));
+        }
+        finally {
+            RClose.closeQuiety(cs, connection);
+        }
+
+        String b = new Esql().useSqlFile(EsqlDemo.class)
+                .procedure("callSpEsql").params("hjb")
+                .execute();
+        assertEquals("HELLO hjb", b);
+
+    }
+
+    @Test
+    public void procedure2() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("createSpEsql2").execute();
+        List<String> bc = new Esql().useSqlFile(EsqlDemo.class)
+                .procedure("callSpEsql2").params("hjb")
+                .execute();
+        assertEquals("HELLO hjb", bc.get(0));
+        assertEquals("WORLD hjb", bc.get(1));
+    }
+
+    @Test
+    public void procedure3() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("createSpEsql2").execute();
+        Map<String, Object> bc = new Esql().useSqlFile(EsqlDemo.class)
+                .procedure("callSpEsql3").params("hjb")
+                .execute();
+        assertEquals("HELLO hjb", bc.get("a"));
+        assertEquals("WORLD hjb", bc.get("b"));
+    }
+
+    public static class Ab {
+        private String a;
+        private String b;
+
+        public String getA() {
+            return a;
+        }
+
+        public void setA(String a) {
+            this.a = a;
+        }
+
+        public String getB() {
+            return b;
+        }
+
+        public void setB(String b) {
+            this.b = b;
+        }
+
+    }
+
+    @Test
+    public void procedure4() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("createSpEsql2").execute();
+        Ab ab = new Esql().useSqlFile(EsqlDemo.class)
+                .procedure("callSpEsql4").params("hjb")
+                .execute();
+        assertEquals("HELLO hjb", ab.getA());
+        assertEquals("WORLD hjb", ab.getB());
     }
 }

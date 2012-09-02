@@ -16,6 +16,7 @@ public class EsqlItem {
     private List<List<EsqlPart>> sqlRawSubs = new ArrayList<List<EsqlPart>>();
     private Class<?> returnType;
     private String onerr;
+    private String split;
 
     public List<EsqlSub> createSqlSubs(Object bean) {
         return EsqlUtils.createSqlSubs(bean, sqlRawSubs, this);
@@ -35,6 +36,9 @@ public class EsqlItem {
         onerr = sqlOptions.get("onerr");
         returnType = RClass.findClass(sqlOptions.get("returnType"));
         if (returnType == null) returnType = RClass.findClass(sqlOptions.get("resultType"));
+
+        split = sqlOptions.get("split");
+        if (StringUtils.isEmpty(split)) split = ";";
     }
 
     public String getSqlId() {
@@ -51,5 +55,9 @@ public class EsqlItem {
 
     public Class<?> getReturnType() {
         return returnType;
+    }
+
+    public String getSqlSpitter() {
+        return split;
     }
 }

@@ -59,7 +59,7 @@ public class EsqlSqlParser {
         List<String> lines = key.startsWith(SQLTABLE_KEY)
                 ? readSqlTableToLines(key) : RClassPath.toLines(key);
 
-                return parseLines(lines);
+        return parseLines(lines);
     }
 
     private static List<String> readSqlTableToLines(String key) {
@@ -97,7 +97,9 @@ public class EsqlSqlParser {
 
             Matcher matcher = SQLID_PATTERN.matcher(line);
             if (!matcher.matches()) {
-                if (trimmedLine.endsWith(";")) {
+                if (esqlItem == null) continue;
+
+                if (trimmedLine.endsWith(esqlItem.getSqlSpitter())) {
                     sqlLines.add(line.substring(0, line.length() - 1));
                     addRawSql(esqlItem, sqlLines, lineNo);
                 }
