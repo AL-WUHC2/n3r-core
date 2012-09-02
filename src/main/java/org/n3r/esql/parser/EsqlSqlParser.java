@@ -37,7 +37,7 @@ public class EsqlSqlParser {
 
     private static Pattern SQLID_PATTERN = Pattern.compile("\\s*\\[\\s*([\\w\\.\\-\\d]+)\\b(.*)\\].*");
     private static LoadingCache<String, Map<String, EsqlItem>> sqlCache = CacheBuilder.newBuilder()
-            .softValues()
+            .softValues()/*.maximumSize(0)*/
             .build(new CacheLoader<String, Map<String, EsqlItem>>() {
                 @Override
                 public Map<String, EsqlItem> load(String key) throws Exception {
@@ -56,8 +56,7 @@ public class EsqlSqlParser {
     public static Map<String, EsqlItem> parseSqlFileWoCache(String key) {
         getContext().setFilePath(key);
 
-        List<String> lines = key.startsWith(SQLTABLE_KEY)
-                ? readSqlTableToLines(key) : RClassPath.toLines(key);
+        List<String> lines = key.startsWith(SQLTABLE_KEY) ? readSqlTableToLines(key) : RClassPath.toLines(key);
 
         return parseLines(lines);
     }

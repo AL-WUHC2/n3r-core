@@ -17,10 +17,8 @@ public class EsqlCallableReturnMapMapper implements EsqlCallableReturnMapper {
         Map<String, Object> result = Maps.newHashMap();
         for (int i = 0, ii = subSql.getPlaceHolders().length; i < ii; ++i) {
             EsqlParamPlaceholder placeholder = subSql.getPlaceHolders()[i];
-            if (placeholder.getInOut() != InOut.IN) {
-                Object object = cs.getObject(i + 1);
-                result.put(placeholder.getPlaceholder(), object);
-            }
+            if (placeholder.getInOut() != InOut.IN)
+                result.put(placeholder.getPlaceholder(), cs.getObject(i + 1));
         }
 
         return result;

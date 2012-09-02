@@ -20,7 +20,6 @@ import org.n3r.esql.config.EsqlConfigable;
 import org.n3r.esql.ex.EsqlExecuteException;
 import org.n3r.esql.ex.EsqlIdNotFoundException;
 import org.n3r.esql.impl.EsqlExecInfo;
-import org.n3r.esql.impl.SelectType;
 import org.n3r.esql.map.AfterProperitesSet;
 import org.n3r.esql.map.EsqlBeanRowMapper;
 import org.n3r.esql.map.EsqlCallableResultBeanMapper;
@@ -28,7 +27,6 @@ import org.n3r.esql.map.EsqlCallableReturnMapMapper;
 import org.n3r.esql.map.EsqlCallableReturnMapper;
 import org.n3r.esql.map.EsqlMapMapper;
 import org.n3r.esql.map.EsqlRowMapper;
-import org.n3r.esql.param.EsqlParamPlaceholder;
 import org.n3r.esql.param.EsqlParamPlaceholder.InOut;
 import org.n3r.esql.param.EsqlParamsBinder;
 import org.n3r.esql.param.EsqlParamsParser;
@@ -49,8 +47,6 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 public class Esql {
     private Class<?> returnType;
-    private SelectType selectType;
-
     public static final String DEFAULT_CONNECTION_NAME = "DEFAULT";
     protected Logger logger = LoggerFactory.getLogger(Esql.class);
     protected String connectionName = DEFAULT_CONNECTION_NAME;
@@ -65,6 +61,7 @@ public class Esql {
     private Map<String, PreparedStatement> batchedMap;
     private EsqlTransaction transaction;
     private Object[] dynamics;
+    private int maxRows = Integer.MAX_VALUE;
 
     public static ThreadLocal<EsqlExecInfo> execContext = new ThreadLocal<EsqlExecInfo>() {
         @Override
@@ -191,7 +188,10 @@ public class Esql {
     private void createTotalSql(EsqlSub subSql) {
         String sql = subSql.getSql().toUpperCase();
         int fromPos1 = sql.indexOf("FROM");
-        int fromPos2 = sql.indexOf("FROM", fromPos1 + 4);
+
+        int fromPos2 = sql.indexOf("DISTINCT");
+        fromPos2 = fromPos2 < 0 ? sql.indexOf("FROM", fromPos1 + 4) : fromPos2;
+
         subSql.setSql(fromPos2 > 0 ? "SELECT COUNT(*) CNT__ FROM (" + sql + ")"
                 : "SELECT COUNT(*) AS CNT " + sql.substring(fromPos1));
         subSql.setWillReturnOnlyOneRow(true);
@@ -237,40 +237,35 @@ public class Esql {
     }
 
     private Object retrieveProcedureRet(EsqlSub subSql, CallableStatement cs) throws SQLException {
-        if (subSql.getOutCount() == 1)
-            for (int i = 0, ii = subSql.getPlaceHolders().length; i < ii; ++i) {
-                EsqlParamPlaceholder placeholder = subSql.getPlaceHolders()[i];
-                if (placeholder.getInOut() != InOut.IN) return cs.getObject(i + 1);
-            }
+        if (subSql.getOutCount() == 0) return null;
 
-        Object ret = null;
+        if (subSql.getOutCount() == 1)
+            for (int i = 0, ii = subSql.getPlaceHolders().length; i < ii; ++i)
+                if (subSql.getPlaceHolders()[i].getInOut() != InOut.IN) return cs.getObject(i + 1);
+
         switch (subSql.getPlaceHolderOutType()) {
         case AUTO_SEQ:
-            List<Object> objects1 = Lists.newArrayList();
-            for (int i = 0, ii = subSql.getPlaceHolders().length; i < ii; ++i) {
-                EsqlParamPlaceholder placeholder = subSql.getPlaceHolders()[i];
-                if (placeholder.getInOut() != InOut.IN) {
-                    Object object = cs.getObject(i + 1);
-                    objects1.add(object);
-                }
-            }
-            ret = objects1;
-            break;
+            return retrieveAutoSeqOuts(subSql, cs);
         case VAR_NAME:
-            EsqlCallableReturnMapper mapper = getCallableReturnMapper();
-            ret = mapper.mapResult(subSql, cs);
-            break;
+            return getCallableReturnMapper().mapResult(subSql, cs);
         default:
             break;
         }
 
-        return ret;
+        return null;
+    }
+
+    private Object retrieveAutoSeqOuts(EsqlSub subSql, CallableStatement cs) throws SQLException {
+        List<Object> objects = Lists.newArrayList();
+        for (int i = 0, ii = subSql.getPlaceHolders().length; i < ii; ++i)
+            if (subSql.getPlaceHolders()[i].getInOut() != InOut.IN) objects.add(cs.getObject(i + 1));
+
+        return objects;
     }
 
     private PreparedStatement prepareSql(Connection conn, EsqlSub subSql, String realSql) throws SQLException {
         return subSql.getSqlType() == EsqlType.CALL
-                ? conn.prepareCall(realSql)
-                : conn.prepareStatement(realSql);
+                ? conn.prepareCall(realSql) : conn.prepareStatement(realSql);
     }
 
     private int processBatchUpdate(Connection conn, EsqlSub subSql) throws SQLException {
@@ -312,7 +307,7 @@ public class Esql {
     }
 
     private Object convert(ResultSet rs, EsqlSub subSql) throws SQLException {
-        return selectType == SelectType.FIRST || subSql.isWillReturnOnlyOneRow()
+        return maxRows <= 1 || subSql.isWillReturnOnlyOneRow()
                 ? firstRow(rs) : selectList(rs);
     }
 
@@ -429,6 +424,7 @@ public class Esql {
 
             if (subSql.getSqlType() == EsqlType.SELECT) lastSelectSql = subSql;
         }
+
         if (lastSelectSql != null) lastSelectSql.setLastSelectSql(true);
 
         return sqlSubs;
@@ -461,13 +457,12 @@ public class Esql {
 
     public Esql select(String sqlId) {
         initSqlId(sqlId, sqlClassPath);
-        this.selectType = SelectType.LIST;
         return this;
     }
 
     public Esql selectFirst(String sqlId) {
         initSqlId(sqlId, sqlClassPath);
-        this.selectType = SelectType.FIRST;
+        limit(1);
         return this;
     }
 
@@ -591,6 +586,11 @@ public class Esql {
     public Esql dynamics(Object... dynamics) {
         this.dynamics = dynamics;
 
+        return this;
+    }
+
+    public Esql limit(int maxRows) {
+        this.maxRows = maxRows;
         return this;
     }
 

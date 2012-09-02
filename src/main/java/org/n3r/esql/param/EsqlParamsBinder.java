@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Date;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.core.lang.RBean;
 import org.n3r.core.lang.RDate;
@@ -21,25 +22,29 @@ public class EsqlParamsBinder {
     private StringBuilder boundParams;
     private PreparedStatement ps;
 
+    private static enum ParamExtra {
+        Extra, Normal
+    }
+
     public String bindParams(PreparedStatement ps, EsqlSub subSql, Object[] params) {
         this.subSql = subSql;
         this.params = params;
         this.boundParams = new StringBuilder();
         this.ps = ps;
 
-        if (params != null && params.length > 0)
+        if (ArrayUtils.isNotEmpty(params))
             switch (subSql.getPlaceHolderType()) {
             case AUTO_SEQ:
                 for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
-                    setParam(i, getParamByIndex(i));
+                    setParam(i, getParamByIndex(i), ParamExtra.Normal);
                 break;
             case MANU_SEQ:
                 for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
-                    setParam(i, findParamBySeq(i + 1));
+                    setParam(i, findParamBySeq(i + 1), ParamExtra.Normal);
                 break;
             case VAR_NAME:
                 for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
-                    setParam(i, findParamByName(subSql, i));
+                    setParam(i, findParamByName(subSql, i), ParamExtra.Normal);
                 break;
             default:
                 break;
@@ -55,21 +60,26 @@ public class EsqlParamsBinder {
         if (extraBindParams == null) return;
 
         for (int i = subSql.getPlaceholderNum(); i < extraBindParams.length; ++i)
-            setParam(i, extraBindParams[i]);
+            setParam(i, extraBindParams[i], ParamExtra.Extra);
     }
 
-    private void setParam(int index, Object value) {
+    private void setParam(int index, Object value, ParamExtra extra) {
         try {
-            setParamEx(index, value);
+            switch (extra) {
+            case Extra:
+                setParamExtra(index, value);
+                break;
+            default:
+                setParamEx(index, value);
+                break;
+            }
         }
         catch (SQLException e) {
             throw new EsqlExecuteException("set parameters fail", e);
         }
     }
 
-    private void setParamEx(int index, Object value) throws SQLException {
-        if (regiesterOut(index)) return;
-
+    private void setParamExtra(int index, Object value) throws SQLException {
         if (value instanceof Date) {
             java.sql.Date date = new java.sql.Date(((Date) value).getTime());
             ps.setDate(index + 1, date);
@@ -79,15 +89,16 @@ public class EsqlParamsBinder {
             ps.setObject(index + 1, value);
             boundParams.append('[').append(value).append(']');
         }
+    }
 
-        regiesterOut(index);
+    private void setParamEx(int index, Object value) throws SQLException {
+        if (regiesterOut(index)) return;
+
+        setParamExtra(index, value);
     }
 
     private boolean regiesterOut(int index) throws SQLException {
-        EsqlParamPlaceholder[] placeHolders = subSql.getPlaceHolders();
-        if (index >= placeHolders.length) return false;
-
-        InOut inOut = placeHolders[index].getInOut();
+        InOut inOut = subSql.getPlaceHolders()[index].getInOut();
         if (subSql.getSqlType() == EsqlType.CALL && inOut != InOut.IN)
             ((CallableStatement) ps).registerOutParameter(index + 1, Types.VARCHAR);
 

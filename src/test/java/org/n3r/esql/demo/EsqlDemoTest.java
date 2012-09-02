@@ -183,7 +183,7 @@ public class EsqlDemoTest {
         Esql esql = new Esql().useSqlFile(EsqlDemo.class);
         esql.update("updateBean")
                 .params(1, "abc").execute();
-        EsqlDemoBean demoBean = esql.selectFirst("selectBean").params(1).returnType(EsqlDemoBean.class).execute();
+        EsqlDemoBean demoBean = esql.select("selectBean").limit(1).params(1).returnType(EsqlDemoBean.class).execute();
         assertEquals("abc", demoBean.getB());
     }
 
@@ -193,7 +193,7 @@ public class EsqlDemoTest {
         Esql esql = new Esql().useSqlFile("/org/n3r/esql/demo/EsqlDemo.esql");
         esql.update("updateBean")
                 .params(1, "abc").execute();
-        EsqlDemoBean demoBean = esql.selectFirst("selectBean").params(1).returnType(EsqlDemoBean.class).execute();
+        EsqlDemoBean demoBean = esql.select("selectBean").limit(1).params(1).returnType(EsqlDemoBean.class).execute();
         assertEquals("abc", demoBean.getB());
     }
 
@@ -210,7 +210,7 @@ public class EsqlDemoTest {
         esql.update("demo.updateBean")
                 .params(1, "abc").execute();
 
-        EsqlDemoBean demoBean = esql.selectFirst("selectBean").params(1).returnType(EsqlDemoBean.class).execute();
+        EsqlDemoBean demoBean = esql.select("selectBean").limit(1).params(1).returnType(EsqlDemoBean.class).execute();
         assertEquals("abc", demoBean.getB());
     }
 
@@ -351,5 +351,17 @@ public class EsqlDemoTest {
                 .execute();
         assertEquals("HELLO hjb", ab.getA());
         assertEquals("WORLD hjb", ab.getB());
+    }
+
+    @Test
+    public void procedureNoOut() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("createSpNoOut").execute();
+        Esql esql = new Esql().useSqlFile(EsqlDemo.class)
+                .params("hjb")
+                .limit(1);
+        int ab = esql.execute("{CALL SP_ESQL_NOOUT(##)}", "SELECT 1 FROM DUAL");
+
+        assertEquals(1, ab);
+
     }
 }

@@ -153,4 +153,11 @@ END;
 [callSpEsql4 returnType=org.n3r.esql.demo.EsqlDemoTest$Ab]
 {call SP_ESQL2(##, #a:OUT#, #b:OUT#)}
 
+[createSpNoOut split=/]
+CREATE OR REPLACE PROCEDURE SP_ESQL_NOOUT(A VARCHAR) IS
+BEGIN
+    NULL;
+END;
+
+
 [emptysql]
