@@ -1,0 +1,9 @@
+[getPrizeDrawChecker returnType=org.n3r.prizedraw.checker.DefaultPrizeCheck]
+SELECT T.ACTIVITY_ID,
+       T.CHECK_PROPERTY,
+       T.NOTEXISTS_TAG,
+       T.CHECK_VALUE,
+       T.CHECK_COND,
+       T.COMPARATOR
+  FROM PRIZE_CHECK T
+ WHERE T.ACTIVITY_ID IN ('0', ##)

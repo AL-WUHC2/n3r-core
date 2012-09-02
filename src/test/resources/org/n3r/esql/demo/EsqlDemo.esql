@@ -1,0 +1,131 @@
+;
+[getString]
+SELECT 'x' x
+FROM DUAL
+
+--这里是注释
+[getInt]
+SELECT 1
+FROM DUAL
+
+[getStringWithOneParam]
+SELECT 'x'
+FROM DUAL
+WHERE 'x' = ##
+
+[getStringWithTwoParams]
+SELECT 'x'
+FROM DUAL
+WHERE 'x' = ##
+AND 'y' = ##
+
+[getStringWithTwoParamsAndSequence]
+SELECT 'x'
+FROM DUAL
+WHERE 'x' = #2#
+AND 'y' = #1#
+
+[initialize onerr=resume]
+DROP TABLE ESQL_TEST;
+CREATE TABLE ESQL_TEST (
+    A INT NOT NULL,
+    B CHAR(10),
+    C VARCHAR2(10),
+    D DATE,
+    E NUMBER,
+    CONSTRAINT PK_ESQL_TEST PRIMARY KEY(A)
+);
+
+INSERT INTO ESQL_TEST VALUES(1, 'A', 'AC', ##, 101);
+INSERT INTO ESQL_TEST VALUES(2, 'B', 'BC', ##, 102);
+INSERT INTO ESQL_TEST VALUES(3, 'C', 'CC', ##, 103);
+INSERT INTO ESQL_TEST VALUES(4, 'D', 'DC', ##, 104);
+
+[getBeanList]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+
+[updateBean]
+UPDATE ESQL_TEST
+SET B = #2#
+WHERE A = #1#
+
+[selectBean]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+WHERE A = ##
+
+[selectByBean]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+WHERE A = #a#
+AND C = #c#
+
+[selectIf returnType=org.n3r.esql.demo.EsqlDemoBean]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+WHERE A = #a#
+<if e == '100'>
+AND C = #c#
+<elseif e == '200'>
+AND C = 'AC'
+<else>
+AND C = 'FALSE'
+<end>
+
+[selectIfNotEmpty returnType=org.n3r.esql.demo.EsqlDemoBean]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+<if isNotEmpty(a)>
+WHERE A = #a#
+<end>
+
+[switchSelect returnType=org.n3r.esql.demo.EsqlDemoBean]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+<switch a>
+<case 1>
+WHERE A = 1
+<case 2>
+WHERE A = 2
+<end>
+
+[switchSelectWithDefault returnType=org.n3r.esql.demo.EsqlDemoBean]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+<switch a>
+<case 1>
+WHERE A = 1
+<case 2>
+WHERE A = 2
+<default>
+WHERE A = 3
+<end>
+
+[selectIf2 returnType = org.n3r.esql.demo.EsqlDemoBean]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+WHERE A = #a#
+<if e == 100>
+    <if a == 1>
+      AND C = #c# AND 1 > 0
+    <end>
+<elseif e == 200>
+AND C = 'AC'
+<else>
+AND C = 'FALSE'
+<end>
+
+[selectRecords]
+SELECT ACTIVITY_ID, USER_ID
+FROM PRIZE_RECORD
+
+[insertPrizeBingoo]
+INSERT INTO PRIZE_BINGOO(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
+VALUES(##, ##, ##, ##, SYSDATE)
+
+[insertPrizeBingooDynamic]
+INSERT INTO PRIZE_$$(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
+VALUES(##, ##, ##, ##, SYSDATE)
+
+[emptysql]

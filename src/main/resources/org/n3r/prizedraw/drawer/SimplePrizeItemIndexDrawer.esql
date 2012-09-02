@@ -1,0 +1,15 @@
+[selectPrizeItems resultType=org.n3r.prizedraw.drawer.PrizeItem]
+SELECT T.ACTIVITY_ID,
+       T.ITEM_ID,
+       T.ITEM_NAME,
+       T.ITEM_TOTAL,
+       T.ITEM_OUT,
+       T.ITEM_IN,
+       T.ITEM_RANDBASE,
+       T.ITEM_LUCKNUM,
+       T.ITEM_SPEC,
+       T.ITEM_MD5,
+       T.DUP_SPEC
+  FROM PRIZE_ITEM T
+ WHERE T.ACTIVITY_ID = ##
+

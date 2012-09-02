@@ -10,6 +10,30 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class RStr {
+    public static String substrInQuotes(String str, char left, int pos) {
+        int leftTimes = 0;
+        int leftPos = str.indexOf(left, pos);
+        if (leftPos < 0) return "";
+
+        for (int i = leftPos + 1; i < str.length(); ++i) {
+            char charAt = str.charAt(i);
+            if (charAt == left) ++leftTimes;
+            else if (matches(left, charAt)) {
+                if (leftTimes == 0) return str.substring(leftPos + 1, i);
+                --leftTimes;
+            }
+        }
+
+        return "";
+    }
+    // return true if 'left' and 'right' are matching parens/brackets/braces
+    public static boolean matches(char left, char right) {
+        if (left == '(') return right == ')';
+        if (left == '[') return right == ']';
+        if (left == '{') return right == '}';
+        return false;
+    }
+
     /**
      * 确定一个对象是不是在后续的可变参数列表中。
      * @param target 目标对象。
@@ -17,9 +41,8 @@ public class RStr {
      * @return true在列表中
      */
     public static <T> boolean in(T target, T... compares) {
-        for (T compare : compares) {
+        for (T compare : compares)
             if (ObjectUtils.equals(target, compare)) return true;
-        }
 
         return false;
     }
@@ -75,7 +98,7 @@ public class RStr {
     public static String alignLeft(CharSequence cs, int width, char c) {
         if (null == cs) return null;
         int length = cs.length();
-        if (length >= width) { return cs.toString(); }
+        if (length >= width) return cs.toString();
         return cs + StringUtils.repeat(c, width - length);
     }
 
@@ -95,9 +118,7 @@ public class RStr {
                     result.append("_");
                     result.append(s.toLowerCase());
                 }
-                else {
-                    result.append(s);
-                }
+                else result.append(s);
             }
         }
 
@@ -203,9 +224,8 @@ public class RStr {
         if (s == null || count < 1) return "";
 
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++)
             sb.append(s);
-        }
 
         return sb.toString();
     }
@@ -222,9 +242,7 @@ public class RStr {
             Arrays.fill(ca, padchar);
             return s.concat(String.valueOf(ca));
         }
-        else {
-            return s;
-        }
+        else return s;
 
     }
 
@@ -240,9 +258,7 @@ public class RStr {
             Arrays.fill(ca, padchar);
             return String.valueOf(ca).concat(s);
         }
-        else {
-            return s;
-        }
+        else return s;
 
     }
 
@@ -324,7 +340,7 @@ public class RStr {
     }
 
     public static String[] toStringArray(Collection<String> collection) {
-        if (collection == null) { return null; }
+        if (collection == null) return null;
         return collection.toArray(new String[collection.size()]);
     }
 
@@ -341,9 +357,7 @@ public class RStr {
 
         String s = str.trim();
 
-        if (s.length() > length) {
-            s = s.substring(0, length);
-        }
+        if (s.length() > length) s = s.substring(0, length);
 
         return s;
     }
@@ -385,11 +399,17 @@ public class RStr {
 
     public static int indexOfBlank(CharSequence cs) {
         int sz = cs.length();
-        for (int i = 0; i < sz; i++) {
+        for (int i = 0; i < sz; i++)
             if (Character.isWhitespace(cs.charAt(i))) return i;
-        }
 
         return -1;
+    }
+
+    public static String substringBeforeFirstBlank(String cs) {
+        int indexOfBlank = indexOfBlank(cs);
+        if (indexOfBlank < 0) return cs;
+
+        return cs.substring(0, indexOfBlank);
     }
 
     public static String trimRight(String original) {
