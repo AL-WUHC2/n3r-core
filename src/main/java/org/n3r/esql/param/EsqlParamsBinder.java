@@ -15,6 +15,7 @@ import org.n3r.esql.ex.EsqlExecuteException;
 import org.n3r.esql.param.EsqlParamPlaceholder.InOut;
 import org.n3r.esql.res.EsqlSub;
 import org.n3r.esql.res.EsqlSub.EsqlType;
+import org.slf4j.Logger;
 
 public class EsqlParamsBinder {
     private EsqlSub subSql;
@@ -26,10 +27,10 @@ public class EsqlParamsBinder {
         Extra, Normal
     }
 
-    public String bindParams(PreparedStatement ps, EsqlSub subSql, Object[] params) {
+    public void bindParams(PreparedStatement ps, EsqlSub subSql, Object[] params, Logger logger) {
         this.subSql = subSql;
         this.params = params;
-        this.boundParams = new StringBuilder();
+        boundParams = new StringBuilder();
         this.ps = ps;
 
         if (ArrayUtils.isNotEmpty(params))
@@ -52,7 +53,8 @@ public class EsqlParamsBinder {
 
         bindExtraParams();
 
-        return boundParams.toString();
+        if (boundParams.length() > 0)
+            logger.info("param: {}", boundParams);
     }
 
     private void bindExtraParams() {
@@ -73,8 +75,7 @@ public class EsqlParamsBinder {
                 setParamEx(index, value);
                 break;
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new EsqlExecuteException("set parameters fail", e);
         }
     }

@@ -1,8 +1,5 @@
 package org.n3r.esql;
 
-import static org.apache.commons.lang3.StringUtils.*;
-import static org.n3r.esql.util.EsqlUtils.*;
-
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -12,16 +9,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.n3r.core.joor.Reflect;
+import org.n3r.core.lang.RArray;
 import org.n3r.core.lang.RClassPath;
 import org.n3r.core.lang.RClose;
 import org.n3r.core.lang.RJavaScript;
-import org.n3r.esql.config.EsqlConfigManager;
-import org.n3r.esql.config.EsqlConfigable;
 import org.n3r.esql.ex.EsqlExecuteException;
 import org.n3r.esql.ex.EsqlIdNotFoundException;
+import org.n3r.esql.impl.EsqlBatch;
 import org.n3r.esql.impl.EsqlExecInfo;
 import org.n3r.esql.map.AfterProperitesSet;
 import org.n3r.esql.map.EsqlBeanRowMapper;
@@ -42,22 +38,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+
+import static org.n3r.esql.util.EsqlUtils.*;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class Esql {
-    private Class<?> returnType;
     public static final String DEFAULT_CONNECTION_NAME = "DEFAULT";
-    protected Logger logger = LoggerFactory.getLogger(Esql.class);
-    protected String connectionName = DEFAULT_CONNECTION_NAME;
-    protected EsqlItem esqlItem;
-    protected Object[] params;
-    protected String sqlClassPath;
+    private Class<?> returnType;
+    private Logger logger = LoggerFactory.getLogger(Esql.class);
+    private String connectionName = DEFAULT_CONNECTION_NAME;
+    private EsqlItem esqlItem;
+    private Object[] params;
+    private String sqlClassPath;
     private EsqlPage page;
-    private boolean inBatchMode;
-    private int maxBatches;
-    private int currentBatches;
-    private List<PreparedStatement> batchedPs;
-    private Map<String, PreparedStatement> batchedMap;
+    private EsqlBatch batch;
     private EsqlTransaction transaction;
     private Object[] dynamics;
     private int maxRows = Integer.MAX_VALUE;
@@ -98,41 +93,42 @@ public class Esql {
 
         Object ret = null;
         try {
-            this.transaction = tranStart();
+            transaction = tranStart();
 
             for (EsqlSub subSql : createSqlSubs(directSqls))
-                ret = executeSub(transaction.getConnection(), ret, subSql);
+                ret = execSub(transaction.getConnection(), ret, subSql);
 
-            if (!inBatchMode) tranCommit(transaction);
+            if (batch == null) tranCommit(transaction);
         } catch (SQLException e) {
-            if (inBatchMode) cleanupBatch();
+            if (batch != null) batch.cleanupBatch();
             throw new EsqlExecuteException("exec sql failed[" + Esql.getExecContextInfo().getSql() + "]"
                     + e.getMessage());
         } finally {
-            if (!inBatchMode) tranClose(transaction);
+            if (batch == null) tranClose(transaction);
         }
 
         return (T) ret;
     }
 
     private void checkPreconditions(String... directSqls) {
-        if (this.esqlItem == null && directSqls.length == 0) throw new EsqlExecuteException("No sqlid defined!");
+        if (esqlItem != null || directSqls.length > 0) return;
+
+        throw new EsqlExecuteException("No sqlid defined!");
     }
 
-    private Object executeSub(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
+    private Object execSub(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
         Esql.getExecContextInfo().setSql(subSql.getSql());
 
         try {
-            return isDdl(subSql.getSql()) ? executeImmedate(conn, getRealSql(subSql)) : pageExecute(conn, ret, subSql);
+            return isDdl(subSql.getSql()) ? execDdl(conn, realSql(subSql)) : pageExecute(conn, ret, subSql);
         } catch (EsqlExecuteException ex) {
-            boolean onerrResume = subSql.getEsqlItem().isOnerrResume();
-            if (!onerrResume) throw ex;
+            if (!subSql.getEsqlItem().isOnerrResume()) throw ex;
         }
 
         return 0;
     }
 
-    private boolean executeImmedate(Connection conn, String sql) {
+    private boolean execDdl(Connection conn, String sql) {
         Statement stmt = null;
         logger.info("sql:{}", sql);
         try {
@@ -146,9 +142,10 @@ public class Esql {
     }
 
     private Object pageExecute(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
-        if (this.page == null || !subSql.isLastSelectSql()) return executeNoneDdl(conn, ret, subSql);
+        if (page == null || !subSql.isLastSelectSql())
+            return execDml(conn, ret, subSql);
 
-        if (this.page.getTotalRows() == 0) this.page.setTotalRows(executeTotalRowsSql(conn, ret, subSql));
+        if (page.getTotalRows() == 0) page.setTotalRows(executeTotalRowsSql(conn, ret, subSql));
 
         return executePageSql(conn, ret, subSql);
     }
@@ -157,14 +154,14 @@ public class Esql {
         // oracle专用物理分页。
         EsqlSub pageSql = createOraclePageSql(subSql);
 
-        return executeNoneDdl(conn, ret, pageSql);
+        return execDml(conn, ret, pageSql);
     }
 
     private int executeTotalRowsSql(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
         EsqlSub totalSqlSub = subSql.clone();
         createTotalSql(totalSqlSub);
 
-        return (Integer) executeNoneDdl(conn, ret, totalSqlSub);
+        return (Integer) execDml(conn, ret, totalSqlSub);
     }
 
     private EsqlSub createOraclePageSql(EsqlSub subSql) {
@@ -189,44 +186,46 @@ public class Esql {
         subSql.setWillReturnOnlyOneRow(true);
     }
 
-    private Object executeNoneDdl(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
-        PreparedStatement ps = null;
-        Object execRet = null;
+    private Object execDml(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
+        Object execRet = batch != null ? execDmlInBatch(conn, ret, subSql) : execDmlNoBatch(conn, ret, subSql);
+        logger.info("result: {}", execRet);
+        getExecContextInfo().addReturn(execRet);
+
+        return execRet;
+    }
+
+    private Object execDmlInBatch(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
+        return batch.processBatchUpdate(conn, subSql);
+    }
+
+    private Object execDmlNoBatch(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
         ResultSet rs = null;
         try {
-            if (!this.inBatchMode) {
-                String realSql = getRealSql(subSql);
-                logger.info("sql:{}", realSql);
-                ps = prepareSql(conn, subSql, realSql);
-                String bindParams = new EsqlParamsBinder().bindParams(ps, subSql, params);
-                logger.info("bind parameters:{}", bindParams);
-            }
+            PreparedStatement ps = prepareSql(conn, subSql, realSql(subSql));
+            new EsqlParamsBinder().bindParams(ps, subSql, params, logger);
+
+            Object execRet = null;
             switch (subSql.getSqlType()) {
             case SELECT:
                 rs = ps.executeQuery();
                 execRet = convert(rs, subSql);
                 break;
             case CALL:
-                if (!this.inBatchMode) {
-                    CallableStatement cs = (CallableStatement) ps;
-                    cs.execute();
-                    execRet = retrieveProcedureRet(subSql, cs);
-                } else execRet = processBatchUpdate(conn, subSql);
+                execRet = execAndRetrieveProcedureRet(subSql, (CallableStatement) ps);
                 break;
             default:
-                if (!this.inBatchMode) execRet = ps.executeUpdate();
-                else execRet = processBatchUpdate(conn, subSql);
+                execRet = ps.executeUpdate();
             }
-            logger.info("execute result:{}", execRet);
-            getExecContextInfo().addReturn(execRet);
 
             return execRet;
         } finally {
-            RClose.closeQuiety(rs, ps);
+            RClose.closeQuiety(rs, rs != null ? rs.getStatement() : null);
         }
     }
 
-    private Object retrieveProcedureRet(EsqlSub subSql, CallableStatement cs) throws SQLException {
+    private Object execAndRetrieveProcedureRet(EsqlSub subSql, CallableStatement cs) throws SQLException {
+        cs.execute();
+
         if (subSql.getOutCount() == 0) return null;
 
         if (subSql.getOutCount() == 1)
@@ -253,46 +252,13 @@ public class Esql {
         return objects;
     }
 
-    private PreparedStatement prepareSql(Connection conn, EsqlSub subSql, String realSql) throws SQLException {
+    public PreparedStatement prepareSql(Connection conn, EsqlSub subSql, String realSql) throws SQLException {
+        logger.info("sql: {} ", realSql);
         return subSql.getSqlType() == EsqlType.CALL ? conn.prepareCall(realSql) : conn.prepareStatement(realSql);
     }
 
-    private int processBatchUpdate(Connection conn, EsqlSub subSql) throws SQLException {
-        String realSql = getRealSql(subSql);
-        PreparedStatement ps = batchedMap.get(realSql);
-        if (ps == null) {
-            logger.info("sql:{}", realSql);
-            ps = prepareSql(conn, subSql, realSql);
-            batchedMap.put(realSql, ps);
-            batchedPs.add(ps);
-        }
-        logger.info("bind batch parameters:{}", new EsqlParamsBinder().bindParams(ps, subSql, params));
-        ps.addBatch();
-        ++currentBatches;
-        return maxBatches > 0 && currentBatches >= maxBatches ? executeBatch() : 0;
-    }
-
-    private String getRealSql(EsqlSub subSql) {
+    public String realSql(EsqlSub subSql) {
         return new EsqlDynamicReplacer().repaceDynamics(subSql, dynamics);
-    }
-
-    private int processBatchExecution() throws SQLException {
-        int totalRowCount = 0;
-        for (PreparedStatement ps : batchedPs) {
-            int[] rowCounts = ps.executeBatch();
-            for (int j = 0; j < rowCounts.length; j++)
-                if (rowCounts[j] == Statement.SUCCESS_NO_INFO) ; // NOTHING TO DO
-                else if (rowCounts[j] == Statement.EXECUTE_FAILED) throw new EsqlExecuteException(
-                        "The batched statement at index " + j + " failed to execute.");
-                else totalRowCount += rowCounts[j];
-        }
-
-        return totalRowCount;
-    }
-
-    public void cleanupBatch() {
-        for (PreparedStatement ps : batchedPs)
-            RClose.closeQuiety(ps);
     }
 
     private Object convert(ResultSet rs, EsqlSub subSql) throws SQLException {
@@ -311,15 +277,14 @@ public class Esql {
     }
 
     private Object rowBeanCreate(ResultSet rs, int rowNum) throws SQLException {
-        EsqlRowMapper rowMapper = getRowMapper();
-        Object rowBean = rowMapper.mapRow(rs, rowNum);
+        Object rowBean = getRowMapper().mapRow(rs, rowNum);
         if (rowBean instanceof AfterProperitesSet)
             ((AfterProperitesSet) rowBean).afterPropertiesSet();
 
         return rowBean;
     }
 
-    private EsqlRowMapper getRowMapper() throws SQLException {
+    private EsqlRowMapper getRowMapper() {
         if (returnType == null && esqlItem != null) returnType = esqlItem.getReturnType();
 
         if (returnType != null && EsqlRowMapper.class.isAssignableFrom(returnType))
@@ -343,7 +308,6 @@ public class Esql {
 
     public Esql returnType(Class<?> returnType) {
         this.returnType = returnType;
-
         return this;
     }
 
@@ -370,37 +334,26 @@ public class Esql {
     protected void initSqlId(String sqlId, String sqlClassPath) {
         getExecContextInfo();
 
-        this.sqlClassPath = sqlClassPath;
+        this.sqlClassPath = isEmpty(sqlClassPath) ? getSqlClassPath(4) : sqlClassPath;
 
-        if (isEmpty(this.sqlClassPath)) this.sqlClassPath = getSqlClassPath(4);
+        esqlItem = EsqlSqlParser.getEsqlItem(this.sqlClassPath, sqlId);
+        if (esqlItem == null)
+            esqlItem = EsqlSqlParser.getEsqlItemFromSqlTable(connectionName, sqlId);
 
-        Map<String, EsqlItem> sqlFile = EsqlSqlParser.parseSqlFile(this.sqlClassPath);
-        esqlItem = sqlFile.get(sqlId);
-
-        EsqlConfigable config = EsqlConfigManager.getConfig(connectionName);
-        if (esqlItem == null && isNotEmpty(config.getSqlfromdb())) {
-            sqlFile = EsqlSqlParser.parseSqlTable(config.getSqlfromdb(), connectionName);
-            esqlItem = sqlFile.get(sqlId);
-        }
-
-        if (esqlItem == null) throwError(sqlId, config);
+        if (esqlItem == null) throwError(sqlId);
     }
 
-    private void throwError(String sqlId, EsqlConfigable config) {
+    private void throwError(String sqlId) {
         StringBuilder errMsg = new StringBuilder(sqlId + " not found ");
-        boolean useSqlFile = isNotEmpty(this.sqlClassPath);
-        if (useSqlFile) errMsg.append("in sql file ").append(this.sqlClassPath);
-        if (isNotEmpty(config.getSqlfromdb()))
-            errMsg.append(useSqlFile ? " or " : "").append("in ").append(config.getSqlfromdb());
+        boolean useSqlFile = isNotEmpty(sqlClassPath);
+        if (useSqlFile) errMsg.append("in sql file ").append(sqlClassPath);
 
         throw new EsqlIdNotFoundException(errMsg.toString());
     }
 
     protected List<EsqlSub> createSqlSubs(String[] directSqls) {
-        if (directSqls.length == 0)
-            return esqlItem.createSqlSubs(params != null && params.length > 0 ? params[0] : null);
-
-        return createSqlSubsByDirectSqls(directSqls);
+        return directSqls.length == 0 ? esqlItem.createSqlSubs(RArray.first(params))
+                : createSqlSubsByDirectSqls(directSqls);
     }
 
     private List<EsqlSub> createSqlSubsByDirectSqls(String[] sqls) {
@@ -419,7 +372,7 @@ public class Esql {
     }
 
     public Esql useSqlFile(Class<?> sqlBoundClass) {
-        this.sqlClassPath = "/" + sqlBoundClass.getName().replace('.', '/') + ".esql";
+        sqlClassPath = "/" + sqlBoundClass.getName().replace('.', '/') + ".esql";
         return this;
     }
 
@@ -467,7 +420,7 @@ public class Esql {
         EsqlTransaction outerTran = getOuterTran();
         if (outerTran != null) return outerTran;
 
-        if (inBatchMode && this.transaction != null) return transaction;
+        if (batch != null && transaction != null) return transaction;
 
         outerTran = getConfigTran(connectionName);
         outerTran.start();
@@ -519,7 +472,7 @@ public class Esql {
     }
 
     public String getSqlPath() {
-        return this.sqlClassPath;
+        return sqlClassPath;
     }
 
     private static EsqlTransaction getOuterTran() {
@@ -538,34 +491,28 @@ public class Esql {
     }
 
     public Esql startBatch(int maxBatches) {
-        this.maxBatches = maxBatches;
-        return startBatch();
+        batch.startBatch(maxBatches);
+        return this;
     }
 
     public Esql startBatch() {
-        this.inBatchMode = true;
-        batchedPs = Lists.newArrayList();
-        batchedMap = Maps.newHashMap();
-
+        batch = new EsqlBatch(this);
+        batch.startBatch();
         return this;
     }
 
     public int executeBatch() {
         int totalRows = 0;
         try {
-            totalRows = processBatchExecution();
+            totalRows = batch.processBatchExecution();
             tranCommit(transaction);
         } catch (SQLException e) {
             throw new EsqlExecuteException("executeBatch failed:" + e.getMessage());
         } finally {
-            cleanupBatch();
             tranClose(transaction);
         }
 
-        this.inBatchMode = false;
-        batchedPs = null;
-        batchedMap = null;
-        maxBatches = -1;
+        batch = null;
         return totalRows;
     }
 
@@ -578,6 +525,14 @@ public class Esql {
     public Esql limit(int maxRows) {
         this.maxRows = maxRows;
         return this;
+    }
+
+    public Object[] getParams() {
+        return params;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
 }

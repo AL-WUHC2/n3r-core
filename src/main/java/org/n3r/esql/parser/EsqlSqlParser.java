@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.n3r.core.lang.RClassPath;
 import org.n3r.core.lang.RStr;
 import org.n3r.esql.Esql;
+import org.n3r.esql.config.EsqlConfigManager;
+import org.n3r.esql.config.EsqlConfigable;
 import org.n3r.esql.ex.EsqlConfigException;
 import org.n3r.esql.impl.EsqlExecInfo;
 import org.n3r.esql.res.EsqlItem;
@@ -20,6 +22,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class EsqlSqlParser {
     private static final String SQLTABLE_KEY = "_SQLTABLE_KEY_";
@@ -135,10 +139,20 @@ public class EsqlSqlParser {
 
             getContext().setStartLineNo(endLine - sqlLines.size());
             esqlItem.addSqlParts(sqlLines);
-        }
-        finally {
+        } finally {
             sqlLines.clear();
         }
+    }
+
+    public static EsqlItem getEsqlItem(String sqlClassPath, String sqlId) {
+        return parseSqlFile(sqlClassPath).get(sqlId);
+    }
+
+    public static EsqlItem getEsqlItemFromSqlTable(String connectionName, String sqlId) {
+        EsqlConfigable config = EsqlConfigManager.getConfig(connectionName);
+        if (isEmpty(config.getSqlfromdb())) return null;
+
+        return parseSqlTable(config.getSqlfromdb(), connectionName).get(sqlId);
     }
 
 }
