@@ -47,7 +47,7 @@ public class IniConfigable extends DefaultConfigable {
             throw new ConfigException("read ini file error " + res, ex);
         }
         finally {
-            RClose.closeQuiety(reader);
+            RClose.closeQuietly(reader);
         }
         return props;
     }

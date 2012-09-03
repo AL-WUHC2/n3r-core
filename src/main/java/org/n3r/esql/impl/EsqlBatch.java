@@ -71,6 +71,6 @@ public class EsqlBatch {
 
     public void cleanupBatch() {
         for (PreparedStatement ps : batchedPs)
-            RClose.closeQuiety(ps);
+            RClose.closeQuietly(ps);
     }
 }

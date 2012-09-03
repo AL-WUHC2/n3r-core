@@ -48,7 +48,7 @@ public class ComplexPrizeItemDrawer implements PrizeDrawer {
             tran.commit();
         }
         finally {
-            RClose.closeQuiety(tran);
+            RClose.closeQuietly(tran);
         }
     }
 

@@ -7,13 +7,13 @@ import com.google.common.io.Closeables;
 
 public class RClose {
 
-    public static void closeQuiety(Closeable... closeables) {
+    public static void closeQuietly(Closeable... closeables) {
         for (Closeable closeable : closeables) {
             Closeables.closeQuietly(closeable);
         }
     }
 
-    public static void closeQuiety(Object... objects) {
+    public static void closeQuietly(Object... objects) {
         for (Object obj : objects) {
             if (obj == null) {
                 continue;

@@ -39,7 +39,7 @@ public class PropsConfigable extends DefaultConfigable {
             throw new ConfigException("read props file error " + res.getDescription(), ex);
         }
         finally {
-            RClose.closeQuiety(reader);
+            RClose.closeQuietly(reader);
         }
     }
 

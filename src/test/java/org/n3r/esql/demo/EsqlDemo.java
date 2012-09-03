@@ -136,7 +136,7 @@ public class EsqlDemo {
             tran.rollback();
         }
         finally {
-            RClose.closeQuiety(tran);
+            RClose.closeQuietly(tran);
         }
     }
 

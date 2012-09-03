@@ -137,7 +137,7 @@ public class Esql {
         } catch (SQLException ex) {
             throw new EsqlExecuteException(ex);
         } finally {
-            RClose.closeQuiety(stmt);
+            RClose.closeQuietly(stmt);
         }
     }
 
@@ -200,8 +200,9 @@ public class Esql {
 
     private Object execDmlNoBatch(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
         ResultSet rs = null;
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = prepareSql(conn, subSql, realSql(subSql));
+            ps = prepareSql(conn, subSql, realSql(subSql));
             new EsqlParamsBinder().bindParams(ps, subSql, params, logger);
 
             Object execRet = null;
@@ -219,7 +220,7 @@ public class Esql {
 
             return execRet;
         } finally {
-            RClose.closeQuiety(rs, rs != null ? rs.getStatement() : null);
+            RClose.closeQuietly(rs, rs != null ? rs.getStatement() : null, ps);
         }
     }
 
@@ -437,7 +438,7 @@ public class Esql {
     protected void tranClose(EsqlTransaction tran) {
         if (getOuterTran() != null) return;
 
-        RClose.closeQuiety(tran);
+        RClose.closeQuietly(tran);
     }
 
     public EsqlTransaction newTransaction() {
@@ -468,7 +469,7 @@ public class Esql {
 
     public static void closeTran() {
         EsqlTransaction tran = getOuterTran();
-        if (tran != null) RClose.closeQuiety(tran);
+        if (tran != null) RClose.closeQuietly(tran);
     }
 
     public String getSqlPath() {
