@@ -2,7 +2,6 @@
 SELECT T.ACTIVITY_ID,
        T.ACTIVITY_EFF,
        T.ACTIVITY_EXP,
-       T.DUP_SPEC,
        T.FREQUENCY_SPEC,
        T.CHECKERS,
        T.DRAWERS,

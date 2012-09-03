@@ -18,7 +18,7 @@ public class PrizeDraw {
     private PrizeActivity prizeActivity;
 
     public PrizeDraw(String activityId) {
-        this.prizeActivity = findPrizeActivity(activityId);
+        prizeActivity = findPrizeActivity(activityId);
     }
 
     /**
@@ -29,16 +29,15 @@ public class PrizeDraw {
     public PrizeItem draw(Object userInfo) {
         try {
             prizeDrawCheck(userInfo);
-        }
-        catch (PrizeDrawCheckException ex) {
+            PrizeItem drawResult = prizeDraw(userInfo);
+            if (drawResult != null)
+                prizeResultProcess(userInfo, drawResult);
+
+            return drawResult;
+        } catch (PrizeDrawCheckException ex) {
             log.info("抽奖校验不通过:{}", ex.getMessage());
             return null;
         }
-
-        PrizeItem drawResult = prizeDraw(userInfo);
-        prizeResultProcess(userInfo, drawResult);
-
-        return drawResult;
     }
 
     private void prizeResultProcess(Object userInfo, PrizeItem drawResult) {

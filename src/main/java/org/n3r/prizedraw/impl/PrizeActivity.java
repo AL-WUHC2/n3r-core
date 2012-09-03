@@ -26,7 +26,6 @@ public class PrizeActivity extends RBaseBean implements AfterProperitesSet {
     private String activityId;
     private Date activityEff;
     private Date activityExp;
-    private String dupSpec;
     private String frequencySpec;
     private String checkers;
     private String drawers;
@@ -40,8 +39,9 @@ public class PrizeActivity extends RBaseBean implements AfterProperitesSet {
             .compile("(\\d+)r?\\s*/(\\d+\\s*\\w)\\s*(\\d+)?.*?by\\s+([\\w_\\-.,]+)");
     private Logger log = LoggerFactory.getLogger(PrizeActivity.class);
 
+    @Override
     public void afterPropertiesSet() {
-        Splitter splitter = Splitter.on(',').omitEmptyStrings().trimResults();
+        Splitter splitter = Splitter.onPattern("[,\\s]").omitEmptyStrings().trimResults();
         splitFunctors(splitter, checkers, prizeDrawCheckers);
         splitFunctors(splitter, drawers, prizeDrawers);
         splitFunctors(splitter, resulters, prizeDrawResulters);
@@ -101,14 +101,6 @@ public class PrizeActivity extends RBaseBean implements AfterProperitesSet {
 
     public void setActivityExp(Date activityExp) {
         this.activityExp = activityExp;
-    }
-
-    public String getDupSpec() {
-        return dupSpec;
-    }
-
-    public void setDupSpec(String dupSpec) {
-        this.dupSpec = dupSpec;
     }
 
     public String getFrequencySpec() {

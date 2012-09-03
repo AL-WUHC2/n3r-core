@@ -2,6 +2,7 @@
 SELECT T.ACTIVITY_ID,
        T.ITEM_ID,
        T.ITEM_NAME,
+       T.ITEM_JOIN,
        T.ITEM_TOTAL,
        T.ITEM_OUT,
        T.ITEM_IN,
@@ -9,7 +10,7 @@ SELECT T.ACTIVITY_ID,
        T.ITEM_LUCKNUM,
        T.ITEM_SPEC,
        T.ITEM_MD5,
-       T.DUP_SPEC
+       T.ITEM_CHECKPOINTS
   FROM PRIZE_ITEM T
  WHERE T.ACTIVITY_ID = ##
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import com.google.common.base.Throwables;
 
@@ -12,17 +13,23 @@ public class RBean {
     public static String getProperty(Object bean, String name) {
         try {
             return BeanUtils.getProperty(bean, name);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw Throwables.propagate(e);
         }
     }
 
-    public static String getPropertyQuietly(Object bean, String name) {
+    public static Object getPropertyQuietly(Object bean, String name) {
+        try {
+            return PropertyUtils.getProperty(bean, name);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String getStrPropertyQuietly(Object bean, String name) {
         try {
             return BeanUtils.getProperty(bean, name);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -30,8 +37,7 @@ public class RBean {
     public static void setPropertyQuietly(Object bean, String name, Object value) {
         try {
             BeanUtils.setProperty(bean, name, value);
-        }
-        catch (Exception e) {}
+        } catch (Exception e) {}
     }
 
     @SuppressWarnings("unchecked")
@@ -41,8 +47,7 @@ public class RBean {
 
         try {
             return BeanUtils.describe(bean);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw Throwables.propagate(e);
         }
     }

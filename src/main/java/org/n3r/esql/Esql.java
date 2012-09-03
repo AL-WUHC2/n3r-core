@@ -220,7 +220,7 @@ public class Esql {
 
             return execRet;
         } finally {
-            RClose.closeQuietly(rs, rs != null ? rs.getStatement() : null, ps);
+            RClose.closeQuietly(rs, ps);
         }
     }
 
@@ -469,7 +469,7 @@ public class Esql {
 
     public static void closeTran() {
         EsqlTransaction tran = getOuterTran();
-        if (tran != null) RClose.closeQuietly(tran);
+        RClose.closeQuietly(tran);
     }
 
     public String getSqlPath() {

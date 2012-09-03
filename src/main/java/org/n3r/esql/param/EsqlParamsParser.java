@@ -27,7 +27,7 @@ public class EsqlParamsParser {
         this.sqlItem = sqlItem;
         this.rawSql = rawSql;
 
-        this.subSql = new EsqlSub();
+        subSql = new EsqlSub();
         subSql.setSqlType(EsqlUtils.parseSqlType(rawSql));
 
         Matcher matcher = PARAM_PATTERN.matcher(rawSql);
@@ -65,7 +65,7 @@ public class EsqlParamsParser {
     }
 
     private static final Pattern lastWord = Pattern.compile(".*\\b([\\w_\\d]+)\\b.*$", Pattern.DOTALL);
-    private static final Pattern questionPattern = Pattern.compile("#\\s*\\?\\s*#");
+    private static final Pattern questionPattern = Pattern.compile("#\\s*\\?\\s*(:.*)?#");
 
     private String inferVarName(EsqlType sqlType, String rawSql, int startPos, int endPos) {
         String variableName = null;
@@ -135,13 +135,11 @@ public class EsqlParamsParser {
     }
 
     private String inferVarNameInUpdateSql(String rawSql, int startPos, int endPos) {
-        String variableName;
         String substr = rawSql.substring(startPos, endPos);
         Matcher matcher = lastWord.matcher(substr);
         if (!matcher.matches()) throw new EsqlConfigException("无法解析#?#： " + substr);
 
-        variableName = matcher.group(1);
-        return variableName;
+        return matcher.group(1);
     }
 
     private void parsePlaceholders(List<String> placeHolders, List<String> placeHolderOptions) {

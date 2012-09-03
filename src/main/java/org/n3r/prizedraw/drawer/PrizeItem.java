@@ -1,25 +1,42 @@
 package org.n3r.prizedraw.drawer;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.n3r.core.joor.Reflect;
 import org.n3r.core.lang.RBaseBean;
 import org.n3r.esql.map.AfterProperitesSet;
+import org.n3r.prizedraw.base.PrizeDrawItemChecker;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
 public class PrizeItem extends RBaseBean implements AfterProperitesSet {
     private String activityId;
     private String itemId;
     private String itemName;
+    private boolean itemJoin;
     private int itemTotal;
     private int itemOut;
     private int itemIn;
     private int itemRandbase;
     private int itemLucknum;
+    private String checkers;
     private String itemSpec;
     private String itemMd5;
-
-    private String dupSpec;
+    private Date itemCheckpoints;
+    private List<PrizeDrawItemChecker> itemCheckers = Lists.newArrayList();
 
     @Override
     public void afterPropertiesSet() {
-
+        if (StringUtils.isNotEmpty(checkers)) {
+            Splitter splitter = Splitter.onPattern("[,\\s]").omitEmptyStrings().trimResults();
+            for (String functorStr : splitter.split(checkers)) {
+                PrizeDrawItemChecker functor = Reflect.on(functorStr).create().get();
+                itemCheckers.add(functor);
+            }
+        }
     }
 
     public int getItemOut() {
@@ -29,8 +46,6 @@ public class PrizeItem extends RBaseBean implements AfterProperitesSet {
     public void setItemOut(int itemOut) {
         this.itemOut = itemOut;
     }
-
-
 
     public int getItemIn() {
         return itemIn;
@@ -88,14 +103,6 @@ public class PrizeItem extends RBaseBean implements AfterProperitesSet {
         this.itemSpec = itemSpec;
     }
 
-    public String getDupSpec() {
-        return dupSpec;
-    }
-
-    public void setDupSpec(String dupSpec) {
-        this.dupSpec = dupSpec;
-    }
-
     public int getItemRandbase() {
         return itemRandbase;
     }
@@ -110,6 +117,34 @@ public class PrizeItem extends RBaseBean implements AfterProperitesSet {
 
     public void setItemLucknum(int itemLucknum) {
         this.itemLucknum = itemLucknum;
+    }
+
+    public boolean isItemJoin() {
+        return itemJoin;
+    }
+
+    public void setItemJoin(boolean itemJoin) {
+        this.itemJoin = itemJoin;
+    }
+
+    public String getCheckers() {
+        return checkers;
+    }
+
+    public void setCheckers(String checkers) {
+        this.checkers = checkers;
+    }
+
+    public List<PrizeDrawItemChecker> getItemCheckers() {
+        return itemCheckers;
+    }
+
+    public Date getItemCheckpoints() {
+        return itemCheckpoints;
+    }
+
+    public void setItemCheckpoints(Date itemCheckpoints) {
+        this.itemCheckpoints = itemCheckpoints;
     }
 
 }

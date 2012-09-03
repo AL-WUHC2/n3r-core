@@ -11,7 +11,7 @@ import com.google.common.base.Throwables;
 
 public class EsqlSub implements Cloneable {
     public static enum EsqlType {
-        SELECT, UPDATE, INSERT, MERGE, DROP, CREATE, TRUNCATE, CALL
+        SELECT, UPDATE, INSERT, MERGE, DROP, CREATE, TRUNCATE, CALL, DELETE
     }
 
     private EsqlItem esqlItem;
@@ -32,8 +32,7 @@ public class EsqlSub implements Cloneable {
     public EsqlSub clone() {
         try {
             return (EsqlSub) super.clone();
-        }
-        catch (CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             throw Throwables.propagate(e);
         }
     }
@@ -48,7 +47,7 @@ public class EsqlSub implements Cloneable {
 
     public void setPlaceHolders(EsqlParamPlaceholder[] placeHolders) {
         this.placeHolders = placeHolders;
-        this.outCount = 0;
+        outCount = 0;
         for (EsqlParamPlaceholder placeHolder : placeHolders)
             if (placeHolder.getInOut() != InOut.IN) ++outCount;
     }
@@ -102,7 +101,7 @@ public class EsqlSub implements Cloneable {
     }
 
     public boolean isLastSelectSql() {
-        return this.lastSelectSql;
+        return lastSelectSql;
     }
 
     public boolean isWillReturnOnlyOneRow() {

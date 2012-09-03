@@ -250,7 +250,7 @@ public class EsqlDemoTest {
             int[] executeBatch = ps.executeBatch();
             System.out.println(ArrayUtils.toString(executeBatch));
         } finally {
-            RClose.closeQuiety(ps, connection);
+            RClose.closeQuietly(ps, connection);
         }
 
     }
@@ -296,7 +296,7 @@ public class EsqlDemoTest {
             cs.execute();
             System.out.println(cs.getString(2));
         } finally {
-            RClose.closeQuiety(cs, connection);
+            RClose.closeQuietly(cs, connection);
         }
 
         String b = new Esql().useSqlFile(EsqlDemo.class)

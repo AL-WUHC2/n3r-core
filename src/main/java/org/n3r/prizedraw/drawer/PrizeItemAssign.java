@@ -2,7 +2,9 @@ package org.n3r.prizedraw.drawer;
 
 import java.util.Date;
 
-public class PrizeItemAssign {
+import org.n3r.core.lang.RBaseBean;
+
+public class PrizeItemAssign extends RBaseBean {
     private String activityId;
     private String itemId;
     private Date assignTimeFrom;

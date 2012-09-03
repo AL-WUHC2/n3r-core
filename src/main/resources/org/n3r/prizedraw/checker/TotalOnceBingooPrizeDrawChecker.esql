@@ -1,0 +1,7 @@
+[checkBingooRecord]
+SELECT 1
+FROM PRIZE_BINGOO
+WHERE ACTIVITY_ID = ##
+AND   USER_ID = ##
+AND   ITEM_JOIN = 0
+AND   ROWNUM < 2

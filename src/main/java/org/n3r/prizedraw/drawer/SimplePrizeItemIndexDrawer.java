@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.n3r.core.text.RRand;
 import org.n3r.esql.Esql;
+import org.n3r.prizedraw.base.PrizeDrawItemChecker;
 import org.n3r.prizedraw.base.PrizeDrawer;
 import org.n3r.prizedraw.impl.PrizeActivity;
 
@@ -18,6 +19,9 @@ public class SimplePrizeItemIndexDrawer implements PrizeDrawer {
 
         // 该奖项已经没有剩余奖品
         if (prizeItem.getItemIn() <= 0) return null;
+
+        for (PrizeDrawItemChecker checker : prizeItem.getItemCheckers())
+            checker.check(prizeActivity, userInfo, prizeItem);
 
         return prizeItem;
     }

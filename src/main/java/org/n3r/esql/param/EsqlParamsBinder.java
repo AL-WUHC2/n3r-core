@@ -3,6 +3,7 @@ package org.n3r.esql.param;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Date;
 
@@ -82,8 +83,8 @@ public class EsqlParamsBinder {
 
     private void setParamExtra(int index, Object value) throws SQLException {
         if (value instanceof Date) {
-            java.sql.Date date = new java.sql.Date(((Date) value).getTime());
-            ps.setDate(index + 1, date);
+            Timestamp date = new Timestamp(((Date) value).getTime());
+            ps.setTimestamp(index + 1, date);
             boundParams.append('[').append(RDate.toDateTimeStr(date)).append(']');
         }
         else {
@@ -110,7 +111,8 @@ public class EsqlParamsBinder {
         Object bean = params[0];
 
         String varName = subSql.getPlaceHolders()[index].getPlaceholder();
-        String property = RBean.getPropertyQuietly(bean, varName);
+        Object property = RBean.getPropertyQuietly(bean, varName);
+
         if (property != null) return property;
 
         String propertyName = RStr.convertUnderscoreNameToPropertyName(varName);

@@ -15,8 +15,10 @@ public class LogPrizeDrawResulter implements PrizeDrawResulter {
 
         if (drawResult != null) {
             String orderNo = RRand.randNum(10);
-            new Esql().insert("insertPrizeBingoo").params(orderNo, prizeActivity.getActivityId(),
-                    drawResult.getItemId(), userId).execute();
+            new Esql().insert("insertPrizeBingoo")
+                    .params(orderNo, prizeActivity.getActivityId(),
+                            drawResult.getItemId(), userId, drawResult.isItemJoin())
+                    .execute();
         }
 
         PrizeRecord prizeRecord = new PrizeRecord();
@@ -27,4 +29,3 @@ public class LogPrizeDrawResulter implements PrizeDrawResulter {
         new Esql().update("logPrizeRecord").params(prizeRecord).execute();
     }
 }
-
