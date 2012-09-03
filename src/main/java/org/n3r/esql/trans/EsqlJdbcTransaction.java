@@ -15,6 +15,7 @@ public class EsqlJdbcTransaction implements EsqlTransaction {
         this.connection = connection;
     }
 
+    @Override
     public void start() {
         try {
             if (connection == null) throw new EsqlExecuteException(
@@ -22,34 +23,34 @@ public class EsqlJdbcTransaction implements EsqlTransaction {
                             " Cause: The DataSource returned a null connection.");
 
             if (connection.getAutoCommit()) connection.setAutoCommit(false);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new EsqlExecuteException(e);
         }
     }
 
+    @Override
     public void commit() {
         if (connection == null) return;
 
         try {
             connection.commit();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new EsqlExecuteException(e);
         }
     }
 
+    @Override
     public void rollback() {
         if (connection == null) return;
 
         try {
             connection.rollback();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new EsqlExecuteException(e);
         }
     }
 
+    @Override
     public Connection getConnection() {
         return connection;
     }
@@ -57,6 +58,7 @@ public class EsqlJdbcTransaction implements EsqlTransaction {
     /**
      * Oracle JDBC会在close时自动commit(如果没有显式调用commit/rollback时).
      */
+    @Override
     public void close() throws IOException {
         Esql.execContext.get().setTransaction(null);
 
@@ -65,8 +67,7 @@ public class EsqlJdbcTransaction implements EsqlTransaction {
         try {
             connection.close();
             connection = null;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             // Ingore
         }
     }

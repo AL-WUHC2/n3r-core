@@ -224,8 +224,9 @@ public class EsqlDemoTest {
 
     @Test
     public void selectLimitedRecords() {
-        Object execute = new Esql().useSqlFile(EsqlDemo.class).select("selectRecords").limit(3).execute();
-        System.out.println(execute);
+        List<Object> execute = new Esql().useSqlFile(EsqlDemo.class).select("selectRecords").limit(3).execute();
+
+        assertEquals(3, execute.size());
     }
 
     @Test
@@ -248,8 +249,7 @@ public class EsqlDemoTest {
             }
             int[] executeBatch = ps.executeBatch();
             System.out.println(ArrayUtils.toString(executeBatch));
-        }
-        finally {
+        } finally {
             RClose.closeQuiety(ps, connection);
         }
 
@@ -295,8 +295,7 @@ public class EsqlDemoTest {
             cs.registerOutParameter(2, Types.VARCHAR);
             cs.execute();
             System.out.println(cs.getString(2));
-        }
-        finally {
+        } finally {
             RClose.closeQuiety(cs, connection);
         }
 
