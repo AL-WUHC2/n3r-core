@@ -1,5 +1,8 @@
 package org.n3r.esql;
 
+import static org.apache.commons.lang3.StringUtils.*;
+import static org.n3r.esql.util.EsqlUtils.*;
+
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -40,10 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import static org.n3r.esql.util.EsqlUtils.*;
-
-import static org.apache.commons.lang3.StringUtils.*;
 
 public class Esql {
     private Class<?> returnType;
@@ -105,13 +104,11 @@ public class Esql {
                 ret = executeSub(transaction.getConnection(), ret, subSql);
 
             if (!inBatchMode) tranCommit(transaction);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (inBatchMode) cleanupBatch();
             throw new EsqlExecuteException("exec sql failed[" + Esql.getExecContextInfo().getSql() + "]"
                     + e.getMessage());
-        }
-        finally {
+        } finally {
             if (!inBatchMode) tranClose(transaction);
         }
 
@@ -126,10 +123,8 @@ public class Esql {
         Esql.getExecContextInfo().setSql(subSql.getSql());
 
         try {
-            return isDdl(subSql.getSql()) ? executeImmedate(conn, getRealSql(subSql))
-                    : pageExecute(conn, ret, subSql);
-        }
-        catch (EsqlExecuteException ex) {
+            return isDdl(subSql.getSql()) ? executeImmedate(conn, getRealSql(subSql)) : pageExecute(conn, ret, subSql);
+        } catch (EsqlExecuteException ex) {
             boolean onerrResume = subSql.getEsqlItem().isOnerrResume();
             if (!onerrResume) throw ex;
         }
@@ -143,18 +138,15 @@ public class Esql {
         try {
             stmt = conn.createStatement();
             return stmt.execute(sql);
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             throw new EsqlExecuteException(ex);
-        }
-        finally {
+        } finally {
             RClose.closeQuiety(stmt);
         }
     }
 
     private Object pageExecute(Connection conn, Object ret, EsqlSub subSql) throws SQLException {
-        if (this.page == null || !subSql.isLastSelectSql())
-            return executeNoneDdl(conn, ret, subSql);
+        if (this.page == null || !subSql.isLastSelectSql()) return executeNoneDdl(conn, ret, subSql);
 
         if (this.page.getTotalRows() == 0) this.page.setTotalRows(executeTotalRowsSql(conn, ret, subSql));
 
@@ -219,8 +211,7 @@ public class Esql {
                     CallableStatement cs = (CallableStatement) ps;
                     cs.execute();
                     execRet = retrieveProcedureRet(subSql, cs);
-                }
-                else execRet = processBatchUpdate(conn, subSql);
+                } else execRet = processBatchUpdate(conn, subSql);
                 break;
             default:
                 if (!this.inBatchMode) execRet = ps.executeUpdate();
@@ -230,8 +221,7 @@ public class Esql {
             getExecContextInfo().addReturn(execRet);
 
             return execRet;
-        }
-        finally {
+        } finally {
             RClose.closeQuiety(rs, ps);
         }
     }
@@ -264,8 +254,7 @@ public class Esql {
     }
 
     private PreparedStatement prepareSql(Connection conn, EsqlSub subSql, String realSql) throws SQLException {
-        return subSql.getSqlType() == EsqlType.CALL
-                ? conn.prepareCall(realSql) : conn.prepareStatement(realSql);
+        return subSql.getSqlType() == EsqlType.CALL ? conn.prepareCall(realSql) : conn.prepareStatement(realSql);
     }
 
     private int processBatchUpdate(Connection conn, EsqlSub subSql) throws SQLException {
@@ -307,14 +296,13 @@ public class Esql {
     }
 
     private Object convert(ResultSet rs, EsqlSub subSql) throws SQLException {
-        return maxRows <= 1 || subSql.isWillReturnOnlyOneRow()
-                ? firstRow(rs) : selectList(rs);
+        return maxRows <= 1 || subSql.isWillReturnOnlyOneRow() ? firstRow(rs) : selectList(rs);
     }
 
     private Object selectList(ResultSet rs) throws SQLException {
         List<Object> result = new ArrayList<Object>();
 
-        for (int rownum = 1; rs.next(); ++rownum) {
+        for (int rownum = 1; rs.next() && rownum <= maxRows; ++rownum) {
             Object rowObject = rowBeanCreate(rs, rownum);
             if (rowObject != null) result.add(rowObject);
         }
@@ -567,11 +555,9 @@ public class Esql {
         try {
             totalRows = processBatchExecution();
             tranCommit(transaction);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new EsqlExecuteException("executeBatch failed:" + e.getMessage());
-        }
-        finally {
+        } finally {
             cleanupBatch();
             tranClose(transaction);
         }

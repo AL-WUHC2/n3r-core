@@ -223,6 +223,12 @@ public class EsqlDemoTest {
     }
 
     @Test
+    public void selectLimitedRecords() {
+        Object execute = new Esql().useSqlFile(EsqlDemo.class).select("selectRecords").limit(3).execute();
+        System.out.println(execute);
+    }
+
+    @Test
     public void batch() throws SQLException {
         Connection connection = null;
         PreparedStatement ps = null;
