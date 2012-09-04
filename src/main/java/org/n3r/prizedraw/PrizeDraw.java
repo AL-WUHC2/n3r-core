@@ -30,8 +30,7 @@ public class PrizeDraw {
         try {
             prizeDrawCheck(userInfo);
             PrizeItem drawResult = prizeDraw(userInfo);
-            if (drawResult != null)
-                prizeResultProcess(userInfo, drawResult);
+            prizeResultProcess(userInfo, drawResult);
 
             return drawResult;
         } catch (PrizeDrawCheckException ex) {
