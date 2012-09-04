@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.n3r.esql.Esql;
 import org.n3r.esql.EsqlTransaction;
 import org.n3r.esql.ex.EsqlExecuteException;
 
@@ -60,8 +59,6 @@ public class EsqlJdbcTransaction implements EsqlTransaction {
      */
     @Override
     public void close() throws IOException {
-        Esql.execContext.get().setTransaction(null);
-
         if (connection == null) return;
 
         try {

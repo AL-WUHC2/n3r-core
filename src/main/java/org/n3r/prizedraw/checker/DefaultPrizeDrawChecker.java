@@ -12,18 +12,19 @@ import org.n3r.prizedraw.impl.PrizeDrawCheckException;
 
 public class DefaultPrizeDrawChecker implements PrizeDrawChecker {
 
+    @Override
     public void check(PrizeActivity prizeActivity, Object userInfo) {
         List<DefaultPrizeCheck> checks = new Esql().select("getPrizeDrawChecker")
                 .params(prizeActivity.getActivityId()).execute();
         for (DefaultPrizeCheck defaultPrizeCheck : checks) {
             String property = RBean.getProperty(userInfo, defaultPrizeCheck.getCheckProperty());
-            if (property == null && !defaultPrizeCheck.isNotexistsTag()) throw new PrizeDrawCheckException(
-                    defaultPrizeCheck.getCheckProperty() + "的值是null");
+            if (property == null && !defaultPrizeCheck.isNotexistsTag())
+                throw new PrizeDrawCheckException(defaultPrizeCheck.getRemark());
 
             PropertyValueComparator comparator = defaultPrizeCheck.getPropertyValueComparator();
             int compareRet = comparator.compare(property, defaultPrizeCheck.getCheckValue());
-            if (!passCond(defaultPrizeCheck.getCheckCond(), compareRet)) throw new PrizeDrawCheckException(
-                    defaultPrizeCheck.getCheckProperty() + "的值校验通不过");
+            if (!passCond(defaultPrizeCheck.getCheckCond(), compareRet))
+                throw new PrizeDrawCheckException(defaultPrizeCheck.getRemark());
         }
     }
 

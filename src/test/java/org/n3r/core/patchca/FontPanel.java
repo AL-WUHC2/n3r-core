@@ -8,10 +8,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
+
 import javax.swing.JPanel;
 
-//////////////////////////////////////////////////////////////// FontPanel class
 class FontPanel extends JPanel {
+    private static final long serialVersionUID = -7929591818307829006L;
     private String _fontName;
     private int _fontStyle;
     private int _fontSize;
@@ -19,9 +20,9 @@ class FontPanel extends JPanel {
 
     //============================================================== constructor
     public FontPanel(String font, int style, int size, boolean antialiased) {
-        this.setPreferredSize(new Dimension(400, 100));
-        this.setBackground(Color.white);
-        this.setForeground(Color.black);
+        setPreferredSize(new Dimension(400, 100));
+        setBackground(Color.white);
+        setForeground(Color.black);
         _fontName = font;
         _fontStyle = style;
         _fontSize = size;
@@ -42,20 +43,18 @@ class FontPanel extends JPanel {
         Font f = new Font(_fontName, _fontStyle, _fontSize);
         g2.setFont(f);
 
-        if (_antialiased) {
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-        }
+        if (_antialiased) g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         //... Find the size of this text so we can center it.
         FontMetrics fm = g2.getFontMetrics(f); // metrics for this object
         Rectangle2D rect = fm.getStringBounds(text, g2); // size of string
-        int textHeight = (int) (rect.getHeight());
-        int textWidth = (int) (rect.getWidth());
+        int textHeight = (int) rect.getHeight();
+        int textWidth = (int) rect.getWidth();
 
         //... Center text horizontally and vertically
-        int x = (this.getWidth() - textWidth) / 2;
-        int y = (this.getHeight() - textHeight) / 2 + fm.getAscent();
+        int x = (getWidth() - textWidth) / 2;
+        int y = (getHeight() - textHeight) / 2 + fm.getAscent();
 
         g2.drawString(text, x, y);
     }

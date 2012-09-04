@@ -126,33 +126,17 @@ public class EsqlDemo {
     }
 
     public void rollback(int a, String b) {
-        EsqlTransaction tran = new Esql().newTransaction();
+        Esql esql = new Esql();
+        EsqlTransaction tran = esql.newTransaction();
         try {
             tran.start();
-            new Esql().update("updateBean")
-                    .params(a, b)
-                    .execute();
-
-            tran.rollback();
-        }
-        finally {
-            RClose.closeQuietly(tran);
-        }
-    }
-
-    public void rollback2(int a, String b) {
-        try {
-            Esql esql = new Esql();
-            Esql.startTran(esql);
-
             esql.update("updateBean")
                     .params(a, b)
                     .execute();
 
-            Esql.rollbackTran();
-        }
-        finally {
-            Esql.closeTran();
+            tran.rollback();
+        } finally {
+            RClose.closeQuietly(tran);
         }
     }
 

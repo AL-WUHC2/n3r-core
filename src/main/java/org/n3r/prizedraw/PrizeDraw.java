@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.esql.Esql;
+import org.n3r.prizedraw.base.PrizeCommitter;
 import org.n3r.prizedraw.base.PrizeDrawChecker;
 import org.n3r.prizedraw.base.PrizeDrawResulter;
 import org.n3r.prizedraw.base.PrizeDrawer;
 import org.n3r.prizedraw.drawer.PrizeItem;
 import org.n3r.prizedraw.impl.PrizeActivity;
 import org.n3r.prizedraw.impl.PrizeDrawCheckException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Throwables;
 
 public class PrizeDraw {
-    private Logger log = LoggerFactory.getLogger(PrizeDraw.class);
     private PrizeActivity prizeActivity;
 
     public PrizeDraw(String activityId) {
@@ -26,22 +26,28 @@ public class PrizeDraw {
      * @param userInfo 用户信息，POJO或者Map
      * @return 奖项ID。如果返回null,表名没有中奖
      */
-    public PrizeItem draw(Object userInfo) {
+    public PrizeItem draw(Object userInfo) throws PrizeDrawCheckException {
         try {
             prizeDrawCheck(userInfo);
             PrizeItem drawResult = prizeDraw(userInfo);
-            prizeResultProcess(userInfo, drawResult);
-
+            drawResult = prizeResultProcess(userInfo, drawResult);
+            PrizeCommitter.commit();
             return drawResult;
-        } catch (PrizeDrawCheckException ex) {
-            log.info("抽奖校验不通过:{}", ex.getMessage());
-            return null;
+        } catch (Throwable th) {
+            PrizeCommitter.rollback();
+            throw Throwables.propagate(th);
+        } finally {
+            PrizeCommitter.close();
         }
+
     }
 
-    private void prizeResultProcess(Object userInfo, PrizeItem drawResult) {
+    private PrizeItem prizeResultProcess(Object userInfo, PrizeItem drawResult) {
+        PrizeItem resultRet = drawResult;
         for (PrizeDrawResulter prizeDrawResulter : prizeActivity.getPrizeDrawResulters())
-            prizeDrawResulter.result(drawResult, prizeActivity, userInfo);
+            resultRet = prizeDrawResulter.result(resultRet, prizeActivity, userInfo);
+
+        return resultRet;
     }
 
     private PrizeItem prizeDraw(Object userInfo) {

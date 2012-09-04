@@ -10,10 +10,10 @@ public class PrizeDrawDemo {
         // 进行奥运抽奖
         Map<String, String> user = new HashMap<String, String>();
         user.put("createDate", "20120602");
-        user.put("userId", "dingoo");
+        user.put("userId", "456");
 
         PrizeDraw prizeDraw = new PrizeDraw("Olympic");
-        for (int i = 0; i < 1000; ++i) {
+        for (int i = 0; i < 1; ++i) {
             PrizeItem prizeItemId = prizeDraw.draw(user);
             System.out.println("抽奖返回:" + prizeItemId);
         }

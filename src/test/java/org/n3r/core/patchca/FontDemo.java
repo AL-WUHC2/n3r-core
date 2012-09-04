@@ -15,6 +15,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class FontDemo extends JFrame {
+    private static final long serialVersionUID = -1623966034224763120L;
+
     //=================================================================== fields
     private FontPanel _displayArea;// Where the sample text is displayed.
 
@@ -30,7 +32,7 @@ public class FontDemo extends JFrame {
     //================================================================ constants
     private static final int INITIAL_SIZE = 18;
     private static final int INITIAL_STYLE = Font.PLAIN;
-//    private static final String INITIAL_STYLENAME = "Font.PLAIN";
+    //    private static final String INITIAL_STYLENAME = "Font.PLAIN";
     private static final String INITIAL_FONTNAME = "Monospaced";
 
     //============================================================== constructor
@@ -49,10 +51,8 @@ public class FontDemo extends JFrame {
         Vector<String> visFonts = new Vector<String>(fontNames.length);
         for (String fontName : fontNames) {
             Font f = new Font(fontName, Font.PLAIN, 12);
-            if (f.canDisplay('a')) {
-                //... Display only fonts that have the alphabetic characters.
-                visFonts.add(fontName);
-            }
+            if (f.canDisplay('a')) //... Display only fonts that have the alphabetic characters.
+            visFonts.add(fontName);
             else {
                 //    On my machine there are almost 20 fonts (eg, Wingdings)
                 //    that don't display text.
@@ -63,6 +63,7 @@ public class FontDemo extends JFrame {
         _fontCombo = new JComboBox(visFonts); // JComboBox of fonts
         _fontCombo.setSelectedItem(INITIAL_FONTNAME); // Select initial font
         _fontCombo.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 _displayArea.setFontName((String) _fontCombo.getSelectedItem());
             }
@@ -84,21 +85,25 @@ public class FontDemo extends JFrame {
 
         //... Add listeners.
         stylePlainRB.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 _displayArea.setFontStyle(Font.PLAIN);
             }
         });
         styleItalicRB.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 _displayArea.setFontStyle(Font.ITALIC);
             }
         });
         styleBoldRB.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 _displayArea.setFontStyle(Font.BOLD);
             }
         });
         styleItalicBoldRB.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 _displayArea.setFontStyle(Font.ITALIC + Font.BOLD);
             }
@@ -107,6 +112,7 @@ public class FontDemo extends JFrame {
         //... Antialiasing checkbox
         _antialiasedCB = new JCheckBox("Antialiased");
         _antialiasedCB.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 _displayArea.setAntialiasing(_antialiasedCB.isSelected());
             }
@@ -119,6 +125,7 @@ public class FontDemo extends JFrame {
         _sizeSlider.setPaintTicks(true); // display the ticks
         _sizeSlider.setPaintLabels(true); // show the numbers
         _sizeSlider.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 _displayArea.setFontSize(_sizeSlider.getValue());
             }
@@ -148,11 +155,10 @@ public class FontDemo extends JFrame {
 
         //... Set window characteristics
         setContentPane(content);
-        Font wingsdingsFont = new Font( "dialog", Font.PLAIN, 25 ); // Must be a logical font name
+        Font wingsdingsFont = new Font("dialog", Font.PLAIN, 25); // Must be a logical font name
         setFont(wingsdingsFont);
         String text = "Smile: \u263A, Phone: \u2706";
-       
-       
+
         setTitle(text/*"Font Demo"*/);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();

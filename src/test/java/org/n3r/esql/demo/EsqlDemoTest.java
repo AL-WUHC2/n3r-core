@@ -369,6 +369,10 @@ public class EsqlDemoTest {
         int ab = esql.execute("{CALL SP_ESQL_NOOUT(##)}", "SELECT 1 FROM DUAL");
 
         assertEquals(1, ab);
+    }
+
+    @Test
+    public void twoTrans() {
 
     }
 }

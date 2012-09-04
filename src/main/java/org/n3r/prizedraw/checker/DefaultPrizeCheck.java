@@ -13,12 +13,14 @@ public class DefaultPrizeCheck implements AfterProperitesSet {
     private String checkValue;
     private String checkCond;
     private String comparator;
+    private String remark;
     private PropertyValueComparator propertyValueComparator;
 
+    @Override
     public void afterPropertiesSet() {
         propertyValueComparator = StringUtils.isEmpty(comparator)
                 ? new StringPropertyValueComparetor()
-                : Reflect.on(comparator).create().<PropertyValueComparator>get();
+                : Reflect.on(comparator).create().<PropertyValueComparator> get();
     }
 
     public String getActivityId() {
@@ -71,6 +73,14 @@ public class DefaultPrizeCheck implements AfterProperitesSet {
 
     public PropertyValueComparator getPropertyValueComparator() {
         return propertyValueComparator;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

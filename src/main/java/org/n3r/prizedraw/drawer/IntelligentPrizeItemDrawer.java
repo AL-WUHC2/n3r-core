@@ -19,6 +19,7 @@ import org.n3r.prizedraw.base.PrizeDrawer;
 import org.n3r.prizedraw.drawer.ItemSpecParser.DayItem;
 import org.n3r.prizedraw.drawer.ItemSpecParser.ItemTimeRange;
 import org.n3r.prizedraw.impl.PrizeActivity;
+import org.n3r.prizedraw.util.PrizeUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -39,20 +40,24 @@ public class IntelligentPrizeItemDrawer implements PrizeDrawer {
         tryParseItemSpec(lastDrawResult);
 
         // 使用随机数判断是否通过幸运抽选关
-        int rand = RRand.randInt(lastDrawResult.getItemRandbase());
-        boolean hasLucky = rand == lastDrawResult.getItemLucknum() % lastDrawResult.getItemRandbase();
+        boolean hasLucky = PrizeUtils.randomize(lastDrawResult);
+
+        Esql esql = new Esql();
+        final EsqlTransaction transaction = esql.newTransaction();
+        PrizeUtils.addCommitter(transaction);
+
         int rows = 0;
-        if (hasLucky) rows = new Esql().update("itemDraw")
+        if (hasLucky) rows = esql.update("itemDraw")
                 .params(prizeActivity.getActivityId(), lastDrawResult.getItemId())
                 .execute();
 
         // 幸运抽奖开始
-        if (rows == 0) rows = new Esql().update("luckyDraw")
+        if (rows == 0) rows = esql.update("luckyDraw")
                 .params(prizeActivity.getActivityId(), lastDrawResult.getItemId())
                 .execute();
 
         // 抽中，减少可用奖项为1
-        if (rows == 1) new Esql().useSqlFile(SimplePrizeItemDrawer.class)
+        if (rows == 1) esql.useSqlFile(SimplePrizeItemDrawer.class)
                 .update("decreaseItemNum").params(lastDrawResult).execute();
 
         return rows == 1 ? lastDrawResult : null;

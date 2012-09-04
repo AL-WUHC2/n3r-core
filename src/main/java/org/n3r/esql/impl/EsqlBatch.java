@@ -1,6 +1,5 @@
 package org.n3r.esql.impl;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,11 +36,11 @@ public class EsqlBatch {
         batchedMap = Maps.newHashMap();
     }
 
-    public int processBatchUpdate(Connection conn, EsqlSub subSql) throws SQLException {
+    public int processBatchUpdate(EsqlSub subSql) throws SQLException {
         String realSql = esql.realSql(subSql);
         PreparedStatement ps = batchedMap.get(realSql);
         if (ps == null) {
-            ps = esql.prepareSql(conn, subSql, realSql);
+            ps = esql.prepareSql(subSql, realSql);
             batchedMap.put(realSql, ps);
             batchedPs.add(ps);
         }
