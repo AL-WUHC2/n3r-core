@@ -1,4 +1,4 @@
-package org.n3r.esql.impl;
+package org.n3r.prizedraw.impl;
 
 import org.n3r.core.lang.RStr;
 import org.n3r.prizedraw.base.PropertyValueComparator;

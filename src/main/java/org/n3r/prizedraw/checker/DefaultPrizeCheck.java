@@ -2,9 +2,9 @@ package org.n3r.prizedraw.checker;
 
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.core.joor.Reflect;
-import org.n3r.esql.impl.StringPropertyValueComparetor;
 import org.n3r.esql.map.AfterProperitesSet;
 import org.n3r.prizedraw.base.PropertyValueComparator;
+import org.n3r.prizedraw.impl.StringPropertyValueComparetor;
 
 public class DefaultPrizeCheck implements AfterProperitesSet {
     private String activityId;
