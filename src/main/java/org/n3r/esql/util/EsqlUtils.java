@@ -13,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.n3r.core.lang.RStr;
 import org.n3r.esql.EsqlTransaction;
 import org.n3r.esql.config.EsqlConfigManager;
 import org.n3r.esql.param.EsqlParamsParser;
@@ -31,8 +30,7 @@ public class EsqlUtils {
         try {
             String firstWord = matcher.group(1).toUpperCase();
             return EsqlType.valueOf(firstWord);
-        }
-        catch (IllegalStateException ex) {
+        } catch (IllegalStateException ex) {
             throw ex;
         }
     }
@@ -158,8 +156,4 @@ public class EsqlUtils {
         return value;
     }
 
-    public static boolean isDdl(String sql) {
-        String firstKeyword = RStr.substringBeforeFirstBlank(sql.trim()).toUpperCase();
-        return RStr.in(firstKeyword, "CREATE", "DROP", "TRUNCATE", "ALTER");
-    }
 }

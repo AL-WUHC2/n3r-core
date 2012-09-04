@@ -57,8 +57,8 @@ public class EsqlDemoTest {
     public void getMapList() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         List<Map<String, Object>> beanList = esqlDemo.getMaps();
-        assertEquals("[{A:1,B:A,C:AC,D:2012-08-21 00:00:00.0,E:101}," +
-                "{A:2,B:B,C:BC,D:2012-08-21 00:00:00.0,E:102}," +
+        assertEquals("[{A:1,B:A,C:#AC,D:2012-08-21 00:00:00.0,E:101}," +
+                "{A:2,B:B,C:#BC,D:2012-08-21 00:00:00.0,E:102}," +
                 "{A:3,B:C,C:CC,D:2012-08-21 00:00:00.0,E:103}," +
                 "{A:4,B:D,C:DC,D:2012-08-21 00:00:00.0,E:104}]"
                 , JSON.toJSONString(beanList).replaceAll("\"", ""));
@@ -68,22 +68,22 @@ public class EsqlDemoTest {
     public void getFirstMap() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         Map<String, Object> bean = esqlDemo.getFirstMap();
-        assertEquals("{A:1,B:A,C:AC,D:2012-08-21 00:00:00.0,E:101}", JSON.toJSONString(bean).replaceAll("\"", ""));
+        assertEquals("{A:1,B:A,C:#AC,D:2012-08-21 00:00:00.0,E:101}", JSON.toJSONString(bean).replaceAll("\"", ""));
     }
 
     @Test
     public void getFirstBean() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean firstBean = esqlDemo.getFirstBean();
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(firstBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(firstBean).replaceAll("\"", ""));
     }
 
     @Test
     public void getBeans() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         List<EsqlDemoBean> beans = esqlDemo.getBeans();
-        assertEquals("[{a:1,b:A,c:AC,d:1345478400000,e:101}," +
-                "{a:2,b:B,c:BC,d:1345478400000,e:102}," +
+        assertEquals("[{a:1,b:A,c:#AC,d:1345478400000,e:101}," +
+                "{a:2,b:B,c:#BC,d:1345478400000,e:102}," +
                 "{a:3,b:C,c:CC,d:1345478400000,e:103}," +
                 "{a:4,b:D,c:DC,d:1345478400000,e:104}]", JSON.toJSONString(beans).replaceAll("\"", ""));
     }
@@ -113,31 +113,31 @@ public class EsqlDemoTest {
     @Test
     public void selectByBean() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
-        EsqlDemoBean esqlDemoBean = esqlDemo.selectBeanByBean(RMap.of("a", 1, "c", "AC"));
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        EsqlDemoBean esqlDemoBean = esqlDemo.selectBeanByBean(RMap.of("a", 1, "c", "#AC"));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
 
         esqlDemoBean = esqlDemo.selectBeanByBean(esqlDemoBean);
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
 
         Map<String, Object> map = esqlDemo.selectMapByBean(esqlDemoBean);
-        assertEquals("{A:1,B:A,C:AC,D:2012-08-21 00:00:00.0,E:101}", JSON.toJSONString(map).replaceAll("\"", ""));
+        assertEquals("{A:1,B:A,C:#AC,D:2012-08-21 00:00:00.0,E:101}", JSON.toJSONString(map).replaceAll("\"", ""));
     }
 
     @Test
     public void selectIf() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
-        EsqlDemoBean esqlDemoBean = esqlDemo.selectIf(RMap.of("a", 1, "c", "AC", "e", 100));
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
-        esqlDemoBean = esqlDemo.selectIf(RMap.of("a", 1, "c", "AC", "e", 200));
+        EsqlDemoBean esqlDemoBean = esqlDemo.selectIf(RMap.of("a", 1, "c", "#AC", "e", 100));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        esqlDemoBean = esqlDemo.selectIf(RMap.of("a", 1, "c", "#AC", "e", 200));
         assertNull(esqlDemoBean);
     }
 
     @Test
     public void selectIfWoReturnType() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
-        EsqlDemoBean esqlDemoBean = esqlDemo.selectIfWoReturnType(RMap.of("a", 1, "c", "AC", "e", 100));
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
-        esqlDemoBean = esqlDemo.selectIfWoReturnType(RMap.of("a", 1, "c", "AC", "e", 200));
+        EsqlDemoBean esqlDemoBean = esqlDemo.selectIfWoReturnType(RMap.of("a", 1, "c", "#AC", "e", 100));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        esqlDemoBean = esqlDemo.selectIfWoReturnType(RMap.of("a", 1, "c", "#AC", "e", 200));
         assertNull(esqlDemoBean);
     }
 
@@ -145,7 +145,7 @@ public class EsqlDemoTest {
     public void selectIfNotEmpty() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.selectIfNotEmpty(RMap.of("a", 1));
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
         esqlDemoBean = esqlDemo.selectIfNotEmpty(RMap.of("a", ""));
         assertNotNull(esqlDemoBean);
     }
@@ -154,7 +154,7 @@ public class EsqlDemoTest {
     public void switchSelect() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.switchSelect(RMap.of("a", 1));
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
         esqlDemoBean = esqlDemo.switchSelect(RMap.of("a", ""));
         assertNotNull(esqlDemoBean);
     }
@@ -163,7 +163,7 @@ public class EsqlDemoTest {
     public void switchSelectWithDefault() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.switchSelectWithDefault(RMap.of("a", 1));
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
         esqlDemoBean = esqlDemo.switchSelectWithDefault(RMap.of("a", ""));
         assertNotNull(esqlDemoBean);
     }
@@ -171,9 +171,9 @@ public class EsqlDemoTest {
     @Test
     public void selectIf2() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
-        EsqlDemoBean esqlDemoBean = esqlDemo.selectIf2(RMap.of("a", 1, "c", "AC", "e", 100));
-        assertEquals("{a:1,b:A,c:AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
-        esqlDemoBean = esqlDemo.selectIf2(RMap.of("a", 2, "c", "AC", "e", 200));
+        EsqlDemoBean esqlDemoBean = esqlDemo.selectIf2(RMap.of("a", 1, "c", "#AC", "e", 100));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        esqlDemoBean = esqlDemo.selectIf2(RMap.of("a", 2, "c", "#AC", "e", 200));
         assertNull(esqlDemoBean);
     }
 
@@ -199,6 +199,8 @@ public class EsqlDemoTest {
 
     @Test
     public void useSqlTable() {
+        new Esql().useSqlFile(EsqlDemo.class).update("createEsql").execute();
+
         List<EsqlTableSqlMapper> ret = new Esql()
                 .returnType(EsqlTableSqlMapper.class)
                 .params(1)
@@ -226,7 +228,7 @@ public class EsqlDemoTest {
     public void selectLimitedRecords() {
         List<Object> execute = new Esql().useSqlFile(EsqlDemo.class).select("selectRecords").limit(3).execute();
 
-        assertEquals(3, execute.size());
+        assertTrue(execute.size() < 3);
     }
 
     @Test

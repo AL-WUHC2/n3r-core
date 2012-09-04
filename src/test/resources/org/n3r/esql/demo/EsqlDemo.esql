@@ -36,8 +36,8 @@ CREATE TABLE ESQL_TEST (
     CONSTRAINT PK_ESQL_TEST PRIMARY KEY(A)
 );
 
-INSERT INTO ESQL_TEST VALUES(1, 'A', 'AC', ##, 101);
-INSERT INTO ESQL_TEST VALUES(2, 'B', 'BC', ##, 102);
+INSERT INTO ESQL_TEST VALUES(1, 'A', '\#AC', ##, 101);
+INSERT INTO ESQL_TEST VALUES(2, 'B', '\#BC', ##, 102);
 INSERT INTO ESQL_TEST VALUES(3, 'C', 'CC', ##, 103);
 INSERT INTO ESQL_TEST VALUES(4, 'D', 'DC', ##, 104);
 
@@ -158,6 +158,40 @@ CREATE OR REPLACE PROCEDURE SP_ESQL_NOOUT(A VARCHAR) IS
 BEGIN
     NULL;
 END;
+
+[createEsql  onerr=resume]
+drop table esql_sql cascade constraints;
+
+create table esql_sql  (
+   id                   varchar2(32)                    not null,
+   options              varchar2(512),
+   sql                  varchar2(1024)                  not null,
+   valid                number(1)                      default 1 not null,
+   remark               varchar2(1024),
+   constraint PK_ESQL_SQL primary key (id)
+);
+
+comment on table esql_sql is
+'定义esql中的sql语句';
+
+comment on column esql_sql.id is
+'SQL标识';
+
+comment on column esql_sql.options is
+'SQL选项';
+
+comment on column esql_sql.sql is
+'SQL语句';
+
+comment on column esql_sql.valid is
+'是否有效1：有效 0无效';
+
+comment on column esql_sql.remark is
+'SQL备注';
+
+INSERT INTO esql_sql(ID, OPTIONS, SQL, VALID, REMARK)
+VALUES('demo.updateBean', NULL, 'UPDATE ESQL_TEST SET B = \#2\# WHERE A = \#1\#', 1, 'TEST' );
+
 
 
 [emptysql]

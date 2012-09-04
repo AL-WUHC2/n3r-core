@@ -120,12 +120,26 @@ public class Esql {
         Esql.getExecContextInfo().setSql(subSql.getSql());
 
         try {
-            return isDdl(subSql.getSql()) ? execDdl(conn, realSql(subSql)) : pageExecute(conn, ret, subSql);
+            return isDdl(subSql) ? execDdl(conn, realSql(subSql)) : pageExecute(conn, ret, subSql);
         } catch (EsqlExecuteException ex) {
             if (!subSql.getEsqlItem().isOnerrResume()) throw ex;
         }
 
         return 0;
+    }
+
+    private boolean isDdl(EsqlSub subSql) {
+        switch (subSql.getSqlType()) {
+        case CREATE:
+        case DROP:
+        case TRUNCATE:
+        case ALTER:
+        case COMMENT:
+            return true;
+        default:
+            break;
+        }
+        return false;
     }
 
     private boolean execDdl(Connection conn, String sql) {

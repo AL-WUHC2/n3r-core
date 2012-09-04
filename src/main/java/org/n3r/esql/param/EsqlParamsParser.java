@@ -35,7 +35,15 @@ public class EsqlParamsParser {
         List<String> placeHolderOptions = new ArrayList<String>();
         StringBuilder sql = new StringBuilder();
         int startPos = 0;
-        while (matcher.find()) {
+        boolean hasEscape = false;
+        while (matcher.find(startPos)) {
+            if (hasPrevEscape(matcher.start())) {
+                sql.append(rawSql.substring(startPos, matcher.start() + 1));
+                startPos = matcher.start() + 1;
+                hasEscape = true;
+                continue;
+            }
+
             String placeHolder = matcher.group(1).trim();
             String paramOptions = "";
             int colonPos = placeHolder.indexOf(':');
@@ -55,13 +63,38 @@ public class EsqlParamsParser {
         }
 
         sql.append(rawSql.substring(startPos));
-        subSql.setSql(sql.toString().replaceAll("\\s+", " "));
+        String onelineSql = sql.toString().replaceAll("\\s+", " ");
+        subSql.setSql(hasEscape ? unescape(onelineSql) : onelineSql);
         subSql.setEsqlItem(sqlItem);
         subSql.setPlaceholderNum(placeHolders.size());
 
         parsePlaceholders(placeHolders, placeHolderOptions);
 
         return subSql;
+    }
+
+    private String unescape(String sql) {
+        StringBuilder unescape = new StringBuilder(sql.length());
+        int lastPos = 0;
+        for (int pos = sql.indexOf('\\', lastPos); pos >= 0 && lastPos < sql.length();) {
+            unescape.append(sql.substring(lastPos, pos)).append(sql.charAt(pos + 1));
+            lastPos = pos + 2;
+            if (lastPos < sql.length()) pos = sql.indexOf('\\', lastPos);
+        }
+
+        if (lastPos < sql.length()) unescape.append(sql.substring(lastPos));
+
+        return unescape.toString();
+    }
+
+    private boolean hasPrevEscape(int start) {
+        if (start == 0) return false;
+
+        boolean hasPreEscape = false;
+        for (int i = start - 1; i >= 0; --i, hasPreEscape = !hasPreEscape)
+            if (rawSql.charAt(i) != '\\') break;
+
+        return hasPreEscape;
     }
 
     private static final Pattern lastWord = Pattern.compile(".*\\b([\\w_\\d]+)\\b.*$", Pattern.DOTALL);

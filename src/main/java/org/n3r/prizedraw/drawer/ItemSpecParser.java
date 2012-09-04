@@ -96,7 +96,8 @@ public class ItemSpecParser {
                 logger.warn("时间范围起始值大于等于结束值，忽略:{}", line);
                 continue;
             }
-            if (RDate.sameDay(midnight, dayItem.getDay()) && toMinutes < System.currentTimeMillis() / 60000) {
+            if (RDate.sameDay(midnight, dayItem.getDay())
+                    && toMinutes < (System.currentTimeMillis() - midnight.getTime()) / 60000) {
                 logger.warn("时间范围在过去，忽略:{}", line);
                 continue;
             }
