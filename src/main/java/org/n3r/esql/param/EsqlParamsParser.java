@@ -197,6 +197,9 @@ public class EsqlParamsParser {
 
         subSql.setPlaceHolderType(setAndCheckPlaceholderInType(paramPlaceholders, InOut.OUT));
         subSql.setPlaceHolderOutType(setAndCheckPlaceholderInType(paramPlaceholders, InOut.IN));
+        if (subSql.getPlaceHolderType() == EsqlPlaceholderType.UNSET)
+            subSql.setPlaceHolderType(subSql.getPlaceHolderOutType());
+
         subSql.setPlaceHolders(paramPlaceholders.toArray(new EsqlParamPlaceholder[0]));
     }
 

@@ -11,7 +11,7 @@ import com.google.common.base.Throwables;
 
 public class EsqlSub implements Cloneable {
     public static enum EsqlType {
-        SELECT, UPDATE, INSERT, MERGE, DROP, CREATE, TRUNCATE, CALL, DELETE, COMMENT, ALTER
+        SELECT, UPDATE, INSERT, MERGE, DROP, CREATE, TRUNCATE, CALL, DELETE, COMMENT, ALTER, BEGIN
     }
 
     private EsqlItem esqlItem;

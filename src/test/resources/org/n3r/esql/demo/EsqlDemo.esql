@@ -192,6 +192,55 @@ comment on column esql_sql.remark is
 INSERT INTO esql_sql(ID, OPTIONS, SQL, VALID, REMARK)
 VALUES('demo.updateBean', NULL, 'UPDATE ESQL_TEST SET B = \#2\# WHERE A = \#1\#', 1, 'TEST' );
 
+[createSpEsql12 split=/]
+CREATE OR REPLACE PROCEDURE SP_ESQL12( B OUT VARCHAR, C OUT VARCHAR) IS
+BEGIN
+  B := 'HELLO';
+  C := 'WORLD';
+END;
+
+[callSpEsql12]
+{call SP_ESQL12( #:OUT#, #:OUT#)}
+
+[createSpEsqlInOut split=/]
+CREATE OR REPLACE PROCEDURE SP_ESQLInOut( B IN OUT VARCHAR, C IN OUT VARCHAR) IS
+BEGIN
+  B := 'HELLO' || B;
+  C := 'WORLD' || C;
+END;
+
+[callSpEsqlInOut]
+{call SP_ESQLInOut( #:INOUT#, #:INOUT#)}
+
+
+[prepareTable4MyProcedure onerr=resume]
+DROP TABLE XYZ;
+CREATE TABLE XYZ (A VARCHAR2(10), B VARCHAR2(10), C INT);
+INSERT INTO XYZ VALUES('1', 'AAAA', 0);
+INSERT INTO XYZ VALUES('2', 'BBBB', 0);
+INSERT INTO XYZ VALUES('3', 'CCCC', 0);
+INSERT INTO XYZ VALUES('4', 'DDDD', 0);
+INSERT INTO XYZ VALUES('5', 'EEEE', 0);
+INSERT INTO XYZ VALUES('6', 'FFFF', 0);
+INSERT INTO XYZ VALUES('7', 'GGGG', 0);
+INSERT INTO XYZ VALUES('8', 'HHHH', 0);
+INSERT INTO XYZ VALUES('9', 'GGGG', 0);
+
+[myprocedure]
+{CALL UPDATE XYZ SET C=1 WHERE ROWID IN (
+        SELECT R FROM (
+            SELECT ROWID R FROM XYZ WHERE C <> 1 ORDER BY DBMS_RANDOM.VALUE
+        ) WHERE ROWNUM < 2
+    )
+    RETURNING A INTO #:OUT# }
+
+[myprocedure2 split=/]
+{CALL  UPDATE XYZ SET C=1 WHERE ROWID IN (
+        SELECT R FROM (
+            SELECT ROWID R FROM XYZ WHERE C <> ## ORDER BY DBMS_RANDOM.VALUE
+        ) WHERE ROWNUM < 2
+    )
+    RETURNING A,B INTO #:OUT#, #:OUT# }
 
 
 [emptysql]

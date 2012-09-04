@@ -7,7 +7,6 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Date;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.core.lang.RBean;
 import org.n3r.core.lang.RDate;
@@ -34,23 +33,22 @@ public class EsqlParamsBinder {
         boundParams = new StringBuilder();
         this.ps = ps;
 
-        if (ArrayUtils.isNotEmpty(params))
-            switch (subSql.getPlaceHolderType()) {
-            case AUTO_SEQ:
-                for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
-                    setParam(i, getParamByIndex(i), ParamExtra.Normal);
-                break;
-            case MANU_SEQ:
-                for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
-                    setParam(i, findParamBySeq(i + 1), ParamExtra.Normal);
-                break;
-            case VAR_NAME:
-                for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
-                    setParam(i, findParamByName(subSql, i), ParamExtra.Normal);
-                break;
-            default:
-                break;
-            }
+        switch (subSql.getPlaceHolderType()) {
+        case AUTO_SEQ:
+            for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
+                setParam(i, getParamByIndex(i), ParamExtra.Normal);
+            break;
+        case MANU_SEQ:
+            for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
+                setParam(i, findParamBySeq(i + 1), ParamExtra.Normal);
+            break;
+        case VAR_NAME:
+            for (int i = 0; i < subSql.getPlaceholderNum(); ++i)
+                setParam(i, findParamByName(subSql, i), ParamExtra.Normal);
+            break;
+        default:
+            break;
+        }
 
         bindExtraParams();
 

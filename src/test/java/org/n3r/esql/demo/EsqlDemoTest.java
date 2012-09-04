@@ -228,7 +228,7 @@ public class EsqlDemoTest {
     public void selectLimitedRecords() {
         List<Object> execute = new Esql().useSqlFile(EsqlDemo.class).select("selectRecords").limit(3).execute();
 
-        assertTrue(execute.size() < 3);
+        assertTrue(execute.size() <= 3);
     }
 
     @Test
@@ -369,6 +369,43 @@ public class EsqlDemoTest {
         int ab = esql.execute("{CALL SP_ESQL_NOOUT(##)}", "SELECT 1 FROM DUAL");
 
         assertEquals(1, ab);
+    }
+
+    @Test
+    public void procedureAllOut() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("createSpEsql12").execute();
+        List<String> rets = new Esql().useSqlFile(EsqlDemo.class).procedure("callSpEsql12").execute();
+
+        assertEquals("HELLO", rets.get(0));
+        assertEquals("WORLD", rets.get(1));
+    }
+
+    @Test
+    public void procedureInOut() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("createSpEsqlInOut").execute();
+        List<String> rets = new Esql().useSqlFile(EsqlDemo.class).params("A", "B").procedure("callSpEsqlInOut")
+                .execute();
+
+        assertEquals("HELLOA", rets.get(0));
+        assertEquals("WORLDB", rets.get(1));
+    }
+
+    @Test
+    public void returning() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("prepareTable4MyProcedure").execute();
+        String ret = new Esql().useSqlFile(EsqlDemo.class).procedure("myprocedure")
+                .execute();
+
+        assertTrue(ret.length() > 0);
+    }
+
+    @Test
+    public void returning2() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("prepareTable4MyProcedure").execute();
+        List<String> ret = new Esql().useSqlFile(EsqlDemo.class).params(10).procedure("myprocedure2")
+                .execute();
+
+        assertTrue(ret.size() > 0);
     }
 
     @Test
