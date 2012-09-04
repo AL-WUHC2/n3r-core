@@ -56,7 +56,7 @@ public class EsqlDynamicReplacer {
         Object bean = dynamics[0];
 
         String varName = esqlDynamic.getPlaceholders()[index].getPlaceholder();
-        String property = RBean.getPropertyQuietly(bean, varName);
+        Object property = RBean.getPropertyQuietly(bean, varName);
         if (property == null) {
             String propertyName = RStr.convertUnderscoreNameToPropertyName(varName);
             if (!StringUtils.equals(propertyName, varName))
