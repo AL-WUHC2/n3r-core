@@ -3,8 +3,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.n3r</groupId>
   <artifactId>n3r-core</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <dependencies>
+  <!-- 测量内存占用大小库
+    <dependency>
+      <groupId>com.github.stephenc</groupId>
+      <artifactId>jamm</artifactId>
+      <version>0.2.5</version>
+    </dependency>
+ -->
+
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
@@ -46,8 +54,12 @@
       <artifactId>commons-io</artifactId>
       <version>2.4</version>
     </dependency>
-    <!-- <dependency> <groupId>mockit</groupId> <artifactId>jmockit</artifactId> <version>0.999.16</version> <scope>test</scope>
-      </dependency> -->
+    <dependency>
+      <groupId>mockit</groupId>
+      <artifactId>jmockit</artifactId>
+      <version>0.999.16</version>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>

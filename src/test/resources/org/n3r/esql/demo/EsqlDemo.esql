@@ -65,9 +65,9 @@ AND C = #c#
 SELECT A,B,C,D,E
 FROM ESQL_TEST
 WHERE A = #a#
-<if e == '100'>
+<if e == 100>
 AND C = #c#
-<elseif e == '200'>
+<elseif e == 200>
 AND C = 'AC'
 <else>
 AND C = 'FALSE'
