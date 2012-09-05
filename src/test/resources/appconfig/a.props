@@ -1,0 +1,6 @@
+password=323222
+password2 = this is my ${password}
+word1=abc
+num=1
+word2=${word1}abc
+

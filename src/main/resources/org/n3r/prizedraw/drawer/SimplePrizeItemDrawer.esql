@@ -1,0 +1,8 @@
+[decreaseItemNum]
+UPDATE PRIZE_ITEM
+SET ITEM_OUT = ITEM_OUT + 1,
+    ITEM_IN = ITEM_IN - 1
+WHERE ACTIVITY_ID = #?#
+AND  ITEM_ID = #?#
+AND ITEM_IN > 0
+

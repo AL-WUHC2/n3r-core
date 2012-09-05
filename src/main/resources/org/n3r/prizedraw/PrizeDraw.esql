@@ -1,0 +1,11 @@
+[GetAllActivities returnType=org.n3r.prizedraw.impl.PrizeActivity]
+SELECT T.ACTIVITY_ID,
+       T.ACTIVITY_EFF,
+       T.ACTIVITY_EXP,
+       T.FREQUENCY_SPEC,
+       T.CHECKERS,
+       T.DRAWERS,
+       T.RESULTERS
+  FROM PRIZE_ACTIVITY T
+ WHERE SYSDATE >= T.ACTIVITY_EFF
+   AND SYSDATE <= T.ACTIVITY_EXP

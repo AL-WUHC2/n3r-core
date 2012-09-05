@@ -1,0 +1,19 @@
+[getString]
+SELECT 'x' x
+FROM DUAL
+
+
+[getString]
+SELECT 1
+FROM DUAL
+
+[getStringWithOneParam]
+SELECT 'x'
+FROM DUAL
+WHERE 'x' = ##
+
+[getStringWithTwoParams]
+SELECT 'x'
+FROM DUAL
+WHERE 'x' = ##
+AND 'y' = ##
