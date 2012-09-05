@@ -12,9 +12,7 @@ import java.util.List;
 
 import org.n3r.core.joor.Reflect;
 import org.n3r.core.lang.RArray;
-import org.n3r.core.lang.RClassPath;
 import org.n3r.core.lang.RClose;
-import org.n3r.core.lang.RJavaScript;
 import org.n3r.esql.ex.EsqlExecuteException;
 import org.n3r.esql.ex.EsqlIdNotFoundException;
 import org.n3r.esql.impl.EsqlBatch;
@@ -34,6 +32,7 @@ import org.n3r.esql.parser.EsqlSqlParser;
 import org.n3r.esql.res.EsqlItem;
 import org.n3r.esql.res.EsqlSub;
 import org.n3r.esql.res.EsqlSub.EsqlType;
+import org.n3r.esql.util.EsqlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,8 +61,6 @@ public class Esql {
     public static ThreadLocal<EsqlExecInfo> execContext = new ThreadLocal<EsqlExecInfo>() {
         @Override
         protected EsqlExecInfo initialValue() {
-            RJavaScript.eval(RClassPath.toStr("/org/n3r/esql/initializeScript.js"));
-
             return new EsqlExecInfo();
         }
     };
@@ -212,20 +209,18 @@ public class Esql {
             ps = prepareSql(subSql, realSql(subSql));
             new EsqlParamsBinder().bindParams(ps, subSql, params, logger);
 
-            Object execRet = null;
-            switch (subSql.getSqlType()) {
-            case SELECT:
+            if (subSql.getSqlType() == EsqlType.SELECT) {
                 rs = ps.executeQuery();
-                execRet = convert(rs, subSql);
-                break;
-            case CALL:
-                execRet = execAndRetrieveProcedureRet(subSql, (CallableStatement) ps);
-                break;
-            default:
-                execRet = ps.executeUpdate();
+                return convert(rs, subSql);
             }
 
-            return execRet;
+            if (EsqlUtils.isProcedure(subSql.getSqlType())) {
+                CallableStatement cs = (CallableStatement) ps;
+                return execAndRetrieveProcedureRet(subSql, cs);
+            }
+
+            return ps.executeUpdate();
+
         } finally {
             RClose.closeQuietly(rs, ps);
         }
@@ -262,7 +257,7 @@ public class Esql {
 
     public PreparedStatement prepareSql(EsqlSub subSql, String realSql) throws SQLException {
         logger.info("sql: {} ", realSql);
-        return subSql.getSqlType() == EsqlType.CALL
+        return EsqlUtils.isProcedure(subSql.getSqlType())
                 ? connection.prepareCall(realSql) : connection.prepareStatement(realSql);
     }
 
@@ -341,8 +336,6 @@ public class Esql {
     public Esql() {}
 
     protected void initSqlId(String sqlId, String sqlClassPath) {
-        getExecContextInfo();
-
         this.sqlClassPath = isEmpty(sqlClassPath) ? getSqlClassPath(4) : sqlClassPath;
 
         esqlItem = EsqlSqlParser.getEsqlItem(this.sqlClassPath, sqlId);

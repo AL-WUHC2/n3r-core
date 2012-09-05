@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.n3r.core.lang.RStr;
 import org.n3r.esql.EsqlTransaction;
 import org.n3r.esql.config.EsqlConfigManager;
 import org.n3r.esql.param.EsqlParamsParser;
@@ -23,6 +24,10 @@ import org.n3r.esql.res.EsqlSub.EsqlType;
 
 public class EsqlUtils {
     private static Pattern FIRST_WORD = Pattern.compile("\\b(\\w+)\\b");
+
+    public static boolean isProcedure(EsqlType sqlType) {
+        return RStr.in(sqlType, EsqlType.CALL, EsqlType.DECLARE, EsqlType.BEGIN);
+    }
 
     public static EsqlType parseSqlType(String rawSql) {
         Matcher matcher = FIRST_WORD.matcher(rawSql);

@@ -391,6 +391,18 @@ public class EsqlDemoTest {
     }
 
     @Test
+    public void createSpEsqlNULL() throws SQLException {
+        new Esql().useSqlFile(EsqlDemo.class).update("createSpEsqlNULL").execute();
+        List<String> rets = new Esql().useSqlFile(EsqlDemo.class)
+                .procedure("callSpEsqlNULL")
+                .dynamics("SP_ESQLNULL")
+                .execute();
+
+        assertNull(rets.get(0));
+        assertNull(rets.get(1));
+    }
+
+    @Test
     public void returning() throws SQLException {
         new Esql().useSqlFile(EsqlDemo.class).update("prepareTable4MyProcedure").execute();
         String ret = new Esql().useSqlFile(EsqlDemo.class).procedure("myprocedure")
@@ -406,6 +418,13 @@ public class EsqlDemoTest {
                 .execute();
 
         assertTrue(ret.size() > 0);
+    }
+
+    @Test
+    public void callPLSQL() throws SQLException {
+        String ret = new Esql().useSqlFile(EsqlDemo.class).params(10).procedure("callPLSQL")
+                .execute();
+        System.out.println(ret);
     }
 
     @Test

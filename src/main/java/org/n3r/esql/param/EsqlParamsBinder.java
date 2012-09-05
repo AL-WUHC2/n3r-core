@@ -14,7 +14,7 @@ import org.n3r.core.lang.RStr;
 import org.n3r.esql.ex.EsqlExecuteException;
 import org.n3r.esql.param.EsqlParamPlaceholder.InOut;
 import org.n3r.esql.res.EsqlSub;
-import org.n3r.esql.res.EsqlSub.EsqlType;
+import org.n3r.esql.util.EsqlUtils;
 import org.slf4j.Logger;
 
 public class EsqlParamsBinder {
@@ -99,7 +99,7 @@ public class EsqlParamsBinder {
 
     private boolean regiesterOut(int index) throws SQLException {
         InOut inOut = subSql.getPlaceHolders()[index].getInOut();
-        if (subSql.getSqlType() == EsqlType.CALL && inOut != InOut.IN)
+        if (EsqlUtils.isProcedure(subSql.getSqlType()) && inOut != InOut.IN)
             ((CallableStatement) ps).registerOutParameter(index + 1, Types.VARCHAR);
 
         return inOut == InOut.OUT;
@@ -122,7 +122,7 @@ public class EsqlParamsBinder {
 
     private Object getParamByIndex(int index) {
         EsqlParamPlaceholder[] placeHolders = subSql.getPlaceHolders();
-        if (index < placeHolders.length && subSql.getSqlType() == EsqlType.CALL
+        if (index < placeHolders.length && EsqlUtils.isProcedure(subSql.getSqlType())
                 && placeHolders[index].getInOut() == InOut.OUT) return null;
 
         if (index < params.length)
