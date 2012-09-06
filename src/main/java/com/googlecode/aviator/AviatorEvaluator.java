@@ -205,12 +205,8 @@ public final class AviatorEvaluator {
     /**
      * Compiled Expression cache
      */
-    private final static ConcurrentHashMap<String/* text expression */, FutureTask<Expression>/*
-                                                                                                   * Compiled
-                                                                                                   * expression
-                                                                                                   * task
-                                                                                                   */> cacheExpressions =
-            new ConcurrentHashMap<String, FutureTask<Expression>>();
+    private final static ConcurrentHashMap<String/* text expression */, FutureTask<Expression>
+    /* Compiled expression task*/> cacheExpressions = new ConcurrentHashMap<String, FutureTask<Expression>>();
 
     /**
      * set optimize level,default AviatorEvaluator.EVAL

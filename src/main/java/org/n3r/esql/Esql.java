@@ -383,6 +383,16 @@ public class Esql {
         return this;
     }
 
+    public Esql id(String sqlId) {
+        initSqlId(sqlId, sqlClassPath);
+        return this;
+    }
+
+    public Esql merge(String sqlId) {
+        initSqlId(sqlId, sqlClassPath);
+        return this;
+    }
+
     public Esql update(String sqlId) {
         initSqlId(sqlId, sqlClassPath);
         return this;

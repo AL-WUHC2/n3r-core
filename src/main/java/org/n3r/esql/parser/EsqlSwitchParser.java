@@ -16,13 +16,12 @@ public class EsqlSwitchParser extends EsqlCondParser {
         checkAndCompileCondition(index, conditionValue);
 
         EsqlPartSwitch sqlPart = new EsqlPartSwitch();
-        this.esqlPart = sqlPart;
+        esqlPart = sqlPart;
 
         sqlPart.setSwitchCondition(conditionValue);
         StringBuilder sql = new StringBuilder();
         int newIndex = index + 1;
         boolean defaultReached = false;
-        boolean endReached = false;
         EsqlCondition sqlCondition = null;
 
         for (int lines = sqlLines.size(); newIndex < lines; ++newIndex) {
@@ -55,7 +54,7 @@ public class EsqlSwitchParser extends EsqlCondParser {
                 sqlPart.setDefaultCase(sqlCondition);
             }
             else if ("end".equals(condition.getConditionKey())) {
-                endReached = true;
+                setEndReached();
                 break;
             }
             else if (sqlCondition != null) {
@@ -65,7 +64,7 @@ public class EsqlSwitchParser extends EsqlCondParser {
             }
         }
 
-        checkEnd(index, endReached);
+        checkEnd(index);
 
         return newIndex;
     }

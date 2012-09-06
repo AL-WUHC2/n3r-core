@@ -24,7 +24,6 @@ public class EsqlIfParser extends EsqlCondParser {
         StringBuilder sql = new StringBuilder();
         int newIndex = index + 1;
         boolean elseReached = false;
-        boolean endReached = false;
 
         for (int lines = sqlLines.size(); newIndex < lines; ++newIndex) {
             EsqlCondStr condition = new EsqlCondStr(sqlLines.get(newIndex));
@@ -51,7 +50,7 @@ public class EsqlIfParser extends EsqlCondParser {
             }
             else if ("end".equals(condition.getConditionKey())) {
                 if (elseReached) esqlPart.setElse(sqlCondition);
-                endReached = true;
+                setEndReached();
                 break;
             }
             else {
@@ -61,7 +60,7 @@ public class EsqlIfParser extends EsqlCondParser {
             }
         }
 
-        checkEnd(index, endReached);
+        checkEnd(index);
 
         return newIndex;
     }
