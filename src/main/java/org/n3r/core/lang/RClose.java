@@ -23,7 +23,7 @@ public class RClose {
                 Closeables.closeQuietly((Closeable) obj);
             }
 
-            Method closeMethod = RMethod.findMethod(obj.getClass(), "close");
+            Method closeMethod = RMethod.getExactMethod(obj.getClass(), "close");
             if (closeMethod != null) {
                 RMethod.invokeQuietly(closeMethod, obj);
             }

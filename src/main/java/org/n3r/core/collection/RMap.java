@@ -38,29 +38,30 @@ public class RMap {
 
         return map;
     }
-    
+
     public static <T> Map<T, T> of(T... keyAndValues) {
-        Map<T, T>  map = newHashMap();
-        for(int i =0; i < keyAndValues.length; i += 2) {
+        Map<T, T> map = newHashMap();
+        for (int i = 0; i < keyAndValues.length; i += 2) {
             T key = keyAndValues[i];
-            T value = (i + 1) < keyAndValues.length ? keyAndValues[i + 1] : null;
+            T value = i + 1 < keyAndValues.length ? keyAndValues[i + 1] : null;
             map.put(key, value);
         }
-        
-        return map;
-    }
-    public static Map<Object, Object> asMap(Object ...keyAndValues) {
-        Map<Object, Object>  map = newHashMap();
-        for(int i =0; i < keyAndValues.length; i += 2) {
-            Object key = keyAndValues[i];
-            Object value = (i + 1) < keyAndValues.length ? keyAndValues[i + 1] : null;
-            map.put(key, value);
-        }
-        
+
         return map;
     }
 
-    private static <K, V> Map<K, V> newHashMap() {
+    public static Map<Object, Object> asMap(Object... keyAndValues) {
+        Map<Object, Object> map = newHashMap();
+        for (int i = 0; i < keyAndValues.length; i += 2) {
+            Object key = keyAndValues[i];
+            Object value = i + 1 < keyAndValues.length ? keyAndValues[i + 1] : null;
+            map.put(key, value);
+        }
+
+        return map;
+    }
+
+    public static <K, V> Map<K, V> newHashMap() {
         return new HashMap<K, V>();
     }
 }

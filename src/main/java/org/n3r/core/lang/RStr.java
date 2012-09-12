@@ -26,6 +26,7 @@ public class RStr {
 
         return "";
     }
+
     // return true if 'left' and 'right' are matching parens/brackets/braces
     public static boolean matches(char left, char right) {
         if (left == '(') return right == ')';
