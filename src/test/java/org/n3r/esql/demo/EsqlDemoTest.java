@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Test;
 import org.n3r.core.collection.RMap;
 import org.n3r.core.lang.RClose;
@@ -430,5 +432,46 @@ public class EsqlDemoTest {
     @Test
     public void twoTrans() {
 
+    }
+
+    public static class AsResult {
+        private String state;
+        private String remark;
+        private int seq;
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
+
+        public int getSeq() {
+            return seq;
+        }
+
+        public void setSeq(int seq) {
+            this.seq = seq;
+        }
+
+    }
+
+    @Test
+    public void testSelectAs() {
+        new Esql().useSqlFile(EsqlDemo.class).update("prepareTable4MyProcedure").execute();
+        AsResult ret = new Esql().useSqlFile(EsqlDemo.class)
+                .id("testSelectAs").limit(1).params("1").returnType(AsResult.class)
+                .execute();
+        assertEquals("EsqlDemoTest.AsResult[state=0,remark=AAAA,seq=1]",
+                ReflectionToStringBuilder.toString(ret, ToStringStyle.SHORT_PREFIX_STYLE));
     }
 }

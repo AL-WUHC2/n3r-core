@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.n3r.core.lang.RClose;
 import org.n3r.esql.Esql;
-import org.n3r.esql.EsqlTransaction;
+import org.n3r.esql.EsqlTran;
 
 public class EsqlDemo {
 
@@ -127,7 +127,7 @@ public class EsqlDemo {
 
     public void rollback(int a, String b) {
         Esql esql = new Esql();
-        EsqlTransaction tran = esql.newTransaction();
+        EsqlTran tran = esql.newTran();
         try {
             tran.start();
             esql.update("updateBean")

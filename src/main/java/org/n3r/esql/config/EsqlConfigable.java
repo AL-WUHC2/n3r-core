@@ -1,9 +1,9 @@
 package org.n3r.esql.config;
 
-import org.n3r.esql.EsqlTransaction;
+import org.n3r.esql.EsqlTran;
 
 public interface EsqlConfigable {
-    EsqlTransaction getTransaction();
+    EsqlTran getTran();
 
     String getSqlfromdb();
 }

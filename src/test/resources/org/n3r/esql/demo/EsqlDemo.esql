@@ -235,6 +235,11 @@ INSERT INTO XYZ VALUES('7', 'GGGG', 0);
 INSERT INTO XYZ VALUES('8', 'HHHH', 0);
 INSERT INTO XYZ VALUES('9', 'GGGG', 0);
 
+[testSelectAs]
+SELECT A seq, B remark, C state
+FROM XYZ
+WHERE A = ##
+
 [myprocedure]
 {CALL UPDATE XYZ SET C=1 WHERE ROWID IN (
         SELECT R FROM (
@@ -243,7 +248,7 @@ INSERT INTO XYZ VALUES('9', 'GGGG', 0);
     )
     RETURNING A INTO #:OUT# }
 
-[myprocedure2 split=/]
+[myprocedure2]
 {CALL  UPDATE XYZ SET C=1 WHERE ROWID IN (
         SELECT R FROM (
             SELECT ROWID R FROM XYZ WHERE C <> ## ORDER BY DBMS_RANDOM.VALUE

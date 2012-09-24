@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.n3r.esql.EsqlTransaction;
+import org.n3r.esql.EsqlTran;
 import org.n3r.esql.ex.EsqlExecuteException;
 
-public class EsqlJdbcTransaction implements EsqlTransaction {
+public class EsqlJdbcTransaction implements EsqlTran {
     private Connection connection;
 
     public EsqlJdbcTransaction(Connection connection) {
@@ -50,7 +50,7 @@ public class EsqlJdbcTransaction implements EsqlTransaction {
     }
 
     @Override
-    public Connection getConnection() {
+    public Connection getConn() {
         return connection;
     }
 

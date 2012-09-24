@@ -7,9 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.n3r.core.joor.Reflect;
 import org.n3r.core.lang.RBaseBean;
 import org.n3r.core.lang.RDuration;
+import org.n3r.core.util.ParamsApplyUtils;
 import org.n3r.esql.map.AfterProperitesSet;
 import org.n3r.prizedraw.base.PrizeDrawChecker;
 import org.n3r.prizedraw.base.PrizeDrawResulter;
@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 public class PrizeActivity extends RBaseBean implements AfterProperitesSet {
     private String activityId;
@@ -31,9 +30,9 @@ public class PrizeActivity extends RBaseBean implements AfterProperitesSet {
     private String drawers;
     private String resulters;
 
-    private List<PrizeDrawChecker> prizeDrawCheckers = Lists.newArrayList();
-    private List<PrizeDrawer> prizeDrawers = Lists.newArrayList();
-    private List<PrizeDrawResulter> prizeDrawResulters = Lists.newArrayList();
+    private List<PrizeDrawChecker> prizeDrawCheckers;
+    private List<PrizeDrawer> prizeDrawers;
+    private List<PrizeDrawResulter> prizeDrawResulters;
     private PrizeDrawChecker frequencyPrizeDrawChecker;
     private static Pattern frequencySpecPattern = Pattern
             .compile("(\\d+)r?\\s*/(\\d+\\s*\\w)\\s*(\\d+)?.*?by\\s+([\\w_\\-.,]+)");
@@ -41,10 +40,10 @@ public class PrizeActivity extends RBaseBean implements AfterProperitesSet {
 
     @Override
     public void afterPropertiesSet() {
-        Splitter splitter = Splitter.onPattern("[,\\s]").omitEmptyStrings().trimResults();
-        splitFunctors(splitter, checkers, prizeDrawCheckers);
-        splitFunctors(splitter, drawers, prizeDrawers);
-        splitFunctors(splitter, resulters, prizeDrawResulters);
+        prizeDrawCheckers = ParamsApplyUtils.createObjects(checkers, PrizeDrawChecker.class);
+        prizeDrawers = ParamsApplyUtils.createObjects(drawers, PrizeDrawer.class);
+        prizeDrawResulters = ParamsApplyUtils.createObjects(resulters, PrizeDrawResulter.class);
+
         parseFrequencySpec(); // 频率控制描述解析
     }
 
@@ -70,13 +69,6 @@ public class PrizeActivity extends RBaseBean implements AfterProperitesSet {
 
         frequencyPrizeDrawChecker = new FrequencyPrizeDrawChecker(durationSeconds, maxTimes, maxExceedTimes,
                 byPropertyNamesArr);
-    }
-
-    private <T> void splitFunctors(Splitter splitter, String functorsStr, List<T> result) {
-        for (String functorStr : splitter.split(functorsStr)) {
-            T functor = Reflect.on(functorStr).create().get();
-            result.add(functor);
-        }
     }
 
     public String getActivityId() {

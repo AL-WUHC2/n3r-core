@@ -8,7 +8,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.n3r.esql.EsqlTransaction;
+import org.n3r.esql.EsqlTran;
 import org.n3r.esql.ex.EsqlConfigException;
 import org.n3r.esql.trans.EsqlJdbcTransaction;
 import org.n3r.esql.trans.EsqlJtaTransaction;
@@ -46,7 +46,7 @@ public class EsqlDsConfig extends EsqlConfig {
     }
 
     @Override
-    public EsqlTransaction getTransaction() {
+    public EsqlTran getTran() {
         if ("jta".equals(transactionType)) return new EsqlJtaTransaction();
 
         return new EsqlJdbcTransaction(getConnection());

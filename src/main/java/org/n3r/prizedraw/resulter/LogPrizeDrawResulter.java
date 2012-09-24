@@ -3,11 +3,11 @@ package org.n3r.prizedraw.resulter;
 import org.n3r.core.lang.RBean;
 import org.n3r.core.text.RRand;
 import org.n3r.esql.Esql;
-import org.n3r.esql.EsqlTransaction;
+import org.n3r.esql.EsqlTran;
+import org.n3r.prizedraw.base.PrizeCommitter;
 import org.n3r.prizedraw.base.PrizeDrawResulter;
 import org.n3r.prizedraw.drawer.PrizeItem;
 import org.n3r.prizedraw.impl.PrizeActivity;
-import org.n3r.prizedraw.util.PrizeUtils;
 
 public class LogPrizeDrawResulter implements PrizeDrawResulter {
 
@@ -18,9 +18,8 @@ public class LogPrizeDrawResulter implements PrizeDrawResulter {
         if (drawResult != null) {
             String orderNo = RRand.randNum(10);
             Esql esql = new Esql();
-            EsqlTransaction transaction = esql.newTransaction();
-            PrizeUtils.addCommitter(transaction);
-            esql.insert("insertPrizeBingoo")
+            final EsqlTran tran = PrizeCommitter.getTran(Esql.DEFAULT_CONN_NAME);
+            esql.useTran(tran).insert("insertPrizeBingoo")
                     .params(orderNo, prizeActivity.getActivityId(),
                             drawResult.getItemId(), userId, drawResult.isItemJoin())
                     .execute();

@@ -13,6 +13,7 @@ import java.util.List;
 import org.n3r.core.joor.Reflect;
 import org.n3r.core.lang.RArray;
 import org.n3r.core.lang.RClose;
+import org.n3r.esql.config.EsqlConfigManager;
 import org.n3r.esql.ex.EsqlExecuteException;
 import org.n3r.esql.ex.EsqlIdNotFoundException;
 import org.n3r.esql.impl.EsqlBatch;
@@ -43,19 +44,19 @@ import static org.n3r.esql.util.EsqlUtils.*;
 import static org.apache.commons.lang3.StringUtils.*;
 
 public class Esql {
-    public static final String DEFAULT_CONNECTION_NAME = "DEFAULT";
+    public static final String DEFAULT_CONN_NAME = "DEFAULT";
     private Class<?> returnType;
     private Logger logger = LoggerFactory.getLogger(Esql.class);
-    private String connectionName = DEFAULT_CONNECTION_NAME;
+    private String connectionName;
     private EsqlItem esqlItem;
     private Object[] params;
     private String sqlClassPath;
     private EsqlPage page;
     private EsqlBatch batch;
-    private EsqlTransaction transaction;
     private Object[] dynamics;
-    private int maxRows = Integer.MAX_VALUE;
-    private boolean externalTrans;
+    private int maxRows = 100000;
+    private EsqlTran externalTran;
+    private EsqlTran internalTran;
     private Connection connection;
 
     public static ThreadLocal<EsqlExecInfo> execContext = new ThreadLocal<EsqlExecInfo>() {
@@ -71,11 +72,14 @@ public class Esql {
 
     public static void setExecContextInfo(EsqlExecInfo execContextInfo) {
         execContext.set(execContextInfo);
-
     }
 
     public Connection getConnection() {
-        return getConfigTran(connectionName).getConnection();
+        return newTran(connectionName).getConn();
+    }
+
+    private void createConn() {
+        connection = internalTran != null ? internalTran.getConn() : externalTran.getConn();
     }
 
     @SuppressWarnings("unchecked")
@@ -85,6 +89,7 @@ public class Esql {
         Object ret = null;
         try {
             if (batch == null) tranStart();
+            createConn();
 
             for (EsqlSub subSql : createSqlSubs(directSqls))
                 ret = execSub(ret, subSql);
@@ -96,6 +101,7 @@ public class Esql {
                     + e.getMessage());
         } finally {
             if (batch == null) tranClose();
+            connection = null;
         }
 
         return (T) ret;
@@ -333,7 +339,9 @@ public class Esql {
         this.connectionName = connectionName;
     }
 
-    public Esql() {}
+    public Esql() {
+        this(DEFAULT_CONN_NAME);
+    }
 
     protected void initSqlId(String sqlId, String sqlClassPath) {
         this.sqlClassPath = isEmpty(sqlClassPath) ? getSqlClassPath(4) : sqlClassPath;
@@ -429,30 +437,53 @@ public class Esql {
     }
 
     private void tranStart() {
-        if (externalTrans) return;
+        if (externalTran != null) return;
 
-        transaction = getConfigTran(connectionName);
-        connection = transaction.getConnection();
-        transaction.start();
+        internalTran = newTran(connectionName);
+        internalTran.start();
     }
 
     private void tranCommit() {
-        if (externalTrans) return;
+        if (externalTran != null) return;
 
-        transaction.commit();
+        internalTran.commit();
     }
 
     private void tranClose() {
-        RClose.closeQuietly(transaction);
-        transaction = null;
+        if (internalTran != null) RClose.closeQuietly(internalTran);
+
+        internalTran = null;
     }
 
-    public EsqlTransaction newTransaction() {
-        externalTrans = true;
-        EsqlTransaction configTran = getConfigTran(connectionName);
-        connection = configTran.getConnection();
+    /**
+     * 创建一个新的事务对象，并且在当前Esql中委托该对象控制事务。
+     * @return
+     */
+    public EsqlTran newTran() {
+        EsqlTran tran = newTran(connectionName);
+        connection = tran.getConn();
+        useTran(tran);
 
-        return configTran;
+        return tran;
+    }
+
+    /**
+     * 委托外部事务对象来控制事务。
+     * @param tran
+     * @return
+     */
+    public Esql useTran(EsqlTran tran) {
+        externalTran = tran;
+        return this;
+    }
+
+    /**
+     * 创建一个事务对象。
+     * @param connName
+     * @return
+     */
+    public static EsqlTran newTran(String connName) {
+        return EsqlConfigManager.getConfig(connName).getTran();
     }
 
     public String getConnectionName() {
@@ -483,7 +514,7 @@ public class Esql {
         batch = new EsqlBatch(this);
         batch.startBatch();
 
-        if (!externalTrans) tranStart();
+        tranStart();
         return this;
     }
 

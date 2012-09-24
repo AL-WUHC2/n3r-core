@@ -11,5 +11,4 @@ public class EsqlExecInfo {
     public void setSql(String sql) {
         this.sql = sql;
     }
-
 }

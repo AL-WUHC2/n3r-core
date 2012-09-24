@@ -13,12 +13,11 @@ public class SimplePrizeItemIndexDrawer implements PrizeDrawer {
     @Override
     public PrizeItem drawPrize(PrizeItem lastDrawResult, PrizeActivity prizeActivity, Object userInfo) {
         List<PrizeItem> items = getPrizeItems(prizeActivity);
-        int randItemIndex = RRand.randInt(items.size());
 
-        PrizeItem prizeItem = items.get(randItemIndex);
+        PrizeItem prizeItem = items.get(items.size() == 1 ? 0 : RRand.randInt(items.size()));
 
-        // 该奖项已经没有剩余奖品
-        if (prizeItem.getItemIn() <= 0) return null;
+        if (prizeItem.getItemTotal() > 0 /* 有总数限制 */
+                && prizeItem.getItemIn() <= 0 /* 该奖项已经没有剩余奖品 */) return null;
 
         for (PrizeDrawItemChecker checker : prizeItem.getItemCheckers())
             checker.check(prizeActivity, userInfo, prizeItem);

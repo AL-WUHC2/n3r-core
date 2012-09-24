@@ -14,8 +14,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.core.lang.RStr;
-import org.n3r.esql.EsqlTransaction;
-import org.n3r.esql.config.EsqlConfigManager;
 import org.n3r.esql.param.EsqlParamsParser;
 import org.n3r.esql.res.EsqlItem;
 import org.n3r.esql.res.EsqlPart;
@@ -44,10 +42,6 @@ public class EsqlUtils {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         String callerClassName = stackTraceElements[num].getClassName();
         return "/" + callerClassName.replace('.', '/') + ".esql";
-    }
-
-    public static EsqlTransaction getConfigTran(String connectionName) {
-        return EsqlConfigManager.getConfig(connectionName).getTransaction();
     }
 
     public static List<EsqlSub> createSqlSubs(Object bean, List<List<EsqlPart>> sqlRawSubs, EsqlItem sqlItem) {

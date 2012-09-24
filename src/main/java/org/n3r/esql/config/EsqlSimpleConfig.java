@@ -3,7 +3,7 @@ package org.n3r.esql.config;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.n3r.esql.EsqlTransaction;
+import org.n3r.esql.EsqlTran;
 import org.n3r.esql.ex.EsqlConfigException;
 import org.n3r.esql.trans.EsqlJdbcTransaction;
 import org.n3r.esql.trans.EsqlJtaTransaction;
@@ -47,7 +47,7 @@ public class EsqlSimpleConfig extends EsqlConfig {
     }
 
     @Override
-    public EsqlTransaction getTransaction() {
+    public EsqlTran getTran() {
         if ("jta".equals(transactionType)) return new EsqlJtaTransaction();
 
         return new EsqlJdbcTransaction(getConnection());

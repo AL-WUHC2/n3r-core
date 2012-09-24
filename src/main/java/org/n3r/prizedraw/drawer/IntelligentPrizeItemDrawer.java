@@ -14,7 +14,8 @@ import org.n3r.core.lang.RDate;
 import org.n3r.core.security.RDigest;
 import org.n3r.core.text.RRand;
 import org.n3r.esql.Esql;
-import org.n3r.esql.EsqlTransaction;
+import org.n3r.esql.EsqlTran;
+import org.n3r.prizedraw.base.PrizeCommitter;
 import org.n3r.prizedraw.base.PrizeDrawer;
 import org.n3r.prizedraw.drawer.ItemSpecParser.DayItem;
 import org.n3r.prizedraw.drawer.ItemSpecParser.ItemTimeRange;
@@ -40,14 +41,13 @@ public class IntelligentPrizeItemDrawer implements PrizeDrawer {
         tryParseItemSpec(lastDrawResult);
 
         // 使用随机数判断是否通过幸运抽选关
-        boolean hasLucky = PrizeUtils.randomize(lastDrawResult);
+        boolean hasLucky = PrizeUtils.hasLucky(lastDrawResult);
 
         Esql esql = new Esql();
-        final EsqlTransaction transaction = esql.newTransaction();
-        PrizeUtils.addCommitter(transaction);
+        final EsqlTran tran = PrizeCommitter.getTran(Esql.DEFAULT_CONN_NAME);
 
         int rows = 0;
-        if (hasLucky) rows = esql.update("itemDraw")
+        if (hasLucky) rows = esql.useTran(tran).update("itemDraw")
                 .params(prizeActivity.getActivityId(), lastDrawResult.getItemId())
                 .execute();
 
@@ -69,7 +69,7 @@ public class IntelligentPrizeItemDrawer implements PrizeDrawer {
      */
     public void tryParseItemSpec(PrizeItem prizeItem) {
         Esql esql = new Esql();
-        EsqlTransaction tran = esql.newTransaction();
+        EsqlTran tran = esql.newTran();
         try {
             tran.start();
 

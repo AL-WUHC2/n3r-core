@@ -3,14 +3,10 @@ package org.n3r.prizedraw.drawer;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-import org.n3r.core.joor.Reflect;
 import org.n3r.core.lang.RBaseBean;
+import org.n3r.core.util.ParamsApplyUtils;
 import org.n3r.esql.map.AfterProperitesSet;
 import org.n3r.prizedraw.base.PrizeDrawItemChecker;
-
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 
 public class PrizeItem extends RBaseBean implements AfterProperitesSet {
     private String activityId;
@@ -26,17 +22,11 @@ public class PrizeItem extends RBaseBean implements AfterProperitesSet {
     private String itemSpec;
     private String itemMd5;
     private Date itemCheckpoints;
-    private List<PrizeDrawItemChecker> itemCheckers = Lists.newArrayList();
+    private List<PrizeDrawItemChecker> itemCheckers;
 
     @Override
     public void afterPropertiesSet() {
-        if (StringUtils.isNotEmpty(checkers)) {
-            Splitter splitter = Splitter.onPattern("[,\\s]").omitEmptyStrings().trimResults();
-            for (String functorStr : splitter.split(checkers)) {
-                PrizeDrawItemChecker functor = Reflect.on(functorStr).create().get();
-                itemCheckers.add(functor);
-            }
-        }
+        itemCheckers = ParamsApplyUtils.createObjects(checkers, PrizeDrawItemChecker.class);
     }
 
     public int getItemOut() {
