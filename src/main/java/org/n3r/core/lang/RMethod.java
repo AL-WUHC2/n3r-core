@@ -1,7 +1,5 @@
 package org.n3r.core.lang;
 
-import static org.n3r.core.lang.RClass.loadClass;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -20,8 +18,7 @@ public class RMethod {
     public static void invokeQuietly(Method method, Object object) {
         try {
             method.invoke(object, new Object[] {});
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // ingore
         }
     }
@@ -34,8 +31,7 @@ public class RMethod {
                     .on(method.getDeclaringClass()).create().get();
 
             return (T) method.invoke(target, args);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw Throwables.propagate(e);
         }
     }
@@ -59,7 +55,7 @@ public class RMethod {
 
     /**
      * 获得类方法的反射。
-     * 
+     *
      * @param clazz 类
      * @param methodName 方法名称
      * @param parameterTypes 方法参数列表
@@ -71,7 +67,7 @@ public class RMethod {
 
     /**
      * 获得类方法的反射。
-     * 
+     *
      * @param className 类名称
      * @param methodName 方法名称
      * @param parameterTypes 方法参数列表
