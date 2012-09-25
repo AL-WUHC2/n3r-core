@@ -17,7 +17,7 @@ import com.google.common.collect.Iterables;
 public class ParamsApplyUtils {
     private static Logger log = LoggerFactory.getLogger(ParamsApplyUtils.class);
     private static final Pattern paramParams = Pattern
-            .compile("\\w+(\\.\\w+)*\\s*(\\(\\s*\\w+\\s*(,\\s*\\w+\\s*)*\\))?");
+            .compile("\\w+([.$]\\w+)*\\s*(\\(\\s*\\w+\\s*(,\\s*\\w+\\s*)*\\))?");
 
     /**
      * 根据形如com.ailk.xxx.yyy(a123,b23)的字符串，生成对象。
@@ -34,10 +34,10 @@ public class ParamsApplyUtils {
         Splitter splitter = Splitter.on(',').trimResults();
 
         while (matcher.find()) {
-            String group = matcher.group();
+            String group = matcher.group().trim();
             int posBrace = group.indexOf('(');
             String functor = posBrace < 0 ? group : group.substring(0, posBrace);
-            Object obj = Reflect.on(functor).create().get();
+            Object obj = Reflect.on(StringUtils.trim(functor)).create().get();
             if (!cls.isInstance(obj)) {
                 log.warn("{} can not instantized to {}", functor, cls.getName());
                 continue;
@@ -47,7 +47,7 @@ public class ParamsApplyUtils {
 
             if (obj instanceof ParamsAppliable)
                 ((ParamsAppliable) obj).applyParams(posBrace <= 0 ? new String[] {}
-                        : Iterables.toArray(splitter.split(RStr.substrInQuotes(group, '(', 0)), String.class));
+                        : Iterables.toArray(splitter.split(RStr.substrInQuotes(group, '(', posBrace)), String.class));
         }
 
         return lst;

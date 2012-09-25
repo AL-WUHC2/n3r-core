@@ -13,6 +13,8 @@ import org.n3r.core.joor.Reflect;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 
+import static org.n3r.core.lang.RClass.*;
+
 public class RMethod {
 
     public static void invokeQuietly(Method method, Object object) {
@@ -36,6 +38,15 @@ public class RMethod {
         catch (Exception e) {
             throw Throwables.propagate(e);
         }
+    }
+
+    public static Method findMethod(Class<?> clazz, String methodName) {
+        try {
+            return clazz.getMethod(methodName, new Class<?>[] {});
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     public static List<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<? extends Annotation> class1) {
