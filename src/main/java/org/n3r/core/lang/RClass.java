@@ -34,7 +34,7 @@ public class RClass {
     /**
      * Load a class given its name. BL: We wan't to use a known
      * ClassLoader--hopefully the heirarchy is set correctly.
-     * @param <T> ÀàÐÍ
+     * @param <T> ç±»åž‹
      * @param className        A class name
      * @return The class pointed to by <code>className</code>
      */
