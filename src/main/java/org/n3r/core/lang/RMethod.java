@@ -1,5 +1,7 @@
 package org.n3r.core.lang;
 
+import static org.n3r.core.lang.RClass.loadClass;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -10,8 +12,6 @@ import org.n3r.core.joor.Reflect;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-
-import static org.n3r.core.lang.RClass.*;
 
 public class RMethod {
 
@@ -40,30 +40,31 @@ public class RMethod {
 
     public static List<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<? extends Annotation> class1) {
         List<Method> methods = Lists.newArrayList();
-        for (Method m : clazz.getMethods()) {
+        for (Method m : clazz.getMethods())
             if (m.isAnnotationPresent(class1)) methods.add(m);
-        }
 
         return methods;
     }
 
     /**
-     * »ñµÃÀà·½·¨µÄ·´Éä¡£
-     * @param clazz Àà
-     * @param methodName ·½·¨Ãû³Æ
-     * @param parameterTypes ·½·¨²ÎÊıÁĞ±í
-     * @return ·½·¨
+     * è·å¾—ç±»æ–¹æ³•çš„åå°„ã€‚
+     * 
+     * @param clazz ç±»
+     * @param methodName æ–¹æ³•åç§°
+     * @param parameterTypes æ–¹æ³•å‚æ•°åˆ—è¡¨
+     * @return æ–¹æ³•
      */
     public static Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
         return MethodUtils.getAccessibleMethod(clazz, methodName, parameterTypes);
     }
 
     /**
-     * »ñµÃÀà·½·¨µÄ·´Éä¡£
-     * @param className ÀàÃû³Æ
-     * @param methodName ·½·¨Ãû³Æ
-     * @param parameterTypes ·½·¨²ÎÊıÁĞ±í
-     * @return ·½·¨
+     * è·å¾—ç±»æ–¹æ³•çš„åå°„ã€‚
+     * 
+     * @param className ç±»åç§°
+     * @param methodName æ–¹æ³•åç§°
+     * @param parameterTypes æ–¹æ³•å‚æ•°åˆ—è¡¨
+     * @return æ–¹æ³•
      */
     public static Method getMethod(String className, String methodName, Class<?>... parameterTypes) {
         return getMethod(loadClass(className), methodName, parameterTypes);

@@ -32,10 +32,10 @@ public class RClass {
     }
 
     /**
-     * Load a class given its name. BL: We wan't to use a known
-     * ClassLoader--hopefully the heirarchy is set correctly.
+     * Load a class given its name. BL: We wan't to use a known ClassLoader--hopefully the heirarchy is set correctly.
+     * 
      * @param <T> 类型
-     * @param className        A class name
+     * @param className A class name
      * @return The class pointed to by <code>className</code>
      */
     @SuppressWarnings("unchecked")
@@ -50,9 +50,8 @@ public class RClass {
     }
 
     /**
-     * Return the context classloader. BL: if this is command line operation,
-     * the classloading issues are more sane. During servlet execution, we
-     * explicitly set the ClassLoader.
+     * Return the context classloader. BL: if this is command line operation, the classloading issues are more sane.
+     * During servlet execution, we explicitly set the ClassLoader.
      * 
      * @return The context classloader.
      */
