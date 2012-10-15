@@ -5,26 +5,37 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.n3r.core.collection.RMap;
 import org.n3r.core.lang.RClose;
 import org.n3r.core.lang.RDate;
 import org.n3r.core.text.RRand;
+import org.n3r.eson.Eson;
 import org.n3r.esql.Esql;
 import org.n3r.esql.EsqlPage;
 import org.n3r.esql.parser.EsqlTableSqlMapper;
 
-import com.alibaba.fastjson.JSON;
-
 import static org.junit.Assert.*;
 
 public class EsqlDemoTest {
+    @BeforeClass
+    public static void beforeClass() {
+        new Esql().useSqlFile(EsqlDemo.class).update("beforeClass").execute();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        new Esql().useSqlFile(EsqlDemo.class).update("afterClass").execute();
+    }
+
     private EsqlDemo esqlDemo = new EsqlDemo();
 
     @Test
@@ -59,25 +70,25 @@ public class EsqlDemoTest {
     public void getMapList() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         List<Map<String, Object>> beanList = esqlDemo.getMaps();
-        assertEquals("[{A:1,B:A,C:#AC,D:2012-08-21 00:00:00.0,E:101}," +
-                "{A:2,B:B,C:#BC,D:2012-08-21 00:00:00.0,E:102}," +
-                "{A:3,B:C,C:CC,D:2012-08-21 00:00:00.0,E:103}," +
-                "{A:4,B:D,C:DC,D:2012-08-21 00:00:00.0,E:104}]"
-                , JSON.toJSONString(beanList).replaceAll("\"", ""));
+        assertEquals("[{A:1,B:A,C:#AC,D:1345478400000,E:101}," +
+                "{A:2,B:B,C:#BC,D:1345478400000,E:102}," +
+                "{A:3,B:C,C:CC,D:1345478400000,E:103}," +
+                "{A:4,B:D,C:DC,D:1345478400000,E:104}]"
+                , new Eson().on(beanList).toString());
     }
 
     @Test
     public void getFirstMap() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         Map<String, Object> bean = esqlDemo.getFirstMap();
-        assertEquals("{A:1,B:A,C:#AC,D:2012-08-21 00:00:00.0,E:101}", JSON.toJSONString(bean).replaceAll("\"", ""));
+        assertEquals("{A:1,B:A,C:#AC,D:1345478400000,E:101}", new Eson().on(bean).toString());
     }
 
     @Test
     public void getFirstBean() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean firstBean = esqlDemo.getFirstBean();
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(firstBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(firstBean).toString());
     }
 
     @Test
@@ -87,7 +98,14 @@ public class EsqlDemoTest {
         assertEquals("[{a:1,b:A,c:#AC,d:1345478400000,e:101}," +
                 "{a:2,b:B,c:#BC,d:1345478400000,e:102}," +
                 "{a:3,b:C,c:CC,d:1345478400000,e:103}," +
-                "{a:4,b:D,c:DC,d:1345478400000,e:104}]", JSON.toJSONString(beans).replaceAll("\"", ""));
+                "{a:4,b:D,c:DC,d:1345478400000,e:104}]", new Eson().on(beans).toString());
+    }
+
+    @Test
+    public void testSelectStringList() {
+        esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
+        List<String> strs = new Esql().useSqlFile(EsqlDemo.class).select("getStringList").execute();
+        assertEquals("[#AC,#BC,CC,DC]", new Eson().on(strs).toString());
     }
 
     @Test
@@ -116,20 +134,33 @@ public class EsqlDemoTest {
     public void selectByBean() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.selectBeanByBean(RMap.of("a", 1, "c", "#AC"));
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
 
         esqlDemoBean = esqlDemo.selectBeanByBean(esqlDemoBean);
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
 
         Map<String, Object> map = esqlDemo.selectMapByBean(esqlDemoBean);
-        assertEquals("{A:1,B:A,C:#AC,D:2012-08-21 00:00:00.0,E:101}", JSON.toJSONString(map).replaceAll("\"", ""));
+        assertEquals("{A:1,B:A,C:#AC,D:1345478400000,E:101}", new Eson().on(map).toString());
+    }
+
+    @Test
+    public void selectByBean2() {
+        esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
+        EsqlDemoBean esqlDemoBean = esqlDemo.selectBeanByBean2(RMap.of("a", 1, "c", "#AC"));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
+
+        esqlDemoBean = esqlDemo.selectBeanByBean2(esqlDemoBean);
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
+
+        Map<String, Object> map = esqlDemo.selectMapByBean(esqlDemoBean);
+        assertEquals("{A:1,B:A,C:#AC,D:1345478400000,E:101}", new Eson().on(map).toString());
     }
 
     @Test
     public void selectIf() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.selectIf(RMap.of("a", 1, "c", "#AC", "e", 100));
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
         esqlDemoBean = esqlDemo.selectIf(RMap.of("a", 1, "c", "#AC", "e", 200));
         assertNull(esqlDemoBean);
     }
@@ -138,7 +169,7 @@ public class EsqlDemoTest {
     public void selectIfWoReturnType() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.selectIfWoReturnType(RMap.of("a", 1, "c", "#AC", "e", 100));
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
         esqlDemoBean = esqlDemo.selectIfWoReturnType(RMap.of("a", 1, "c", "#AC", "e", 200));
         assertNull(esqlDemoBean);
     }
@@ -147,7 +178,7 @@ public class EsqlDemoTest {
     public void selectIfNotEmpty() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.selectIfNotEmpty(RMap.of("a", 1));
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
         esqlDemoBean = esqlDemo.selectIfNotEmpty(RMap.of("a", ""));
         assertNotNull(esqlDemoBean);
     }
@@ -156,7 +187,7 @@ public class EsqlDemoTest {
     public void switchSelect() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.switchSelect(RMap.of("a", 1));
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
         esqlDemoBean = esqlDemo.switchSelect(RMap.of("a", ""));
         assertNotNull(esqlDemoBean);
     }
@@ -165,7 +196,7 @@ public class EsqlDemoTest {
     public void switchSelectWithDefault() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.switchSelectWithDefault(RMap.of("a", 1));
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
         esqlDemoBean = esqlDemo.switchSelectWithDefault(RMap.of("a", ""));
         assertNotNull(esqlDemoBean);
     }
@@ -174,7 +205,7 @@ public class EsqlDemoTest {
     public void selectIf2() {
         esqlDemo.executeImmediate(RDate.parse("2012-08-21"));
         EsqlDemoBean esqlDemoBean = esqlDemo.selectIf2(RMap.of("a", 1, "c", "#AC", "e", 100));
-        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", JSON.toJSONString(esqlDemoBean).replaceAll("\"", ""));
+        assertEquals("{a:1,b:A,c:#AC,d:1345478400000,e:101}", new Eson().on(esqlDemoBean).toString());
         esqlDemoBean = esqlDemo.selectIf2(RMap.of("a", 2, "c", "#AC", "e", 200));
         assertNull(esqlDemoBean);
     }
@@ -201,8 +232,6 @@ public class EsqlDemoTest {
 
     @Test
     public void useSqlTable() {
-        new Esql().useSqlFile(EsqlDemo.class).update("createEsql").execute();
-
         List<EsqlTableSqlMapper> ret = new Esql()
                 .returnType(EsqlTableSqlMapper.class)
                 .params(1)
@@ -221,9 +250,9 @@ public class EsqlDemoTest {
     @Test
     public void pageCall() {
         EsqlPage page = new EsqlPage(3, 10);
-        Object execute = new Esql().useSqlFile(EsqlDemo.class).select("selectRecords").limit(page).execute();
-        System.out.println(execute);
-        System.out.println(page);
+        /* Object execute =*/new Esql().useSqlFile(EsqlDemo.class).select("selectRecords").limit(page).execute();
+        //        System.out.println(execute);
+        //        System.out.println(page);
     }
 
     @Test
@@ -251,8 +280,8 @@ public class EsqlDemoTest {
                 ps.setString(4, userId);
                 ps.addBatch();
             }
-            int[] executeBatch = ps.executeBatch();
-            System.out.println(ArrayUtils.toString(executeBatch));
+            /*int[] executeBatch = */ps.executeBatch();
+            //            System.out.println(ArrayUtils.toString(executeBatch));
         } finally {
             RClose.closeQuietly(ps, connection);
         }
@@ -272,6 +301,35 @@ public class EsqlDemoTest {
         }
 
         esql.executeBatch();
+
+        new Esql().useSqlFile(EsqlDemo.class).id("deletePrizeBingoo").execute();
+    }
+
+    @Test
+    public void insertPrizeBingoo2() {
+        Esql esql = new Esql().useSqlFile(EsqlDemo.class);
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("ORDER_NO", RRand.randLetters(10));
+        map.put("ACTIVITY_ID", "Olympic");
+        map.put("ITEM_ID", RRand.randInt(10));
+        map.put("USER_ID", RRand.randLetters(10));
+        int ret = esql.id("insertPrizeBingoo2").params(map).execute();
+        assertEquals(1, ret);
+
+        map.put("ITEM_ID", RRand.randInt(10));
+        ret = esql.id("updatePrizeBingoo2").params(map).execute();
+        assertEquals(1, ret);
+
+        map.put("ITEM_ID", RRand.randInt(10));
+        ret = esql.id("mergePrizeBingoo2").params(map).execute();
+        assertEquals(1, ret);
+
+        esql.id("deletePrizeBingoo").execute();
+
+        map.put("ITEM_ID", RRand.randInt(10));
+        ret = esql.id("mergePrizeBingoo2").params(map).execute();
+        assertEquals(1, ret);
+        esql.id("deletePrizeBingoo").execute();
     }
 
     @Test
@@ -298,7 +356,7 @@ public class EsqlDemoTest {
             cs.setString(1, "hjb");
             cs.registerOutParameter(2, Types.VARCHAR);
             cs.execute();
-            System.out.println(cs.getString(2));
+            //            System.out.println(cs.getString(2));
         } finally {
             RClose.closeQuietly(cs, connection);
         }
@@ -424,9 +482,9 @@ public class EsqlDemoTest {
 
     @Test
     public void callPLSQL() throws SQLException {
-        String ret = new Esql().useSqlFile(EsqlDemo.class).params(10).procedure("callPLSQL")
+        /*  String ret = */new Esql().useSqlFile(EsqlDemo.class).params(10).procedure("callPLSQL")
                 .execute();
-        System.out.println(ret);
+        /*  System.out.println(ret);*/
     }
 
     @Test

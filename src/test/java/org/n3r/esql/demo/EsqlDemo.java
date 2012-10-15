@@ -81,6 +81,13 @@ public class EsqlDemo {
                 .execute();
     }
 
+    public EsqlDemoBean selectBeanByBean2(Object params) {
+        return new Esql().selectFirst("selectByBean2")
+                .params(params)
+                .returnType(EsqlDemoBean.class)
+                .execute();
+    }
+
     public Map<String, Object> selectMapByBean(Object params) {
         return new Esql().selectFirst("selectByBean")
                 .params(params)
