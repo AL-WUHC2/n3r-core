@@ -103,6 +103,7 @@ public class EsqlParamsParser {
     private String inferVarName(EsqlType sqlType, String rawSql, int startPos, int endPos) {
         String variableName = null;
         switch (sqlType) {
+        case SELECT:
         case UPDATE:
             variableName = inferVarNameInUpdateSql(rawSql, startPos, endPos);
             break;

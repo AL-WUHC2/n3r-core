@@ -13,20 +13,21 @@ SELECT 'x'
 FROM DUAL
 WHERE 'x' = ##
 
+--自动序号
 [getStringWithTwoParams]
 SELECT 'x'
 FROM DUAL
 WHERE 'x' = ##
 AND 'y' = ##
 
+--指定序号
 [getStringWithTwoParamsAndSequence]
 SELECT 'x'
 FROM DUAL
 WHERE 'x' = #2#
 AND 'y' = #1#
 
-[initialize onerr=resume]
-DROP TABLE ESQL_TEST;
+[beforeClass onerr=resume]
 CREATE TABLE ESQL_TEST (
     A INT NOT NULL,
     B CHAR(10),
@@ -36,6 +37,123 @@ CREATE TABLE ESQL_TEST (
     CONSTRAINT PK_ESQL_TEST PRIMARY KEY(A)
 );
 
+create table esql_sql  (
+   id                   varchar2(32)                    not null,
+   options              varchar2(512),
+   sql                  varchar2(1024)                  not null,
+   valid                number(1)                      default 1 not null,
+   remark               varchar2(1024),
+   constraint PK_ESQL_SQL primary key (id)
+);
+
+comment on table esql_sql is
+'定义esql中的sql语句';
+comment on column esql_sql.id is
+'SQL标识';
+comment on column esql_sql.options is
+'SQL选项';
+comment on column esql_sql.sql is
+'SQL语句';
+comment on column esql_sql.valid is
+'是否有效1：有效 0无效';
+comment on column esql_sql.remark is
+'SQL备注';
+
+INSERT INTO esql_sql(ID, OPTIONS, SQL, VALID, REMARK)
+VALUES('demo.updateBean', NULL, 'UPDATE ESQL_TEST SET B = \#2\# WHERE A = \#1\#', 1, 'TEST' );
+
+create table ESQL_TEST_BINGOO
+(
+  order_no    VARCHAR2(16) not null,
+  activity_id VARCHAR2(10) not null,
+  bingoo_time DATE not null,
+  user_id     VARCHAR2(128) not null,
+  item_id     VARCHAR2(10) not null,
+  item_join   NUMBER(1) default 0 not null
+);
+
+alter table ESQL_TEST_BINGOO
+  add constraint PK_ESQL_TEST_BINGOO primary key (ORDER_NO);
+
+create table ESQL_TEST_RECORD
+(
+  activity_id  VARCHAR2(10) not null,
+  last_time    DATE,
+  user_id      VARCHAR2(128) not null,
+  robot_tag    INTEGER default 0 not null,
+  draw_times   INTEGER not null,
+  bingoo_times INTEGER default 0 not null
+);
+alter table ESQL_TEST_RECORD
+  add constraint PK_ESQL_TEST_RECORD primary key (ACTIVITY_ID, USER_ID);
+
+  create table ESQL_TEST_RECORD
+(
+  activity_id  VARCHAR2(10) not null,
+  last_time    DATE,
+  user_id      VARCHAR2(128) not null,
+  robot_tag    INTEGER default 0 not null,
+  draw_times   INTEGER not null,
+  bingoo_times INTEGER default 0 not null
+);
+
+alter table ESQL_TEST_RECORD
+  add constraint PK_ESQL_TEST_RECORD primary key (ACTIVITY_ID, USER_ID)；
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('24-09-2012 17:17:52', 'dd-mm-yyyy hh24:mi:ss'), '456', 0, 4, 4);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo3', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo4', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('24-09-2012 17:18:36', 'dd-mm-yyyy hh24:mi:ss'), 'HJB', 0, 1, 1);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('24-09-2012 17:26:54', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo', 0, 4, 4);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo5', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo7', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo9', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo6', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo8', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:22', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo0', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo1', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('25-09-2012 17:11:23', 'dd-mm-yyyy hh24:mi:ss'), 'bingoo2', 0, 3, 3);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('04-09-2012 18:00:49', 'dd-mm-yyyy hh24:mi:ss'), 'dingoo', 0, 5, 5);
+
+insert into ESQL_TEST_RECORD (ACTIVITY_ID, LAST_TIME, USER_ID, ROBOT_TAG, DRAW_TIMES, BINGOO_TIMES)
+values ('Olympic', to_date('04-09-2012 18:04:48', 'dd-mm-yyyy hh24:mi:ss'), '123', 0, 3, 3);
+
+
+[afterClass]
+DROP TABLE ESQL_TEST;
+drop table esql_sql cascade constraints;
+DROP TABLE ESQL_TEST_BINGOO;
+DROP TABLE ESQL_TEST_RECORD;
+
+[initialize  onerr=resume]
+TRUNCATE TABLE ESQL_TEST;
 INSERT INTO ESQL_TEST VALUES(1, 'A', '\#AC', ##, 101);
 INSERT INTO ESQL_TEST VALUES(2, 'B', '\#BC', ##, 102);
 INSERT INTO ESQL_TEST VALUES(3, 'C', 'CC', ##, 103);
@@ -43,6 +161,10 @@ INSERT INTO ESQL_TEST VALUES(4, 'D', 'DC', ##, 104);
 
 [getBeanList]
 SELECT A,B,C,D,E
+FROM ESQL_TEST
+
+[getStringList]
+SELECT C
 FROM ESQL_TEST
 
 [updateBean]
@@ -61,9 +183,19 @@ FROM ESQL_TEST
 WHERE A = #a#
 AND C = #c#
 
-[selectIf returnType=org.n3r.esql.demo.EsqlDemoBean]
+--变量名自动推断
+[selectByBean2]
 SELECT A,B,C,D,E
 FROM ESQL_TEST
+WHERE A = #?#
+AND C = #?#
+
+[sqlPart]
+SELECT A,B,C,D,E
+FROM ESQL_TEST
+
+[selectIf returnType=org.n3r.esql.demo.EsqlDemoBean]
+<#include sqlPart>
 WHERE A = #a#
 <if e == 100>
 AND C = #c#
@@ -74,8 +206,7 @@ AND C = 'FALSE'
 <end>
 
 [selectIfNotEmpty returnType=org.n3r.esql.demo.EsqlDemoBean]
-SELECT A,B,C,D,E
-FROM ESQL_TEST
+<#include sqlPart>
 <if isNotEmpty(a)>
 WHERE A = #a#
 <end>
@@ -118,14 +249,36 @@ AND C = 'FALSE'
 
 [selectRecords]
 SELECT ACTIVITY_ID, USER_ID
-FROM PRIZE_RECORD
+FROM ESQL_TEST_RECORD
 
 [insertPrizeBingoo]
-INSERT INTO PRIZE_BINGOO(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
+INSERT INTO ESQL_TEST_BINGOO(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
 VALUES(##, ##, ##, ##, SYSDATE)
 
+[deletePrizeBingoo]
+DELETE FROM ESQL_TEST_BINGOO
+
+[insertPrizeBingoo2]
+INSERT INTO ESQL_TEST_BINGOO(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
+VALUES(#?#, #?#, #?#, #?#, SYSDATE);
+
+[updatePrizeBingoo2]
+UPDATE ESQL_TEST_BINGOO
+SET ACTIVITY_ID = #?#
+WHERE ORDER_NO = #?#
+
+[mergePrizeBingoo2]
+MERGE INTO ESQL_TEST_BINGOO T USING DUAL
+ON (T.ORDER_NO = #?#)
+WHEN MATCHED THEN
+UPDATE SET ACTIVITY_ID = #?#
+WHEN NOT MATCHED THEN
+INSERT (ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
+VALUES(#?#, #?#, #?#, #?#, SYSDATE);
+
+
 [insertPrizeBingooDynamic]
-INSERT INTO PRIZE_$$(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
+INSERT INTO ESQL_TEST_$$(ORDER_NO, ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME)
 VALUES(##, ##, ##, ##, SYSDATE)
 
 [createSpEsql split=/]
@@ -159,38 +312,6 @@ BEGIN
     NULL;
 END;
 
-[createEsql  onerr=resume]
-drop table esql_sql cascade constraints;
-
-create table esql_sql  (
-   id                   varchar2(32)                    not null,
-   options              varchar2(512),
-   sql                  varchar2(1024)                  not null,
-   valid                number(1)                      default 1 not null,
-   remark               varchar2(1024),
-   constraint PK_ESQL_SQL primary key (id)
-);
-
-comment on table esql_sql is
-'定义esql中的sql语句';
-
-comment on column esql_sql.id is
-'SQL标识';
-
-comment on column esql_sql.options is
-'SQL选项';
-
-comment on column esql_sql.sql is
-'SQL语句';
-
-comment on column esql_sql.valid is
-'是否有效1：有效 0无效';
-
-comment on column esql_sql.remark is
-'SQL备注';
-
-INSERT INTO esql_sql(ID, OPTIONS, SQL, VALID, REMARK)
-VALUES('demo.updateBean', NULL, 'UPDATE ESQL_TEST SET B = \#2\# WHERE A = \#1\#', 1, 'TEST' );
 
 [createSpEsql12 split=/]
 CREATE OR REPLACE PROCEDURE SP_ESQL12( B OUT VARCHAR, C OUT VARCHAR) IS

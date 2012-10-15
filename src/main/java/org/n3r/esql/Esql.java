@@ -1,10 +1,10 @@
 package org.n3r.esql;
 
-import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import org.n3r.esql.map.EsqlCallableReturnMapMapper;
 import org.n3r.esql.map.EsqlCallableReturnMapper;
 import org.n3r.esql.map.EsqlMapMapper;
 import org.n3r.esql.map.EsqlRowMapper;
+import org.n3r.esql.map.SingleValueMapper;
 import org.n3r.esql.param.EsqlParamPlaceholder.InOut;
 import org.n3r.esql.param.EsqlParamsBinder;
 import org.n3r.esql.param.EsqlParamsParser;
@@ -58,6 +59,7 @@ public class Esql {
     private EsqlTran externalTran;
     private EsqlTran internalTran;
     private Connection connection;
+    private ArrayList<Object> executeResults;
 
     public static ThreadLocal<EsqlExecInfo> execContext = new ThreadLocal<EsqlExecInfo>() {
         @Override
@@ -82,17 +84,24 @@ public class Esql {
         connection = internalTran != null ? internalTran.getConn() : externalTran.getConn();
     }
 
+    public List<Object> getResults() {
+        return executeResults;
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T execute(String... directSqls) {
         checkPreconditions(directSqls);
+        executeResults = new ArrayList<Object>();
 
         Object ret = null;
         try {
             if (batch == null) tranStart();
             createConn();
 
-            for (EsqlSub subSql : createSqlSubs(directSqls))
+            for (EsqlSub subSql : createSqlSubs(directSqls)) {
                 ret = execSub(ret, subSql);
+                executeResults.add(ret);
+            }
 
             if (batch == null) tranCommit();
         } catch (SQLException e) {
@@ -287,14 +296,14 @@ public class Esql {
     }
 
     private Object rowBeanCreate(ResultSet rs, int rowNum) throws SQLException {
-        Object rowBean = getRowMapper().mapRow(rs, rowNum);
+        Object rowBean = getRowMapper(rs.getMetaData()).mapRow(rs, rowNum);
         if (rowBean instanceof AfterProperitesSet)
             ((AfterProperitesSet) rowBean).afterPropertiesSet();
 
         return rowBean;
     }
 
-    private EsqlRowMapper getRowMapper() {
+    private EsqlRowMapper getRowMapper(ResultSetMetaData metaData) throws SQLException {
         if (returnType == null && esqlItem != null) returnType = esqlItem.getReturnType();
 
         if (returnType != null && EsqlRowMapper.class.isAssignableFrom(returnType))
@@ -302,7 +311,7 @@ public class Esql {
 
         if (returnType != null) return new EsqlBeanRowMapper(returnType);
 
-        return new EsqlMapMapper();
+        return metaData.getColumnCount() > 1 ? new EsqlMapMapper() : new SingleValueMapper();
     }
 
     private EsqlCallableReturnMapper getCallableReturnMapper() {
@@ -324,15 +333,7 @@ public class Esql {
     private Object firstRow(ResultSet rs) throws SQLException {
         if (!rs.next()) return null;
 
-        if (rs.getMetaData().getColumnCount() == 1) {
-            Object object = rs.getObject(1);
-            if (object instanceof BigDecimal)
-                return ((BigDecimal) object).intValue();
-
-            return object;
-        }
-
-        return rowBeanCreate(rs, 1);
+        return rs.getMetaData().getColumnCount() == 1 ? EsqlUtils.getResultSetValue(rs, 1) : rowBeanCreate(rs, 1);
     }
 
     public Esql(String connectionName) {

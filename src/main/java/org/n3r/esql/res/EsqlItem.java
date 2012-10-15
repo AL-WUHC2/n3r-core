@@ -17,13 +17,15 @@ public class EsqlItem {
     private Class<?> returnType;
     private String onerr;
     private String split;
+    private List<String> rawSqlLines = new ArrayList<String>();
 
     public List<EsqlSub> createSqlSubs(Object bean) {
         return EsqlUtils.createSqlSubs(bean, sqlRawSubs, this);
     }
 
-    public void addSqlParts(List<String> sqlLines) {
-        this.sqlRawSubs.add(EsqlSubParser.parse(sqlLines));
+    public void addSqlParts(Map<String, EsqlItem> sqlFile, List<String> sqlLines) {
+        rawSqlLines.addAll(sqlLines);
+        sqlRawSubs.add(EsqlSubParser.parse(sqlFile, sqlLines));
     }
 
     public void setSqlId(String sqlId) {
@@ -60,4 +62,9 @@ public class EsqlItem {
     public String getSqlSpitter() {
         return split;
     }
+
+    public List<String> getRawSqlLines() {
+        return rawSqlLines;
+    }
+
 }

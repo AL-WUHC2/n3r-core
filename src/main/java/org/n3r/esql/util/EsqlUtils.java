@@ -86,10 +86,11 @@ public class EsqlUtils {
                     "oracle.sql.TIMESTAMP".equals(metaDataClassName)) obj = rs.getTimestamp(index);
             else obj = rs.getDate(index);
         }
-        else if (obj != null && obj instanceof java.sql.Date) {
+        else if (obj instanceof java.sql.Date) {
             if ("java.sql.Timestamp".equals(rs.getMetaData().getColumnClassName(index))) obj = rs.getTimestamp(index);
         }
         else if (obj instanceof String) obj = ((String) obj).trim();
+        else if (obj instanceof BigDecimal) obj = ((BigDecimal) obj).intValue();
 
         return obj;
     }

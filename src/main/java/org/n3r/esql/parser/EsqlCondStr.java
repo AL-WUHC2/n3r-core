@@ -16,19 +16,19 @@ public class EsqlCondStr {
 
     public boolean isQuoted() {
         String trimedSqlLine = sqlLine.trim();
-        this.quoted = RStr.isQuoted(trimedSqlLine, "<", ">");
-        this.condition = trimedSqlLine;
+        quoted = RStr.isQuoted(trimedSqlLine, "<", ">");
+        condition = trimedSqlLine;
 
         if (quoted) {
-            this.condition = trimedSqlLine.substring(1, trimedSqlLine.length() - 1).trim();
+            condition = trimedSqlLine.substring(1, trimedSqlLine.length() - 1).trim();
             int posOfBlank = RStr.indexOfBlank(condition);
             if (posOfBlank > 0) {
-                this.conditionKey = condition.substring(0, posOfBlank);
-                this.conditionValue = condition.substring(posOfBlank).trim();
+                conditionKey = condition.substring(0, posOfBlank);
+                conditionValue = condition.substring(posOfBlank).trim();
             }
             else {
-                this.conditionKey = condition;
-                this.conditionValue = "";
+                conditionKey = condition;
+                conditionValue = "";
             }
         }
 

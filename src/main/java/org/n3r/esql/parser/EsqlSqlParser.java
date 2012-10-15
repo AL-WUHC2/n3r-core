@@ -104,14 +104,14 @@ public class EsqlSqlParser {
 
                 if (trimmedLine.endsWith(esqlItem.getSqlSpitter())) {
                     sqlLines.add(line.substring(0, line.length() - 1));
-                    addRawSql(esqlItem, sqlLines, lineNo);
+                    addRawSql(sqlFile, esqlItem, sqlLines, lineNo);
                 }
                 else sqlLines.add(line);
 
                 continue;
             }
 
-            addRawSql(esqlItem, sqlLines, lineNo);
+            addRawSql(sqlFile, esqlItem, sqlLines, lineNo);
 
             esqlItem = new EsqlItem();
             String sqlId = matcher.group(1);
@@ -124,7 +124,7 @@ public class EsqlSqlParser {
             esqlItem.setSqlOptions(new EsqlOptionsParser().parseOptions(matcher.group(2)));
         }
 
-        addRawSql(esqlItem, sqlLines, lineNo);
+        addRawSql(sqlFile, esqlItem, sqlLines, lineNo);
 
         return sqlFile;
     }
@@ -133,12 +133,13 @@ public class EsqlSqlParser {
         return context.get();
     }
 
-    private static void addRawSql(EsqlItem esqlItem, ArrayList<String> sqlLines, int endLine) {
+    private static void addRawSql(Map<String, EsqlItem> sqlFile, EsqlItem esqlItem, ArrayList<String> sqlLines,
+            int endLine) {
         try {
             if (esqlItem == null || sqlLines.size() == 0) return;
 
             getContext().setStartLineNo(endLine - sqlLines.size());
-            esqlItem.addSqlParts(sqlLines);
+            esqlItem.addSqlParts(sqlFile, sqlLines);
         } finally {
             sqlLines.clear();
         }
