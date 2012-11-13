@@ -1,5 +1,9 @@
 package org.n3r.esql;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.n3r.esql.util.EsqlUtils.getSqlClassPath;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +20,7 @@ import org.n3r.core.lang.RClose;
 import org.n3r.esql.config.EsqlConfigManager;
 import org.n3r.esql.ex.EsqlExecuteException;
 import org.n3r.esql.ex.EsqlIdNotFoundException;
+import org.n3r.esql.impl.DbTypeFactory;
 import org.n3r.esql.impl.EsqlBatch;
 import org.n3r.esql.impl.EsqlExecInfo;
 import org.n3r.esql.map.AfterProperitesSet;
@@ -40,10 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
-import static org.n3r.esql.util.EsqlUtils.*;
-
-import static org.apache.commons.lang3.StringUtils.*;
-
 public class Esql {
     public static final String DEFAULT_CONN_NAME = "DEFAULT";
     private Class<?> returnType;
@@ -60,6 +61,7 @@ public class Esql {
     private EsqlTran internalTran;
     private Connection connection;
     private ArrayList<Object> executeResults;
+    private DbType dbType;
 
     public static ThreadLocal<EsqlExecInfo> execContext = new ThreadLocal<EsqlExecInfo>() {
         @Override
@@ -82,6 +84,7 @@ public class Esql {
 
     private void createConn() {
         connection = internalTran != null ? internalTran.getConn() : externalTran.getConn();
+        dbType = DbTypeFactory.parseDbType(connection);
     }
 
     public List<Object> getResults() {
@@ -172,7 +175,7 @@ public class Esql {
 
     private Object executePageSql(Object ret, EsqlSub subSql) throws SQLException {
         // oracle专用物理分页。
-        EsqlSub pageSql = createOraclePageSql(subSql);
+        EsqlSub pageSql = dbType.createPageSql(subSql, page);
 
         return execDml(ret, pageSql);
     }
@@ -181,17 +184,10 @@ public class Esql {
         EsqlSub totalSqlSub = subSql.clone();
         createTotalSql(totalSqlSub);
 
-        return (Integer) execDml(ret, totalSqlSub);
-    }
+        Object totalRows = execDml(ret, totalSqlSub);
+        if(totalRows instanceof Number ) return ((Number)totalRows).intValue();
 
-    private EsqlSub createOraclePageSql(EsqlSub subSql) {
-        EsqlSub pageSubSql = subSql.clone();
-        String pageSql = "SELECT * FROM ( SELECT ROW__.*, ROWNUM RN__ FROM ( " + subSql.getSql()
-                + " ) ROW__  WHERE ROWNUM <= ?) WHERE RN__ > ?";
-        pageSubSql.setSql(pageSql);
-        pageSubSql.setExtraBindParams(page.getStartIndex() + page.getPageRows(), page.getStartIndex());
-
-        return pageSubSql;
+        throw new EsqlExecuteException("returned total rows object " + totalRows + " is not a number");
     }
 
     private void createTotalSql(EsqlSub subSql) {

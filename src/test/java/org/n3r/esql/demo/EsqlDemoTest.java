@@ -268,7 +268,7 @@ public class EsqlDemoTest {
         PreparedStatement ps = null;
         try {
             connection = new Esql().getConnection();
-            ps = connection.prepareStatement("INSERT INTO PRIZE_BINGOO(ORDER_NO, " +
+            ps = connection.prepareStatement("INSERT INTO ESQL_TEST_BINGOO(ORDER_NO, " +
                     "ACTIVITY_ID, ITEM_ID, USER_ID, BINGOO_TIME) VALUES(?, ?, ?, ?, SYSDATE)");
             for (int i = 0; i < 10; ++i) {
                 String orderNo = RRand.randLetters(10);

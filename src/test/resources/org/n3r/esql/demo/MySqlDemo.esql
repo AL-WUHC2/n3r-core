@@ -1,0 +1,8 @@
+[pagingDemo]
+SELECT * FROM student
+
+
+[autoIncr]
+INSERT INTO demo_auto_incr(name) VALUES ('bingoohuang');
+
+SELECT @@IDENTITY
