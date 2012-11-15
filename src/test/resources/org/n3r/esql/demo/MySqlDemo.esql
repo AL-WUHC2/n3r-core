@@ -2,7 +2,7 @@
 SELECT * FROM student
 
 
-[autoIncr]
+[autoIncr returnType=int]
 INSERT INTO demo_auto_incr(name) VALUES ('bingoohuang');
 
 SELECT @@IDENTITY

@@ -280,6 +280,17 @@ public class Esql {
         return maxRows <= 1 || subSql.isWillReturnOnlyOneRow() ? firstRow(rs) : selectList(rs);
     }
 
+    private Object firstRow(ResultSet rs) throws SQLException {
+        if (!rs.next()) return null;
+
+        if(rs.getMetaData().getColumnCount() == 1)
+            return convertSingleValue(EsqlUtils.getResultSetValue(rs, 1));
+
+        return rowBeanCreate(rs, 1);
+    }
+
+
+
     private Object selectList(ResultSet rs) throws SQLException {
         List<Object> result = new ArrayList<Object>();
 
@@ -321,15 +332,26 @@ public class Esql {
         return new EsqlCallableReturnMapMapper();
     }
 
+    private Object convertSingleValue(Object resultSetValue) {
+        if (returnType == null && esqlItem != null) returnType = esqlItem.getReturnType();
+
+        String returnTypeName = esqlItem == null ? null : esqlItem.getSqlOptions().get("returnType");
+        if (returnType == null && returnTypeName == null) return resultSetValue;
+
+        if ("string".equals(returnTypeName)) return String.valueOf(resultSetValue);
+        if ("int".equals(returnTypeName)) {
+            if (resultSetValue instanceof Number) return ((Number)resultSetValue).intValue();
+        }
+        if ("long".equals(returnTypeName)) {
+            if (resultSetValue instanceof Number) return ((Number)resultSetValue).longValue();
+        }
+
+        return resultSetValue;
+    }
+
     public Esql returnType(Class<?> returnType) {
         this.returnType = returnType;
         return this;
-    }
-
-    private Object firstRow(ResultSet rs) throws SQLException {
-        if (!rs.next()) return null;
-
-        return rs.getMetaData().getColumnCount() == 1 ? EsqlUtils.getResultSetValue(rs, 1) : rowBeanCreate(rs, 1);
     }
 
     public Esql(String connectionName) {
