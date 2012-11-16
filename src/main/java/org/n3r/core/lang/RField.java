@@ -8,5 +8,14 @@ public class RField {
         return field.getName().startsWith("$") || field.getName().equals("serialVersionUID");
     }
 
+    public static Field getDeclaredField(Class<?> clazz, String fieldName) {
+        try {
+            return clazz.getDeclaredField(fieldName);
+        }
+        catch (Exception e) {
+            // Ignore
+            return null;
+        }
+    }
 
 }

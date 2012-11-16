@@ -221,6 +221,14 @@ public class RStr {
         return sb == null ? sb : sb.append(b);
     }
 
+    public static StringBuilder deleteCharAt(StringBuilder sb, int index) {
+        return sb == null ? sb : sb.deleteCharAt(index);
+    }
+
+    public static StringBuilder delete(StringBuilder sb, int start, int end) {
+        return sb == null ? sb : sb.delete(start, end);
+    }
+
     public static String repeat(String s, int count) {
         if (s == null || count < 1) return "";
 
