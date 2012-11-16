@@ -16,7 +16,7 @@ public class MySqlDemo {
         System.out.println(json);
 
 
-        String id = new Esql("mysql").selectFirst("autoIncr").execute().toString();
+        int id = new Esql("mysql").useSqlFile(1.esql, 2.esql).selectFirst("autoIncr").execute();
         System.out.println(id);
     }
 }

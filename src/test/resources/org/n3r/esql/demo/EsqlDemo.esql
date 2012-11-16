@@ -4,7 +4,7 @@ SELECT 'x' x
 FROM DUAL
 
 --这里是注释
-[getInt]
+[getInt returnType=int]
 SELECT 1
 FROM DUAL
 

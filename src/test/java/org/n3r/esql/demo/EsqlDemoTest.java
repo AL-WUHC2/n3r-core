@@ -1,5 +1,10 @@
 package org.n3r.esql.demo;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,8 +27,6 @@ import org.n3r.eson.Eson;
 import org.n3r.esql.Esql;
 import org.n3r.esql.EsqlPage;
 import org.n3r.esql.parser.EsqlTableSqlMapper;
-
-import static org.junit.Assert.*;
 
 public class EsqlDemoTest {
     @BeforeClass
@@ -426,7 +429,8 @@ public class EsqlDemoTest {
         Esql esql = new Esql().useSqlFile(EsqlDemo.class)
                 .params("hjb")
                 .limit(1);
-        int ab = esql.execute("{CALL SP_ESQL_NOOUT(##)}", "SELECT 1 FROM DUAL");
+        int ab = esql.returnType("int")
+                .execute("{CALL SP_ESQL_NOOUT(##)}", "SELECT 1 FROM DUAL");
 
         assertEquals(1, ab);
     }
