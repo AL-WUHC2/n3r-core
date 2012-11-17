@@ -62,6 +62,7 @@ public class Esql {
     private Connection connection;
     private ArrayList<Object> executeResults;
     private DbType dbType;
+    private String returnTypeName;
 
     public static ThreadLocal<EsqlExecInfo> execContext = new ThreadLocal<EsqlExecInfo>() {
         @Override
@@ -335,7 +336,9 @@ public class Esql {
     private Object convertSingleValue(Object resultSetValue) {
         if (returnType == null && esqlItem != null) returnType = esqlItem.getReturnType();
 
-        String returnTypeName = esqlItem == null ? null : esqlItem.getSqlOptions().get("returnType");
+        String returnTypeName = this.returnTypeName;
+        if (returnTypeName == null)
+              returnTypeName = esqlItem == null ? null : esqlItem.getSqlOptions().get("returnType");
         if (returnType == null && returnTypeName == null) return resultSetValue;
 
         if ("string".equals(returnTypeName)) return String.valueOf(resultSetValue);
@@ -569,6 +572,11 @@ public class Esql {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public Esql returnType(String returnTypeName) {
+        this.returnTypeName = returnTypeName;
+        return this;
     }
 
 }

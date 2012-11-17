@@ -90,7 +90,6 @@ public class EsqlUtils {
             if ("java.sql.Timestamp".equals(rs.getMetaData().getColumnClassName(index))) obj = rs.getTimestamp(index);
         }
         else if (obj instanceof String) obj = ((String) obj).trim();
-        else if (obj instanceof BigDecimal) obj = ((BigDecimal) obj).intValue();
 
         return obj;
     }
