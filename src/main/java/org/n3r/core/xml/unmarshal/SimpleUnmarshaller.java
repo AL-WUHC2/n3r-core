@@ -8,10 +8,10 @@ import org.n3r.core.xmltool.XMLTag;
 
 @RXBindTo( { String.class, Boolean.class, Byte.class, Character.class,
         Short.class, Integer.class, Long.class, Double.class, Float.class })
-public class SimpleUnmarshaller implements UnmarshalAware {
+public class SimpleUnmarshaller<T> implements UnmarshalAware<T> {
 
     @Override
-    public <T> T unmarshal(XMLTag xmlNode, Class<T> clazz) {
+    public T unmarshal(XMLTag xmlNode, Class<?> clazz) {
         return Reflect.on(ClassUtils.primitiveToWrapper(clazz)).call("valueOf", xmlNode.getText()).get();
     }
 

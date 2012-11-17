@@ -38,7 +38,7 @@ public class RJaxbClassesScanner {
         return getRXBindClass(marshallerMap, clazz);
     }
 
-    public static UnmarshalAware getUnmarshaller(Class<?> clazz) {
+    public static <T> UnmarshalAware<T> getUnmarshaller(Class<T> clazz) {
         return getRXBindClass(unmarshallerMap, clazz);
     }
 

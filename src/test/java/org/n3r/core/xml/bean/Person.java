@@ -4,10 +4,10 @@ import org.n3r.core.lang.RBaseBean;
 import org.n3r.core.xml.annotation.RXTransient;
 
 public class Person extends RBaseBean {
-    private String name;
-    private int age;
+    protected String name;
+    protected int age;
     @RXTransient
-    private String remark;
+    protected String remark;
 
     public void setName(String name) {
         this.name = name;

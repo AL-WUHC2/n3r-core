@@ -2,8 +2,8 @@ package org.n3r.core.xml;
 
 import org.n3r.core.xmltool.XMLTag;
 
-public interface UnmarshalAware {
+public interface UnmarshalAware<T> {
 
-    <T> T unmarshal(XMLTag xmlNode, Class<T> clazz);
+    T unmarshal(XMLTag xmlNode, Class<?> clazz);
 
 }

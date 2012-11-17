@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.n3r.core.xml.bean.ListVoid;
 import org.n3r.core.xml.bean.Person;
 import org.n3r.core.xml.bean.User;
+import org.n3r.core.xml.bean.UserAnno;
 
 import static org.junit.Assert.*;
 
@@ -18,7 +19,7 @@ public class RXmlTest {
 
     @Test
     public void test1() {
-        String xmlExpect = "<User><PersonInfo><Name>aaa</Name><Age>12</Age></PersonInfo><Friend><Name>bbb</Name><Age>13</Age></Friend><Friend><Name>ccc</Name><Age>14</Age></Friend></User>";
+        String xmlExpect = "<User><Friend><Age>13</Age><Name>bbb</Name></Friend><Friend><Age>14</Age><Name>ccc</Name></Friend><PersonInfo><Age>12</Age><Name>aaa</Name></PersonInfo></User>";
 
         Person person = new Person();
         person.setName("aaa");
@@ -45,10 +46,25 @@ public class RXmlTest {
 
     @Test
     public void test2() {
-        String xml = "<User><PersonInfo><Name>aaa</Name><Age>12</Age></PersonInfo><Family><Name>bbb</Name><Age>13</Age></Family><Family><Name>ccc</Name><Age>14</Age></Family></User>";
+        String xml = "<Home><PersonInfo><Name>aaa</Name><Age>12</Age></PersonInfo><Family><Name>bbb</Name><Age>13</Age></Family><Family><Name>ccc</Name><Age>14</Age></Family></Home>";
 
-        User user2 = RXml.xmlToBean(xml, User.class);
-        assertNull(user2.getFriends());
+        Person person = new Person();
+        person.setName("aaa");
+        person.setAge(12);
+
+        Person f1 = new Person();
+        f1.setName("bbb");
+        f1.setAge(13);
+
+        Person f2 = new Person();
+        f2.setName("ccc");
+        f2.setAge(14);
+
+        UserAnno user = new UserAnno();
+        user.setPersonInfo(person);
+        user.setFriends(Arrays.asList(f1, f2));
+        UserAnno user2 = RXml.xmlToBean(xml, UserAnno.class);
+        assertEquals(user, user2);
     }
 
     @Test
@@ -63,7 +79,7 @@ public class RXmlTest {
             fail();
         }
         catch (RuntimeException e) {
-            assertEquals("Unkown List Item Class for field items", e.getMessage());
+            assertEquals("Unkown List Item Class for items", e.getMessage());
         }
     }
 
