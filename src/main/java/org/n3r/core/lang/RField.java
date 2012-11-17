@@ -19,7 +19,7 @@ public class RField {
     }
 
     /**
-     * »ñÈ¡Ò»¸öÀàÖ¸¶¨µÄÊôĞÔ£¨±éÀú¸¸Àà£©
+     * è·å–ä¸€ä¸ªç±»æŒ‡å®šçš„å±æ€§ï¼ˆéå†çˆ¶ç±»ï¼‰
      * @param clazz
      * @param fieldName
      * @return
