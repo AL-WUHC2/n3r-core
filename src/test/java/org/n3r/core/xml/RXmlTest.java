@@ -49,7 +49,7 @@ public class RXmlTest {
 
     @Test
     public void test2() {
-        String xml = "<Home><PersonInfo><Name>aaa</Name><Age>12</Age></PersonInfo><Family><Name>bbb</Name><Age>13</Age></Family><Family><Name>ccc</Name><Age>14</Age></Family></Home>";
+        String xml = "<Home><Family><Age>13</Age><Name>bbb</Name></Family><Family><Age>14</Age><Name>ccc</Name></Family><PersonInfo><Age>12</Age><Name>aaa</Name></PersonInfo></Home>";
 
         Person person = new Person();
         person.setName("aaa");
@@ -66,6 +66,9 @@ public class RXmlTest {
         UserAnno user = new UserAnno();
         user.setPersonInfo(person);
         user.setFriends(Arrays.asList(f1, f2));
+        String actXml = RXml.beanToXml(user);
+        assertEquals(xml, actXml);
+
         UserAnno user2 = RXml.xmlToBean(xml, UserAnno.class);
         assertEquals(user, user2);
     }

@@ -3,6 +3,7 @@ package org.n3r.core.xml.marshal;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.n3r.core.xml.FieldsTraverser;
 import org.n3r.core.xml.XMarshalAware;
@@ -13,6 +14,7 @@ import org.n3r.core.xml.utils.RXSkipWhen;
 import org.n3r.core.xmltool.XMLTag;
 
 import static org.apache.commons.lang3.StringUtils.*;
+import static org.n3r.core.lang.RClass.*;
 import static org.n3r.core.lang.RField.*;
 import static org.n3r.core.xml.utils.RJaxbClassesScanner.*;
 import static org.n3r.core.xmltool.XMLDoc.*;
@@ -42,13 +44,18 @@ public class RMarshaller extends FieldsTraverser implements XMarshalAware {
 
         String fieldName = pDescriptor.getName();
         Field field = getTraverseDeclaredField(marsharlObject.getClass(), fieldName);
-
         RXSkip rxSkip = field.getAnnotation(RXSkip.class);
         if (rxSkip != null && rxSkip.value() == RXSkipWhen.Absolute) return;
         if (isNotNormal(field)) return;
 
         Object fieldValue = method.invoke(marsharlObject);
         if (rxSkip != null && rxSkip.value() == RXSkipWhen.Null && fieldValue == null) return;
+
+        Class<?> unmarType = field.getType();
+        if (isAssignable(unmarType, List.class)) {
+            // remove last 's'
+            fieldName = fieldName.substring(0, fieldName.length() - 1);
+        }
 
         RXElement element = field.getAnnotation(RXElement.class);
         String elementName = element == null ? capitalize(fieldName) : element.value();
