@@ -6,8 +6,10 @@ import java.lang.reflect.Method;
 
 import org.n3r.core.xml.FieldsTraverser;
 import org.n3r.core.xml.XMarshalAware;
+import org.n3r.core.xml.annotation.RXCData;
 import org.n3r.core.xml.annotation.RXElement;
-import org.n3r.core.xml.annotation.RXTransient;
+import org.n3r.core.xml.annotation.RXSkip;
+import org.n3r.core.xml.utils.RXSkipWhen;
 import org.n3r.core.xmltool.XMLTag;
 
 import static org.apache.commons.lang3.StringUtils.*;
@@ -20,11 +22,11 @@ public class RMarshaller extends FieldsTraverser implements XMarshalAware {
     private XMLTag currentTag;
     private Object marsharlObject;
 
-    public XMLTag marshal(String tagName, Object object, XMLTag parent) {
+    public XMLTag marshal(String tagName, Object object, XMLTag parent, boolean isCData) {
         marsharlObject = object;
 
         XMarshalAware marshaller = getMarshaller(marsharlObject.getClass());
-        if (marshaller != null) return marshaller.marshal(tagName, marsharlObject, parent);
+        if (marshaller != null) return marshaller.marshal(tagName, marsharlObject, parent, isCData);
 
         currentTag = parent == null ? newDocument(false).addRoot(tagName) : parent.addTag(tagName);
 
@@ -41,8 +43,12 @@ public class RMarshaller extends FieldsTraverser implements XMarshalAware {
         String fieldName = pDescriptor.getName();
         Field field = getTraverseDeclaredField(marsharlObject.getClass(), fieldName);
 
-        if (field.isAnnotationPresent(RXTransient.class)) return;
+        RXSkip rxSkip = field.getAnnotation(RXSkip.class);
+        if (rxSkip != null && rxSkip.value() == RXSkipWhen.Absolute) return;
         if (isNotNormal(field)) return;
+
+        Object fieldValue = method.invoke(marsharlObject);
+        if (rxSkip != null && rxSkip.value() == RXSkipWhen.Null && fieldValue == null) return;
 
         RXElement element = field.getAnnotation(RXElement.class);
         String elementName = element == null ? capitalize(fieldName) : element.value();
@@ -50,8 +56,7 @@ public class RMarshaller extends FieldsTraverser implements XMarshalAware {
         XMarshalAware marshaller = getMarshaller(field.getType());
         marshaller = marshaller != null ? marshaller : new RMarshaller();
 
-        Object fieldValue = method.invoke(marsharlObject);
-        marshaller.marshal(elementName, fieldValue, currentTag);
+        marshaller.marshal(elementName, fieldValue, currentTag, field.isAnnotationPresent(RXCData.class));
     }
 
 }

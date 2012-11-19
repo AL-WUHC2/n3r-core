@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.n3r.core.joor.Reflect;
 import org.n3r.core.lang.RClassPath;
-import org.n3r.core.xml.UnmarshalAware;
+import org.n3r.core.xml.XUnmarshalAware;
 import org.n3r.core.xml.XMarshalAware;
 import org.n3r.core.xml.annotation.RXBindTo;
 
@@ -26,7 +26,7 @@ public class RJaxbClassesScanner {
                     marshallerMap.put(bindClass, clz);
                 }
             }
-            if (isAssignable(clz, UnmarshalAware.class)) {
+            if (isAssignable(clz, XUnmarshalAware.class)) {
                 for (Class<?> bindClass : bindClasses) {
                     unmarshallerMap.put(bindClass, clz);
                 }
@@ -38,7 +38,7 @@ public class RJaxbClassesScanner {
         return getRXBindClass(marshallerMap, clazz);
     }
 
-    public static <T> UnmarshalAware<T> getUnmarshaller(Class<T> clazz) {
+    public static <T> XUnmarshalAware<T> getUnmarshaller(Class<T> clazz) {
         return getRXBindClass(unmarshallerMap, clazz);
     }
 

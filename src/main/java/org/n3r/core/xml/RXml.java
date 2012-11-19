@@ -17,7 +17,7 @@ public class RXml {
 
     public static String beanToXml(Object obj, String rootName) {
         XMLTag result = null;
-        return formatXml(new RMarshaller().marshal(rootName, obj, result));
+        return formatXml(new RMarshaller().marshal(rootName, obj, result, false));
     }
 
     public static String beanToXmlWithFormat(Object obj) {
@@ -26,7 +26,7 @@ public class RXml {
 
     public static String beanToXmlWithFormat(Object obj, String rootName) {
         XMLTag result = null;
-        return toStr(new RMarshaller().marshal(rootName, obj, result));
+        return toStr(new RMarshaller().marshal(rootName, obj, result, false));
     }
 
     public static <T> T xmlToBean(String xml, Class<T> clazz) {

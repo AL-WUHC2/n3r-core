@@ -3,6 +3,9 @@ package org.n3r.core.xml;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.n3r.core.lang.RBaseBean;
+import org.n3r.core.xml.annotation.RXCData;
+import org.n3r.core.xml.annotation.RXRootElement;
 import org.n3r.core.xml.bean.ListVoid;
 import org.n3r.core.xml.bean.Person;
 import org.n3r.core.xml.bean.User;
@@ -81,6 +84,25 @@ public class RXmlTest {
         catch (RuntimeException e) {
             assertEquals("Unkown List Item Class for items", e.getMessage());
         }
+    }
+
+    @Test
+    public void testEmptyList() {
+        String xmlExpect = "<User><PersonInfo><Age>12</Age><Name>aaa</Name></PersonInfo></User>";
+
+        Person person = new Person();
+        person.setName("aaa");
+        person.setAge(12);
+
+        User user = new User();
+        user.setPersonInfo(person);
+        user.setFriends(null);
+
+        String xml = RXml.beanToXml(user);
+        assertEquals(xmlExpect, xml);
+
+        User user2 = RXml.xmlToBean(xml, User.class);
+        assertEquals(user, user2);
     }
 
     @Test
@@ -168,6 +190,33 @@ public class RXmlTest {
         public void setSerialNo(String serialNo) {
             this.serialNo = serialNo;
         }
+    }
+
+    @RXRootElement("Root")
+    public static class CdataBean extends RBaseBean {
+        @RXCData
+        private String content;
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getContent() {
+            return content;
+        }
+    }
+
+    @Test
+    public void testCDATA() {
+        String xml = "<Root><Content><![CDATA[<Root><Content>Hello</Content></Root>]]></Content></Root>";
+
+        CdataBean bean = new CdataBean();
+        bean.setContent("<Root><Content>Hello</Content></Root>");
+        String result = RXml.beanToXml(bean);
+        assertEquals(xml, result);
+
+        CdataBean bean2 = RXml.xmlToBean(xml, CdataBean.class);
+        assertEquals(bean, bean2);
     }
 
 }

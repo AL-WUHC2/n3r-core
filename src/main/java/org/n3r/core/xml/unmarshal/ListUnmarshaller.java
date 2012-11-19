@@ -3,12 +3,12 @@ package org.n3r.core.xml.unmarshal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.n3r.core.xml.UnmarshalAware;
+import org.n3r.core.xml.XUnmarshalAware;
 import org.n3r.core.xml.annotation.RXBindTo;
 import org.n3r.core.xmltool.XMLTag;
 
 @RXBindTo(List.class)
-public class ListUnmarshaller<T> implements UnmarshalAware<List<T>> {
+public class ListUnmarshaller<T> implements XUnmarshalAware<List<T>> {
 
     @Override
     public List<T> unmarshal(XMLTag xmlNode, Class<?> clazz) {

@@ -1,12 +1,12 @@
 package org.n3r.core.xml.bean;
 
 import org.n3r.core.lang.RBaseBean;
-import org.n3r.core.xml.annotation.RXTransient;
+import org.n3r.core.xml.annotation.RXSkip;
 
 public class Person extends RBaseBean {
     protected String name;
     protected int age;
-    @RXTransient
+    @RXSkip
     protected String remark;
 
     public void setName(String name) {

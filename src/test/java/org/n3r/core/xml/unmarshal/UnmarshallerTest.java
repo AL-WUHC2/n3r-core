@@ -5,6 +5,7 @@ import org.n3r.core.xml.RXml;
 import org.n3r.core.xml.bean.AnnoBean;
 import org.n3r.core.xml.bean.Person;
 import org.n3r.core.xml.bean.PersonWithId;
+import org.n3r.core.xml.bean.UnnecessaryBean;
 
 import static org.junit.Assert.*;
 
@@ -53,6 +54,25 @@ public class UnmarshallerTest {
         anno.setParam1("HELLO");
         AnnoBean anno2 = RXml.xmlToBean("<root><branch>HELLO</branch></root>", AnnoBean.class);
         assertEquals(anno, anno2);
+    }
+
+    @Test
+    public void testUnnecessary() {
+        UnnecessaryBean bean = new UnnecessaryBean();
+        bean.setName("aaa");
+        UnnecessaryBean bean2 = RXml.xmlToBean("<Root><Name>aaa</Name></Root>", UnnecessaryBean.class);
+        assertEquals(bean, bean2);
+        bean.setNickName("bbb");
+        bean2 = RXml.xmlToBean("<Root><Name>aaa</Name><NickName>bbb</NickName></Root>", UnnecessaryBean.class);
+        assertEquals(bean, bean2);
+
+        try {
+            bean2 = RXml.xmlToBean("<Root><NickName>bbb</NickName></Root>", UnnecessaryBean.class);
+            fail();
+        }
+        catch (Exception e) {
+            assertEquals("Node Name isn't found in Root", e.getMessage());
+        }
     }
 
 }

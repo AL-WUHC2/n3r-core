@@ -6,9 +6,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.n3r.core.xml.FieldsTraverser;
-import org.n3r.core.xml.UnmarshalAware;
+import org.n3r.core.xml.XUnmarshalAware;
 import org.n3r.core.xml.annotation.RXElement;
-import org.n3r.core.xml.annotation.RXTransient;
+import org.n3r.core.xml.annotation.RXSkip;
+import org.n3r.core.xml.utils.RXSkipWhen;
 import org.n3r.core.xmltool.XMLTag;
 
 import static org.apache.commons.lang3.StringUtils.*;
@@ -18,7 +19,7 @@ import static org.n3r.core.lang.RField.*;
 import static org.n3r.core.lang.RType.*;
 import static org.n3r.core.xml.utils.RJaxbClassesScanner.*;
 
-public class RUnmarshaller<T> extends FieldsTraverser implements UnmarshalAware<T> {
+public class RUnmarshaller<T> extends FieldsTraverser implements XUnmarshalAware<T> {
 
     private XMLTag currentTag;
     private Class<?> unmarsharlClazz;
@@ -30,7 +31,7 @@ public class RUnmarshaller<T> extends FieldsTraverser implements UnmarshalAware<
         currentTag = xmlNode;
         unmarsharlClazz = clazz;
 
-        UnmarshalAware<?> unmarshaller = getUnmarshaller(unmarsharlClazz);
+        XUnmarshalAware<?> unmarshaller = getUnmarshaller(unmarsharlClazz);
         if (unmarshaller != null) return (T) unmarshaller.unmarshal(currentTag, unmarsharlClazz);
 
         unmarshalObject = on(unmarsharlClazz).create().get();
@@ -47,7 +48,8 @@ public class RUnmarshaller<T> extends FieldsTraverser implements UnmarshalAware<
         String fieldName = pDescriptor.getName();
         Field field = getTraverseDeclaredField(unmarsharlClazz, fieldName);
 
-        if (field.isAnnotationPresent(RXTransient.class)) return;
+        RXSkip rxSkip = field.getAnnotation(RXSkip.class);
+        if (rxSkip != null && rxSkip.value() == RXSkipWhen.Absolute) return;
         if (isNotNormal(field)) return;
 
         Class<?> unmarType = field.getType();
@@ -60,11 +62,20 @@ public class RUnmarshaller<T> extends FieldsTraverser implements UnmarshalAware<
         RXElement element = field.getAnnotation(RXElement.class);
         String fieldTagName = element == null ? capitalize(fieldName) : element.value();
 
-        UnmarshalAware<?> unmarshaller = getUnmarshaller(field.getType());
+        XMLTag child = null;
+        try {
+            child = currentTag.gotoFirstChild(fieldTagName);
+        }
+        catch (Exception e) {
+            if (rxSkip != null && rxSkip.value() == RXSkipWhen.Null) return;
+            if (isAssignable(field.getType(), List.class)) return;
+            throw new RuntimeException("Node " + fieldTagName + " isn't found in " + currentTag.getCurrentTagName());
+        }
+
+        XUnmarshalAware<?> unmarshaller = getUnmarshaller(field.getType());
         unmarshaller = unmarshaller == null ? new RUnmarshaller<Object>() : unmarshaller;
 
-        method.invoke(unmarshalObject,
-                unmarshaller.unmarshal(currentTag.gotoFirstChild(fieldTagName), unmarType));
+        method.invoke(unmarshalObject, unmarshaller.unmarshal(child, unmarType));
         currentTag.gotoParent();
     }
 }
