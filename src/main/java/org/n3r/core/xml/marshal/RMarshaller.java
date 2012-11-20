@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.n3r.core.xml.FieldsTraverser;
+import org.n3r.core.xml.RXml;
 import org.n3r.core.xml.XMarshalAware;
 import org.n3r.core.xml.annotation.RXCData;
 import org.n3r.core.xml.annotation.RXElement;
@@ -24,11 +25,11 @@ public class RMarshaller extends FieldsTraverser implements XMarshalAware {
     private XMLTag currentTag;
     private Object marsharlObject;
 
-    public XMLTag marshal(String tagName, Object object, XMLTag parent, boolean isCData) {
+    public XMLTag marshal(String tagName, Object object, XMLTag parent) {
         marsharlObject = object;
 
         XMarshalAware marshaller = getMarshaller(marsharlObject.getClass());
-        if (marshaller != null) return marshaller.marshal(tagName, marsharlObject, parent, isCData);
+        if (marshaller != null) return marshaller.marshal(tagName, marsharlObject, parent);
 
         currentTag = parent == null ? newDocument(false).addRoot(tagName) : parent.addTag(tagName);
 
@@ -60,10 +61,15 @@ public class RMarshaller extends FieldsTraverser implements XMarshalAware {
         RXElement element = field.getAnnotation(RXElement.class);
         String elementName = element == null ? capitalize(fieldName) : element.value();
 
-        XMarshalAware marshaller = getMarshaller(field.getType());
+        if (field.isAnnotationPresent(RXCData.class)) {
+            currentTag.addTag(elementName).addCDATA(RXml.beanToXml(fieldValue)).gotoParent();
+            return;
+        }
+
+        XMarshalAware marshaller = getMarshaller(unmarType);
         marshaller = marshaller != null ? marshaller : new RMarshaller();
 
-        marshaller.marshal(elementName, fieldValue, currentTag, field.isAnnotationPresent(RXCData.class));
+        marshaller.marshal(elementName, fieldValue, currentTag);
     }
 
 }

@@ -6,7 +6,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.n3r.core.xml.FieldsTraverser;
+import org.n3r.core.xml.RXml;
 import org.n3r.core.xml.XUnmarshalAware;
+import org.n3r.core.xml.annotation.RXCData;
 import org.n3r.core.xml.annotation.RXElement;
 import org.n3r.core.xml.annotation.RXSkip;
 import org.n3r.core.xml.utils.RXSkipWhen;
@@ -72,10 +74,17 @@ public class RUnmarshaller<T> extends FieldsTraverser implements XUnmarshalAware
             throw new RuntimeException("Node " + fieldTagName + " isn't found in " + currentTag.getCurrentTagName());
         }
 
-        XUnmarshalAware<?> unmarshaller = getUnmarshaller(field.getType());
-        unmarshaller = unmarshaller == null ? new RUnmarshaller<Object>() : unmarshaller;
+        Object fieldValue = null;
+        if (field.isAnnotationPresent(RXCData.class)) {
+            fieldValue = RXml.xmlToBean(child.getCDATA(), field.getType());
+        }
+        else {
+            XUnmarshalAware<?> unmarshaller = getUnmarshaller(field.getType());
+            unmarshaller = unmarshaller == null ? new RUnmarshaller<Object>() : unmarshaller;
+            fieldValue = unmarshaller.unmarshal(child, unmarType);
+        }
 
-        method.invoke(unmarshalObject, unmarshaller.unmarshal(child, unmarType));
+        method.invoke(unmarshalObject, fieldValue);
         currentTag.gotoParent();
     }
 }

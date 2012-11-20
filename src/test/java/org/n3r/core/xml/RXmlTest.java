@@ -197,7 +197,38 @@ public class RXmlTest {
 
     @RXRootElement("Root")
     public static class CdataBean extends RBaseBean {
+        private String before;
         @RXCData
+        private Cdata content;
+        private String last;
+
+        public void setBefore(String before) {
+            this.before = before;
+        }
+
+        public String getBefore() {
+            return before;
+        }
+
+        public void setContent(Cdata content) {
+            this.content = content;
+        }
+
+        public Cdata getContent() {
+            return content;
+        }
+
+        public void setLast(String last) {
+            this.last = last;
+        }
+
+        public String getLast() {
+            return last;
+        }
+    }
+
+    @RXRootElement("Root")
+    public static class Cdata extends RBaseBean {
         private String content;
 
         public void setContent(String content) {
@@ -211,10 +242,14 @@ public class RXmlTest {
 
     @Test
     public void testCDATA() {
-        String xml = "<Root><Content><![CDATA[<Root><Content>Hello</Content></Root>]]></Content></Root>";
+        String xml = "<Root><Before>Before</Before><Content><![CDATA[<Root><Content>Hello</Content></Root>]]></Content><Last>Last</Last></Root>";
 
+        Cdata c = new Cdata();
+        c.setContent("Hello");
         CdataBean bean = new CdataBean();
-        bean.setContent("<Root><Content>Hello</Content></Root>");
+        bean.setBefore("Before");
+        bean.setContent(c);
+        bean.setLast("Last");
         String result = RXml.beanToXml(bean);
         assertEquals(xml, result);
 

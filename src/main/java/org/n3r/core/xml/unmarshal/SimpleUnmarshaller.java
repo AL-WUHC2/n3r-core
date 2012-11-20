@@ -12,7 +12,7 @@ public class SimpleUnmarshaller<T> implements XUnmarshalAware<T> {
 
     @Override
     public T unmarshal(XMLTag xmlNode, Class<?> clazz) {
-        return Reflect.on(ClassUtils.primitiveToWrapper(clazz)).call("valueOf", xmlNode.getTextOrCDATA()).get();
+        return Reflect.on(ClassUtils.primitiveToWrapper(clazz)).call("valueOf", xmlNode.getText()).get();
     }
 
 }

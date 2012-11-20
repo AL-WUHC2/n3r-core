@@ -3,9 +3,10 @@ package org.n3r.core.xml.utils;
 import java.util.Map;
 
 import org.n3r.core.joor.Reflect;
+import org.n3r.core.lang.RClass;
 import org.n3r.core.lang.RClassPath;
-import org.n3r.core.xml.XUnmarshalAware;
 import org.n3r.core.xml.XMarshalAware;
+import org.n3r.core.xml.XUnmarshalAware;
 import org.n3r.core.xml.annotation.RXBindTo;
 
 import static com.google.common.collect.Maps.*;
@@ -45,9 +46,13 @@ public class RJaxbClassesScanner {
     public static <T> T getRXBindClass(Map<Class<?>, Class<?>> map, Class<?> target) {
         Class<?> clz = map.get(target);
         if (clz == null && target.isPrimitive()) clz = map.get(primitiveToWrapper(target));
+        if (clz == null) {
+            for (Class<?> clazz : map.keySet()) {
+                if (RClass.isAssignable(target, clazz)) clz = map.get(clazz);
+            }
+        }
         if (clz == null) return null;
 
         return Reflect.on(clz).create().get();
     }
-
 }

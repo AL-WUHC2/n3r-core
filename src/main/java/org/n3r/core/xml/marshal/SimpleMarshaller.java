@@ -12,9 +12,8 @@ import static org.n3r.core.xmltool.XMLDoc.*;
 public class SimpleMarshaller implements XMarshalAware {
 
     @Override
-    public XMLTag marshal(String tagName, Object object, XMLTag parent, boolean isCData) {
+    public XMLTag marshal(String tagName, Object object, XMLTag parent) {
         parent = parent == null ? newDocument(false).addRoot(tagName) : parent.addTag(tagName);
-        String objText = toStr(object);
-        return isCData ? parent.addCDATA(objText) : parent.addText(objText);
+        return parent.addText(toStr(object));
     }
 }

@@ -10,11 +10,11 @@ import org.n3r.core.xmltool.XMLTag;
 public class ListMarshaller implements XMarshalAware {
 
     @Override
-    public XMLTag marshal(String tagName, Object object, XMLTag parent, boolean isCData) {
+    public XMLTag marshal(String tagName, Object object, XMLTag parent) {
         if (object == null) return parent;
 
         for (Object item : (List<?>) object) {
-            new RMarshaller().marshal(tagName, item, parent, isCData);
+            new RMarshaller().marshal(tagName, item, parent);
         }
         return parent;
     }
