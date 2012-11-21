@@ -10,6 +10,7 @@ import org.n3r.core.xml.RXml;
 import org.n3r.core.xml.XMarshalAware;
 import org.n3r.core.xml.annotation.RXCData;
 import org.n3r.core.xml.annotation.RXElement;
+import org.n3r.core.xml.annotation.RXNonWrap;
 import org.n3r.core.xml.annotation.RXSkip;
 import org.n3r.core.xml.utils.RXSkipWhen;
 import org.n3r.core.xmltool.XMLTag;
@@ -18,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 import static org.n3r.core.lang.RClass.*;
 import static org.n3r.core.lang.RField.*;
 import static org.n3r.core.xml.utils.RJaxbClassesScanner.*;
-import static org.n3r.core.xmltool.XMLDoc.*;
+import static org.n3r.core.xml.utils.RXmlUtils.*;
 
 public class RMarshaller extends FieldsTraverser implements XMarshalAware {
 
@@ -31,7 +32,7 @@ public class RMarshaller extends FieldsTraverser implements XMarshalAware {
         XMarshalAware marshaller = getMarshaller(marsharlObject.getClass());
         if (marshaller != null) return marshaller.marshal(tagName, marsharlObject, parent);
 
-        currentTag = parent == null ? newDocument(false).addRoot(tagName) : parent.addTag(tagName);
+        currentTag = buildCurrentTag(tagName, parent);
 
         traverseFields(marsharlObject.getClass());
 
@@ -51,6 +52,11 @@ public class RMarshaller extends FieldsTraverser implements XMarshalAware {
 
         Object fieldValue = method.invoke(marsharlObject);
         if (rxSkip != null && rxSkip.value() == RXSkipWhen.Null && fieldValue == null) return;
+
+        if (field.isAnnotationPresent(RXNonWrap.class)) {
+            new RMarshaller().marshal(null, fieldValue, currentTag);
+            return;
+        }
 
         Class<?> unmarType = field.getType();
         if (isAssignable(unmarType, List.class)) {

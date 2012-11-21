@@ -6,10 +6,11 @@ import org.n3r.core.xml.bean.AnnoBean;
 import org.n3r.core.xml.bean.Person;
 import org.n3r.core.xml.bean.PersonWithId;
 import org.n3r.core.xml.bean.UnnecessaryBean;
+import org.n3r.core.xml.bean.UserNonWrap;
 
 import static org.junit.Assert.*;
 
-public class UnmarshallerTest {
+public class RUnmarshallerTest {
 
     @Test
     public void test1() {
@@ -75,4 +76,18 @@ public class UnmarshallerTest {
         }
     }
 
+    @Test
+    public void testNonWrap() {
+        Person person = new Person();
+        person.setName("John");
+        person.setAge(33);
+        UserNonWrap user = new UserNonWrap();
+        user.setPerson(person);
+        user.setId("userId");
+
+        String xml = "<Root><Id>userId</Id><Age>33</Age><Name>John</Name></Root>";
+        UserNonWrap user2 = RXml.xmlToBean(xml, UserNonWrap.class);
+
+        assertEquals(user, user2);
+    }
 }

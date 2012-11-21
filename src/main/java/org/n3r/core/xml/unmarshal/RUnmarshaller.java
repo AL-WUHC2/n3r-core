@@ -10,6 +10,7 @@ import org.n3r.core.xml.RXml;
 import org.n3r.core.xml.XUnmarshalAware;
 import org.n3r.core.xml.annotation.RXCData;
 import org.n3r.core.xml.annotation.RXElement;
+import org.n3r.core.xml.annotation.RXNonWrap;
 import org.n3r.core.xml.annotation.RXSkip;
 import org.n3r.core.xml.utils.RXSkipWhen;
 import org.n3r.core.xmltool.XMLTag;
@@ -55,6 +56,12 @@ public class RUnmarshaller<T> extends FieldsTraverser implements XUnmarshalAware
         if (isNotNormal(field)) return;
 
         Class<?> unmarType = field.getType();
+
+        if (field.isAnnotationPresent(RXNonWrap.class)) {
+            method.invoke(unmarshalObject, new RUnmarshaller<Object>().unmarshal(currentTag, unmarType));
+            return;
+        }
+
         if (isAssignable(unmarType, List.class)) {
             unmarType = getActualTypeArgument(field.getGenericType());
             if (unmarType == Void.class) throw new RuntimeException("Unkown List Item Class for " + fieldName);

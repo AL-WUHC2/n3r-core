@@ -6,6 +6,7 @@ import org.n3r.core.xml.bean.AnnoBean;
 import org.n3r.core.xml.bean.Person;
 import org.n3r.core.xml.bean.PersonWithId;
 import org.n3r.core.xml.bean.UnnecessaryBean;
+import org.n3r.core.xml.bean.UserNonWrap;
 
 import static org.junit.Assert.*;
 
@@ -73,5 +74,18 @@ public class RMarshallerTest {
         bean.setNickName("bbb");
         xml = RXml.beanToXml(bean);
         assertEquals("<Root><Name>aaa</Name><NickName>bbb</NickName></Root>", xml);
+    }
+
+    @Test
+    public void testNonWrap() {
+        Person person = new Person();
+        person.setName("John");
+        person.setAge(33);
+        UserNonWrap user = new UserNonWrap();
+        user.setPerson(person);
+        user.setId("userId");
+
+        String xml = RXml.beanToXml(user);
+        assertEquals("<Root><Id>userId</Id><Age>33</Age><Name>John</Name></Root>", xml);
     }
 }

@@ -5,7 +5,7 @@ import org.n3r.core.xml.annotation.RXBindTo;
 import org.n3r.core.xmltool.XMLTag;
 
 import static org.n3r.core.lang.RStr.*;
-import static org.n3r.core.xmltool.XMLDoc.*;
+import static org.n3r.core.xml.utils.RXmlUtils.*;
 
 @RXBindTo( { String.class, Boolean.class, Byte.class, Character.class,
         Short.class, Integer.class, Long.class, Double.class, Float.class })
@@ -13,7 +13,7 @@ public class SimpleMarshaller implements XMarshalAware {
 
     @Override
     public XMLTag marshal(String tagName, Object object, XMLTag parent) {
-        parent = parent == null ? newDocument(false).addRoot(tagName) : parent.addTag(tagName);
+        parent = buildCurrentTag(tagName, parent);
         return parent.addText(toStr(object));
     }
 }
