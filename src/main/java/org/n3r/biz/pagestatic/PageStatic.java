@@ -40,11 +40,17 @@ public class PageStatic implements PageService{
         this.pageStaticBuilder = pageStaticBuilder;
     }
 
-    public void staticAndUpload(final String url, final String localFileName) {
+    public void directContentUpload(String content, String localFileName) {
+        putQueue("direct://", pageHttpClient.getContent(), localFileName);
+    }
+
+    public void urlStaticAndUpload(final String url, final String localFileName) {
+        checkPageHttpClientCreated(url);
         threadPool4GetUrlContent.submit(new Runnable() {
             @Override
             public void run() {
-                if (pageHttpClient.executeGetMethod(url))putQueue(url, localFileName);
+                if (pageHttpClient.executeGetMethod(url))
+                    putQueue(url, pageHttpClient.getContent(), localFileName);
             }
         });
     }
@@ -53,8 +59,6 @@ public class PageStatic implements PageService{
         waitLastBatchFinish();
 
         createThreadPool4GetUrlContent();
-
-        createPageHttpClient();
 
         createPageQueue();
 
@@ -100,7 +104,9 @@ public class PageStatic implements PageService{
         return pageQueue = new LinkedBlockingQueue<Page>();
     }
 
-    private void createPageHttpClient() {
+    private void checkPageHttpClientCreated(String url) {
+        if (pageHttpClient != null ) return;
+
         pageHttpClient = new PageHttpClient();
         pageHttpClient.setHttpSocketTimeoutSeconds(pageStaticBuilder.getHttpSocketTimeoutSeconds());
     }
@@ -113,9 +119,9 @@ public class PageStatic implements PageService{
         return batchId;
     }
 
-    private void putQueue(String url, String file)  {
+    private void putQueue(String url, String content, String file)  {
         try {
-            pageQueue.put(new Page(url, pageHttpClient.getContent(), file));
+            pageQueue.put(new Page(url, content, file));
         } catch (InterruptedException e) {
             log.error("put queue catched InterruptedException {}", e);
         }
@@ -134,8 +140,10 @@ public class PageStatic implements PageService{
     public void shutdown() {
         threadPool4GetUrlContent = null;
 
-        pageHttpClient.shutdown();
-        pageHttpClient = null;
+        if (pageHttpClient != null) {
+            pageHttpClient.shutdown();
+            pageHttpClient = null;
+        }
 
         pageUploader = null;
         pageQueue = null;
@@ -145,4 +153,6 @@ public class PageStatic implements PageService{
                 (System.currentTimeMillis() - startupMillis)/1000.);
         batchId = null;
     }
+
+
 }

@@ -65,7 +65,9 @@ public class PageStaticDemo {
             String localFile = "/home/mall/pagestatic/pagehtml/p" + i % 2 + "/" + fileName;
 
             // 静态化指定url，以及对应本地文件名称
-            pageStatic.staticAndUpload(url, localFile);
+            pageStatic.urlStaticAndUpload(url, localFile);
+            String content = "<html>我是静态内容</html>";
+            pageStatic.directContentUpload(content, localFile);
         }
 
         // 等待上传完成

@@ -12,13 +12,94 @@
       <version>0.2.5</version>
     </dependency>
  -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.21</version>
+      <optional>true</optional>
+    </dependency>
 
     <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>spy</groupId>
+      <artifactId>spymemcached</artifactId>
+      <version>2.8.4</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>com.googlecode.xmemcached</groupId>
+      <artifactId>xmemcached</artifactId>
+      <version>1.3.8</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.whalin</groupId>
+      <artifactId>Memcached-Java-Client</artifactId>
+      <version>3.0.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+      <version>1.6</version>
+      <optional>true</optional>
+    </dependency>
+
     <dependency>
       <groupId>org.objenesis</groupId>
       <artifactId>objenesis</artifactId>
       <version>1.2</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.ibatis</groupId>
+      <artifactId>ibatis-sqlmap</artifactId>
+      <version>2.3.4.726</version>
+      <optional>true</optional>
+    </dependency>
+    <!-- There is a plugin for XJC to do this - the CamelCase Always plugin. -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.andromda.thirdparty.jaxb2_commons</groupId> -->
+    <!-- <artifactId>camelcase-always</artifactId> -->
+    <!-- <version>1.0</version> -->
+    <!-- <scope>test</scope> -->
+    <!-- </dependency> -->
+
+    <!--
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.6</version>
+      <scope>test</scope>
+    </dependency>
+     -->
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.6.6</version>
+      <optional>true</optional>
+    </dependency>
+    <!-- <dependency> -->
+    <!-- <groupId>cglib</groupId> -->
+    <!-- <artifactId>cglib-nodep</artifactId> -->
+    <!-- <version>2.2.2</version> -->
+    <!-- </dependency> -->
+
+    <dependency>
+      <groupId>weblogic</groupId>
+      <artifactId>wlfullclient</artifactId>
+      <version>10.3</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.1</version>
@@ -27,6 +108,7 @@
       <groupId>c3p0</groupId>
       <artifactId>c3p0</artifactId>
       <version>0.9.1.2</version>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -50,6 +132,12 @@
       <version>1.8.3</version>
     </dependency>
     <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.6</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.4</version>
@@ -67,36 +155,15 @@
       <version>4.10</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.oracle</groupId>
       <artifactId>ojdbc14</artifactId>
       <version>10.2.0.4.0</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.6.6</version>
-      <scope>test</scope>
-    </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.7</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.0.7</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <version>3.1</version>
-        </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -118,6 +185,48 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.n3r.biz.pagestatic.PageStaticDemo</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/assembly/dist.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.n3r.biz.pagestatic.PageStaticDemo</mainClass>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib</classpathPrefix>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      -->
     </plugins>
   </build>
 </project>
