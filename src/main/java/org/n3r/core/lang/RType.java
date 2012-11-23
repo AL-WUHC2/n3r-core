@@ -2,6 +2,7 @@ package org.n3r.core.lang;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 
 public class RType {
     /**
@@ -20,5 +21,9 @@ public class RType {
         catch (ClassCastException ex) {
             return Void.class;
         }
+    }
+
+    public static boolean isTypeVariable(Type genericType) {
+        return TypeVariable.class.isAssignableFrom(genericType.getClass());
     }
 }

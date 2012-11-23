@@ -3,24 +3,28 @@ package org.n3r.core.xml.unmarshal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.n3r.core.xml.XUnmarshalAware;
 import org.n3r.core.xml.annotation.RXBindTo;
+import org.n3r.core.xml.impl.BaseUnmarshaller;
 import org.n3r.core.xmltool.XMLTag;
 
 @RXBindTo(List.class)
-public class ListUnmarshaller<T> implements XUnmarshalAware<List<T>> {
+public class ListUnmarshaller extends BaseUnmarshaller {
 
     @Override
-    public List<T> unmarshal(XMLTag xmlNode, Class<?> clazz) {
+    public Object unmarshal(XMLTag xmlNode, Class<?> clazz) {
         String tagName = xmlNode.getCurrentTagName();
 
-        List<T> result = new ArrayList<T>();
+        List<Object> result = new ArrayList<Object>();
         XMLTag parent = xmlNode.gotoParent();
         for (XMLTag child : parent.getChilds()) {
             if (!tagName.equals(child.getCurrentTagName())) continue;
+            Class<?> actualClass = getActualClass(child, clazz);
+            if (actualClass.equals(Void.class) && typeMapping == null) continue;
 
-            result.add(new RUnmarshaller<T>().unmarshal(child, clazz));
+            result.add(new RUnmarshaller().setTypeMapping(typeMapping).unmarshal(child, actualClass));
         }
+
         return result;
     }
+
 }

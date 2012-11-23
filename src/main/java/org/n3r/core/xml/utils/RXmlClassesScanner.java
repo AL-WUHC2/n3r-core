@@ -5,14 +5,14 @@ import java.util.Map;
 import org.n3r.core.joor.Reflect;
 import org.n3r.core.lang.RClass;
 import org.n3r.core.lang.RClassPath;
-import org.n3r.core.xml.XMarshalAware;
-import org.n3r.core.xml.XUnmarshalAware;
 import org.n3r.core.xml.annotation.RXBindTo;
+import org.n3r.core.xml.impl.BaseMarshaller;
+import org.n3r.core.xml.impl.BaseUnmarshaller;
 
 import static com.google.common.collect.Maps.*;
 import static org.apache.commons.lang3.ClassUtils.*;
 
-public class RJaxbClassesScanner {
+public class RXmlClassesScanner {
 
     private static Map<Class<?>, Class<?>> marshallerMap = newHashMap();
     private static Map<Class<?>, Class<?>> unmarshallerMap = newHashMap();
@@ -22,12 +22,12 @@ public class RJaxbClassesScanner {
             RXBindTo bindType = clz.getAnnotation(RXBindTo.class);
 
             Class<?>[] bindClasses = bindType.value();
-            if (isAssignable(clz, XMarshalAware.class)) {
+            if (isAssignable(clz, BaseMarshaller.class)) {
                 for (Class<?> bindClass : bindClasses) {
                     marshallerMap.put(bindClass, clz);
                 }
             }
-            if (isAssignable(clz, XUnmarshalAware.class)) {
+            if (isAssignable(clz, BaseUnmarshaller.class)) {
                 for (Class<?> bindClass : bindClasses) {
                     unmarshallerMap.put(bindClass, clz);
                 }
@@ -35,11 +35,11 @@ public class RJaxbClassesScanner {
         }
     }
 
-    public static XMarshalAware getMarshaller(Class<?> clazz) {
+    public static BaseMarshaller getMarshaller(Class<?> clazz) {
         return getRXBindClass(marshallerMap, clazz);
     }
 
-    public static <T> XUnmarshalAware<T> getUnmarshaller(Class<T> clazz) {
+    public static BaseUnmarshaller getUnmarshaller(Class<?> clazz) {
         return getRXBindClass(unmarshallerMap, clazz);
     }
 

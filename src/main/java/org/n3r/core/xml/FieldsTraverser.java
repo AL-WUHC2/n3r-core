@@ -5,7 +5,7 @@ import java.beans.PropertyDescriptor;
 
 import static java.beans.Introspector.*;
 
-public abstract class FieldsTraverser {
+public class FieldsTraverser {
 
     public void traverseFields(Class<?> clazz) {
         try {
@@ -21,6 +21,8 @@ public abstract class FieldsTraverser {
         }
     }
 
-    public abstract void processFields(PropertyDescriptor pDescriptor) throws Exception;
+    public void processFields(PropertyDescriptor pDescriptor) throws Exception {
+
+    }
 
 }

@@ -30,7 +30,12 @@ public class RXml {
     }
 
     public static <T> T xmlToBean(String xml, Class<T> clazz) {
-        return new RUnmarshaller<T>().unmarshal(from(xml, false), clazz);
+        return xmlToBean(xml, clazz, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T xmlToBean(String xml, Class<T> clazz, Object typeMapping) {
+        return (T) new RUnmarshaller().setTypeMapping(typeMapping).unmarshal(from(xml, false), clazz);
     }
 
     private static String getRootName(Object obj) {

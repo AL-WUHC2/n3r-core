@@ -78,15 +78,11 @@ public class RXmlTest {
         ListVoid bean = new ListVoid();
         bean.setItems(Arrays.asList("AAA", "BBB"));
 
-        String xml = RXml.beanToXml(bean);
+        String xml = "<ListVoid><Item _type_=\"java.lang.String\">AAA</Item><Item _type_=\"java.lang.String\">BBB</Item></ListVoid>";
+        assertEquals(xml, RXml.beanToXml(bean));
 
-        try {
-            RXml.xmlToBean(xml, ListVoid.class);
-            fail();
-        }
-        catch (RuntimeException e) {
-            assertEquals("Unkown List Item Class for items", e.getMessage());
-        }
+        ListVoid xmlToBean = RXml.xmlToBean(xml, ListVoid.class);
+        assertEquals(bean, xmlToBean);
     }
 
     @Test

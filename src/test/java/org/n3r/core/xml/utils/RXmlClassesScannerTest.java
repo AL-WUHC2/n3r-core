@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class RJaxbClassesScannerTest {
+public class RXmlClassesScannerTest {
 
     @Test
     public void test0() {
-        assertNotNull(new RJaxbClassesScanner());
+        assertNotNull(new RXmlClassesScanner());
     }
 
 }
