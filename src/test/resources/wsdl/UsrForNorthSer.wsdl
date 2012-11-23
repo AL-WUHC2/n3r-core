@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.chinaunicom.cn/UsrForNorthSer/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unibssBody="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody" targetNamespace="http://ws.chinaunicom.cn/UsrForNorthSer/" name="UsrForNorthSer">  
+  <wsdl:documentation>用户服务</wsdl:documentation>  
+  <wsdl:types> 
+    <xsd:schema xmlns:ns1="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody" targetNamespace="http://ws.chinaunicom.cn/UsrForNorthSer/">  
+      <xsd:import schemaLocation="UsrForNorthSchema.xsd" namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody"/> 
+    </xsd:schema> 
+  </wsdl:types>  
+  <wsdl:message name="qryCommonUserInfoRequest"> 
+    <wsdl:documentation>无</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_COMMON_USER_INFO_INPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryCommonUserInfoResponse"> 
+    <wsdl:documentation>无</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_COMMON_USER_INFO_OUTPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="checkMemberNumRequest"> 
+    <wsdl:documentation>无</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:CHCK_MEMBER_NUM_INPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="checkMemberNumResponse"> 
+    <wsdl:documentation>无</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:CHCK_MEMBER_NUM_OUTPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="checkUserInfoRequest"> 
+    <wsdl:documentation>区号：服务号码归属地的区号，如：010，仅固网进行填写，移网号码不需要填写该字段； 电信类型：参见ODS模型； 服务号码：如果是固话号码则是不含区号的服务号码；</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:CHECK_USER_INFO_INPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="checkUserInfoResponse"> 
+    <wsdl:documentation>区号：服务号码归属地的区号，如：010，仅固网进行填写，移网号码不需要填写该字段； 电信类型：参见ODS模型； 服务号码：如果是固话号码则是不含区号的服务号码；</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:CHECK_USER_INFO_OUTPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryMultUserInfoRequest"> 
+    <wsdl:documentation>区号：服务号码归属地的区号，如：010，仅固网进行填写，移网号码不需要填写该字段； 服务号码：如果是固话号码则是不含区号的服务号码； 查询类型为按融合编号查询，则融合编号必填；如果查询类型为按组合产品主用户查询，则主用户号码必填；组合编号是后台bSS为每一个组合产品订购实例生成的唯一标识码，部分省分支持。</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_MULT_USER_INFO_INPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryMultUserInfoResponse"> 
+    <wsdl:documentation>区号：服务号码归属地的区号，如：010，仅固网进行填写，移网号码不需要填写该字段； 服务号码：如果是固话号码则是不含区号的服务号码； 查询类型为按融合编号查询，则融合编号必填；如果查询类型为按组合产品主用户查询，则主用户号码必填；组合编号是后台bSS为每一个组合产品订购实例生成的唯一标识码，部分省分支持。</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_MULT_USER_INFO_OUTPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryUserSpInfoRequest"> 
+    <wsdl:documentation>USER_ID 为必传字段，返回该用户订购的相关sp信息</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_USERSPINFO_INPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryUserSpInfoResponse"> 
+    <wsdl:documentation>返回用户的SP信息 应答编码： 0000：成功。 1111：账户ID不存在。 1204：该号码不存在。 8888 其他错误。</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_USERSPINFO_OUTPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryRelationInfoRequest"> 
+    <wsdl:documentation>无</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_RELATION_INFO_INPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryRelationInfoResponse"> 
+    <wsdl:documentation>号码区号：服务号码为固话时必填，移网侧号码不需要填写此字段。 号码A：对于固话号码不填写区号。如：84832344；</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_RELATION_INFO_OUTPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryUserAttrRequest"> 
+    <wsdl:documentation>区号：服务号码归属地的区号，如：010，仅固网进行填写，移网号码不需要填写该字段； 电信类型：参见ODS模型； 服务号码：如果是固话号码则是不含区号的服务号码； 传属性编码返回当前属性值</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_USER_ATTR_INFO_INPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="qryUserAttrResponse"> 
+    <wsdl:documentation>无</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QRY_USER_ATTR_INFO_OUTPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="queryVagueInfoRequest"> 
+    <wsdl:documentation>无</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QUERY_INFO_BY_VAGUE_INPUT"/> 
+  </wsdl:message>  
+  <wsdl:message name="queryVagueInfoResponse"> 
+    <wsdl:documentation>无</wsdl:documentation>  
+    <wsdl:part name="parameters" element="unibssBody:QUERY_INFO_BY_VAGUE_OUTPUT"/> 
+  </wsdl:message>  
+  <wsdl:portType name="UsrForNorthSer"> 
+    <wsdl:operation name="qryCommonUserInfo"> 
+      <wsdl:input message="tns:qryCommonUserInfoRequest"/>  
+      <wsdl:output message="tns:qryCommonUserInfoResponse"/> 
+    </wsdl:operation>  
+    <wsdl:operation name="checkMemberNum"> 
+      <wsdl:input message="tns:checkMemberNumRequest"/>  
+      <wsdl:output message="tns:checkMemberNumResponse"/> 
+    </wsdl:operation>  
+    <wsdl:operation name="checkUserInfo"> 
+      <wsdl:input message="tns:checkUserInfoRequest"/>  
+      <wsdl:output message="tns:checkUserInfoResponse"/> 
+    </wsdl:operation>  
+    <wsdl:operation name="qryMultUserInfo"> 
+      <wsdl:input message="tns:qryMultUserInfoRequest"/>  
+      <wsdl:output message="tns:qryMultUserInfoResponse"/> 
+    </wsdl:operation>  
+    <wsdl:operation name="qryUserSpInfo"> 
+      <wsdl:input message="tns:qryUserSpInfoRequest"/>  
+      <wsdl:output message="tns:qryUserSpInfoResponse"/> 
+    </wsdl:operation>  
+    <wsdl:operation name="qryRelationInfo"> 
+      <wsdl:input message="tns:qryRelationInfoRequest"/>  
+      <wsdl:output message="tns:qryRelationInfoResponse"/> 
+    </wsdl:operation>  
+    <wsdl:operation name="qryUserAttr"> 
+      <wsdl:input message="tns:qryUserAttrRequest"/>  
+      <wsdl:output message="tns:qryUserAttrResponse"/> 
+    </wsdl:operation>  
+    <wsdl:operation name="queryVagueInfo"> 
+      <wsdl:input message="tns:queryVagueInfoRequest"/>  
+      <wsdl:output message="tns:queryVagueInfoResponse"/> 
+    </wsdl:operation> 
+  </wsdl:portType>  
+  <wsdl:binding name="UsrForNorthSerSOAP" type="tns:UsrForNorthSer"> 
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>  
+    <wsdl:operation name="qryCommonUserInfo"> 
+      <wsdl:documentation>用户信息通用查询</wsdl:documentation>  
+      <soap:operation soapAction="http://ws.chinaunicom.cn/UsrForNorthSer/qryCommonUserInfo/"/>  
+      <wsdl:input> 
+        <soap:body use="literal"/> 
+      </wsdl:input>  
+      <wsdl:output> 
+        <soap:body use="literal"/> 
+      </wsdl:output> 
+    </wsdl:operation>  
+    <wsdl:operation name="checkMemberNum"> 
+      <wsdl:documentation>集团成员号码校验接口</wsdl:documentation>  
+      <soap:operation soapAction="http://ws.chinaunicom.cn/UsrForNorthSer/checkMemberNum/"/>  
+      <wsdl:input> 
+        <soap:body use="literal"/> 
+      </wsdl:input>  
+      <wsdl:output> 
+        <soap:body use="literal"/> 
+      </wsdl:output> 
+    </wsdl:operation>  
+    <wsdl:operation name="checkUserInfo"> 
+      <wsdl:documentation>用户校验及三户基本信息查询</wsdl:documentation>  
+      <soap:operation soapAction="http://ws.chinaunicom.cn/UsrForNorthSer/checkUserInfo/"/>  
+      <wsdl:input> 
+        <soap:body use="literal"/> 
+      </wsdl:input>  
+      <wsdl:output> 
+        <soap:body use="literal"/> 
+      </wsdl:output> 
+    </wsdl:operation>  
+    <wsdl:operation name="qryMultUserInfo"> 
+      <wsdl:documentation>组合业务资料查询</wsdl:documentation>  
+      <soap:operation soapAction="http://ws.chinaunicom.cn/UsrForNorthSer/qryMultUserInfo/"/>  
+      <wsdl:input> 
+        <soap:body use="literal"/> 
+      </wsdl:input>  
+      <wsdl:output> 
+        <soap:body use="literal"/> 
+      </wsdl:output> 
+    </wsdl:operation>  
+    <wsdl:operation name="qryUserSpInfo"> 
+      <wsdl:documentation>Sp信息查询</wsdl:documentation>  
+      <soap:operation soapAction="http://ws.chinaunicom.cn/UsrForNorthSer/qryUserSpInfo/"/>  
+      <wsdl:input> 
+        <soap:body use="literal"/> 
+      </wsdl:input>  
+      <wsdl:output> 
+        <soap:body use="literal"/> 
+      </wsdl:output> 
+    </wsdl:operation>  
+    <wsdl:operation name="qryRelationInfo"> 
+      <wsdl:documentation>用户关系查询</wsdl:documentation>  
+      <soap:operation soapAction="http://ws.chinaunicom.cn/UsrForNorthSer/qryRelationInfo/"/>  
+      <wsdl:input> 
+        <soap:body use="literal"/> 
+      </wsdl:input>  
+      <wsdl:output> 
+        <soap:body use="literal"/> 
+      </wsdl:output> 
+    </wsdl:operation>  
+    <wsdl:operation name="qryUserAttr"> 
+      <wsdl:documentation>用户属性查询</wsdl:documentation>  
+      <soap:operation soapAction="http://ws.chinaunicom.cn/UsrForNorthSer/qryUserAttr/"/>  
+      <wsdl:input> 
+        <soap:body use="literal"/> 
+      </wsdl:input>  
+      <wsdl:output> 
+        <soap:body use="literal"/> 
+      </wsdl:output> 
+    </wsdl:operation>  
+    <wsdl:operation name="queryVagueInfo"> 
+      <wsdl:documentation>用户扩展查询接口</wsdl:documentation>  
+      <soap:operation soapAction="http://ws.chinaunicom.cn/UsrForNorthSer/queryVagueInfo/"/>  
+      <wsdl:input> 
+        <soap:body use="literal"/> 
+      </wsdl:input>  
+      <wsdl:output> 
+        <soap:body use="literal"/> 
+      </wsdl:output> 
+    </wsdl:operation> 
+  </wsdl:binding>  
+  <wsdl:service name="UsrForNorthSer"> 
+    <wsdl:documentation>用户服务</wsdl:documentation>  
+    <wsdl:port name="UsrForNorthSerSOAP" binding="tns:UsrForNorthSerSOAP"> 
+      <soap:address location="http://ws.chinaunicom.cn/"/> 
+    </wsdl:port> 
+  </wsdl:service> 
+</wsdl:definitions>
+

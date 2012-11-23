@@ -15,10 +15,12 @@ public class DefaultConfigable extends BaseConfigable {
         this.properties = properties;
     }
 
+    @Override
     public boolean exists(String key) {
-        return properties.containsKey(key);
+        return properties.containsKey(key) ;
     }
 
+    @Override
     public Properties getProperties() {
         return properties;
     }
@@ -26,15 +28,20 @@ public class DefaultConfigable extends BaseConfigable {
     public static void main(String[] args) {
         System.out.println(new AesCryptor("n3rconfigkey").encrypt("orcl"));
     }
+
+    @Override
     public String getStr(String key) {
         String property = properties.getProperty(key);
         property = StrSubstitutor.replace(property, properties);
-        if (StringUtils.startsWith(property, "{AES}")) 
+
+        if (StringUtils.startsWith(property, "{AES}"))
             property = new AesCryptor("n3rconfigkey").decrypt(property.substring(5));
+
 
         return StringUtils.trim(property);
     }
 
+    @Override
     public Configable subset(String prefix) {
         Properties subProps = new Properties();
 

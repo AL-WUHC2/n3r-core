@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:queryVagueInfoReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/queryVagueInfoReq" targetNamespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/queryVagueInfoReq" elementFormDefault="qualified" attributeFormDefault="unqualified">  
+  <xs:element name="QUERY_INFO_BY_VAGUE_REQ"> 
+    <xs:annotation> 
+      <xs:documentation>无</xs:documentation> 
+    </xs:annotation>  
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element name="IN_TAG_SET" minOccurs="1" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>查询模式</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="ROUTE_TAG" minOccurs="1" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>路由标识</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1"/>  
+              <xs:minLength value="1"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="EPARCHY_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>地市编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="8"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="CITY_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>业务区编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="8"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="CUST_NAME" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>客户名称</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="100"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="PSPT_TYPE_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>证件类型</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="PSPT_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>证件号码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="100"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="CUST_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>客户编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="20"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="USER_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>用户标识</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="20"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="ACCT_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>账户标识</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="20"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="NET_TYPE_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>电信类别编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="BRAND_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>品牌编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="4"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="PRODUCT_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>产品id</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="8"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="SERIAL_NUMBER" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>逻辑号码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="40"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="FIX_NUMBER" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>物理号码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="40"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="ACCT_NBR" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>上网账号</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="40"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="DETAIL_INSTALL_ADDRESS" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>装机地址</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="MOFFICE_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>局向ID</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="ADDRESS_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>地址编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="COMMUNIT_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>社区ID</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="COMMUNIT_NAME" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>社区名称</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="100"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="CUST_MANAGER_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>社区经理ID</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="CUST_MANAGER_NAME" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>社区经理名称</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="100"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="LINK_NAME" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>联系人</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="100"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="LINK_PHONE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>联系方式</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="40"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="BILL_NUM" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>计费编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="CIRCUIT_NUM" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>电路号码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="PIM_NUM" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>机身码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="ICCID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>ICCID</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="REMOVE_TAG" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>在用标识</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1"/>  
+              <xs:minLength value="1"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="TRADE_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>省份业务流水号</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="16"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="SUBSCRIBE_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>订单号</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="16"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="OWE_TAG" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>是否欠查费标识,0否，1是</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1"/>  
+              <xs:minLength value="1"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR1" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展1</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR2" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展2</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR3" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展3</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR4" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展4</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR5" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展5</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR6" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展6</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR7" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展7</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR8" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展8</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR9" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展9</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RSRV_STR10" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>扩展10</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1000"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="PARA" minOccurs="0" maxOccurs="unbounded"> 
+          <xs:annotation> 
+            <xs:documentation>保留字段</xs:documentation> 
+          </xs:annotation>  
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element name="PARA_ID" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>保留字段id</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="4000"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="PARA_VALUE" minOccurs="0" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>保留字段值</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="4000"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element> 
+</xs:schema>
+

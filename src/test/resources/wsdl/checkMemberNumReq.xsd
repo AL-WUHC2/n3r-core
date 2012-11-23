@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:checkMemberNumReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkMemberNumReq" targetNamespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkMemberNumReq" elementFormDefault="qualified" attributeFormDefault="unqualified">  
+  <xs:element name="CHCK_MEMBER_NUM_REQ"> 
+    <xs:annotation> 
+      <xs:documentation>无</xs:documentation> 
+    </xs:annotation>  
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element name="USER_ID_A" minOccurs="1" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>用户标识A</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="16"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="USER_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>用户标识</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="16"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RELATION_TYPE_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>关系类型</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="ROLE_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>角色编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="SERVICE_CLASS_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>网别</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="4"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="BRAND_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>品牌</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="PRODUCT_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>产品标识</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="8"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="PARA" minOccurs="0" maxOccurs="unbounded"> 
+          <xs:annotation> 
+            <xs:documentation>保留字段</xs:documentation> 
+          </xs:annotation>  
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element name="PARA_ID" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>保留字段ID</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="20"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="PARA_VALUE" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>保留字段值</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="60"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element> 
+</xs:schema>
+

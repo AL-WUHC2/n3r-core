@@ -1,0 +1,8 @@
+[insertSendLog]
+INSERT INTO tab_bulletin_send_log(bulletin_id, bulletin_send_date)
+VALUES(#1#, #2#)
+
+[updateSendLog]
+update tab_bulletin_send_log
+set bulletin_send_date= #2#
+where bulletin_id=#1#

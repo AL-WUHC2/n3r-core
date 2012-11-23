@@ -1,0 +1,40 @@
+[simpleNumPerformance]
+SELECT * FROM (
+    SELECT   /*+ FRIST_ROWS(1000) */ DBMS_RANDOM.VALUE(1,1000) RANDOM,
+             T.SERIAL_NUMBER  "NumID",
+             T.ADVANCE_LIMIT/10  "NumPreFee",
+             T.RANK_MONEY_S  "NumLevel",
+             T.EPARCHY_CODE "City",
+             NVL(T.PRE_ORDER_TAG,0) "PreOrderTag",
+             NVL2(T.RULE_NAME, '1', '0') "NiceRuleTag",
+             T.USE_TYPE "UseType",
+             '靓号预存款' || T.ADVANCE_LIMIT/1000 || '元从入网次月起分' || T.MONTH_LIMIT || '个月返还' "NumMemo"
+      FROM  TF_R_PHNBR_IDLE T
+     WHERE  T.PROVINCE_CODE = '11'
+       AND  T.NET_TYPE_CODE = '02'
+       AND  T.TRADE_CATE = '0'
+       AND  T.EPARCHY_CODE IN ('110','000')
+       AND  T.CODE_REVERSE LIKE '311%'
+       AND ROWNUM <= 5000 ORDER BY 1
+) WHERE ROWNUM <= 1000
+
+
+[bindNumPerformance]
+SELECT * FROM (
+    SELECT   /*+ FRIST_ROWS(1000) */ DBMS_RANDOM.VALUE(1,1000) RANDOM,
+             T.SERIAL_NUMBER  "NumID",
+             T.ADVANCE_LIMIT/10  "NumPreFee",
+             T.RANK_MONEY_S  "NumLevel",
+             T.EPARCHY_CODE "City",
+             NVL(T.PRE_ORDER_TAG,0) "PreOrderTag",
+             NVL2(T.RULE_NAME, '1', '0') "NiceRuleTag",
+             T.USE_TYPE "UseType",
+             '靓号预存款' || T.ADVANCE_LIMIT/1000 || '元从入网次月起分' || T.MONTH_LIMIT || '个月返还' "NumMemo"
+      FROM  TF_R_PHNBR_IDLE T
+     WHERE  T.PROVINCE_CODE = ##
+       AND  T.NET_TYPE_CODE = ##
+       AND  T.TRADE_CATE = '0'
+       AND  T.EPARCHY_CODE IN (##,'000')
+       AND  T.CODE_REVERSE LIKE ##
+       AND ROWNUM <= 5000 ORDER BY 1
+) WHERE ROWNUM <= 1000

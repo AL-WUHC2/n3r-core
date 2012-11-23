@@ -1,0 +1,2952 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qryMultUserInfoRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryMultUserInfoRsp" targetNamespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryMultUserInfoRsp" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="QRY_MULT_USER_INFO_RSP">
+		<xs:annotation>
+			<xs:documentation>区号：服务号码归属地的区号，如：010，仅固网进行填写，移网号码不需要填写该字段； 服务号码：如果是固话号码则是不含区号的服务号码； 查询类型为按融合编号查询，则融合编号必填；如果查询类型为按组合产品主用户查询，则主用户号码必填；组合编号是后台bSS为每一个组合产品订购实例生成的唯一标识码，部分省分支持。</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="RESP_CODE">
+					<xs:annotation>
+						<xs:documentation>应答编码</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="4"/>
+							<xs:minLength value="4"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="RESP_DESC">
+					<xs:annotation>
+						<xs:documentation>应答描述</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="500"/>
+							<xs:minLength value="0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="VIR_USER_ID" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>组合用户标识？</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="16"/>
+							<xs:minLength value="0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="COMBINATION_INFO" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>组合信息</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="COMBINATION_NO" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>组合编号</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="COMBINATION_PRODUCT" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>组合产品信息</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="PRODUCT_ID">
+											<xs:annotation>
+												<xs:documentation>产品标识</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="8"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="MKT_CAMP_ID" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>活动</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="20"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PRODUCT_MODE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>产品模式，见附录</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="2"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="DEFAULT_TAG">
+											<xs:annotation>
+												<xs:documentation>是否取默认构成</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="1"/>
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PRODUCT_PACKAGE" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>产品构成信息</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="PACKAGE_ID">
+														<xs:annotation>
+															<xs:documentation>构成/包标识</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="20"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="DEFAULT_TAG">
+														<xs:annotation>
+															<xs:documentation>是否取默认业务和资费</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="1"/>
+																<xs:minLength value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="SERVICE" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>业务信息</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SERVICE_ID">
+																	<xs:annotation>
+																		<xs:documentation>业务标识</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="8"/>
+																			<xs:minLength value="0"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="SVC_TYPE">
+																	<xs:annotation>
+																		<xs:documentation>业务类型</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="1"/>
+																			<xs:minLength value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="SERVICE_ITEM" minOccurs="0" maxOccurs="unbounded">
+																	<xs:annotation>
+																		<xs:documentation>业务属性信息</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="ATTR_CODE">
+																				<xs:annotation>
+																					<xs:documentation>属性编码</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="100"/>
+																						<xs:minLength value="0"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="ATTR_VALUE" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>属性值</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="2000"/>
+																						<xs:minLength value="0"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="CUST_DISCNT" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>资费信息</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="DISCNT_CODE">
+																	<xs:annotation>
+																		<xs:documentation>资费编码</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="8"/>
+																			<xs:minLength value="0"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="CUST_DISCNT_ITEM" minOccurs="0" maxOccurs="unbounded">
+																	<xs:annotation>
+																		<xs:documentation>资费属性信息</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="ATTR_CODE">
+																				<xs:annotation>
+																					<xs:documentation>属性编码</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="100"/>
+																						<xs:minLength value="0"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="ATTR_VALUE" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>属性值</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="2000"/>
+																						<xs:minLength value="0"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="PRODUCT_ITEM" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>产品属性信息</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ATTR_CODE">
+														<xs:annotation>
+															<xs:documentation>属性编码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="100"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ATTR_VALUE" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>属性值</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="2000"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="MULT_USER_INFO" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>融合产品用户信息</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="SUB_USER_COUNT">
+											<xs:annotation>
+												<xs:documentation>融合产品下用户数</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:integer">
+													<xs:totalDigits value="4"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="SUB_USER_LIST" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>融合产品用户列表</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="SERVICE_CLASS_CODE">
+														<xs:annotation>
+															<xs:documentation>电信类型编码，编码见附录</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="4"/>
+																<xs:minLength value="4"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="SERVICE_CLASS_CODE_NAME" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>电信类型名称</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="30"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="AREA_CODE" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>区号</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="6"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="SERIAL_NUMBER">
+														<xs:annotation>
+															<xs:documentation>服务号码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="40"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="USER_ID">
+														<xs:annotation>
+															<xs:documentation>用户编码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="16"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="BRAND_CODE">
+														<xs:annotation>
+															<xs:documentation>品牌取值见附录</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="4"/>
+																<xs:minLength value="4"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="BRAND_NAME" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>品牌名称</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="30"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="PRODUCT_ID" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>产品编码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="8"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="PRODUCT_NAME" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>产品名称</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="100"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ROLE_CODE_B" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>成员角色编码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="8"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ROLE_B" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>成员角色名称</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="100"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="RELATION_TYPE_CODE" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>成员关系类型编码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="4"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="RELATION_TYPE_NAME" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>成员关系类型名称</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="100"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="START_DATE" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>组合成员生效时间</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="14"/>
+																<xs:minLength value="14"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="END_DATE" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>组合成员失效时间</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="14"/>
+																<xs:minLength value="14"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="USER_MKT_CAMP" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>活动信息</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="MKT_CAMP_ID">
+																	<xs:annotation>
+																		<xs:documentation>活动ID</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="20"/>
+																			<xs:minLength value="0"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="START_DATE">
+																	<xs:annotation>
+																		<xs:documentation>开始时间</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="14"/>
+																			<xs:minLength value="14"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="END_DATE">
+																	<xs:annotation>
+																		<xs:documentation>终止时间</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="14"/>
+																			<xs:minLength value="14"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="ASSURE_TYPE_CODE" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>担保类型</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="2"/>
+																			<xs:minLength value="0"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="ASSURE_ID" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>担保信息参数</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="200"/>
+																			<xs:minLength value="0"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="ASSURE_DATE" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>担保期限</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="14"/>
+																			<xs:minLength value="14"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="PRODUCT" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>产品</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="PRODUCT_ID">
+																	<xs:annotation>
+																		<xs:documentation>产品标识</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="8"/>
+																			<xs:minLength value="0"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="MKT_CAMP_ID" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>活动</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="20"/>
+																			<xs:minLength value="0"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="PRODUCT_MODE" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>产品模式，见附录</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="2"/>
+																			<xs:minLength value="2"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="START_ENABLE">
+																	<xs:annotation>
+																		<xs:documentation>生效标识</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="1"/>
+																			<xs:minLength value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="START_DATE">
+																	<xs:annotation>
+																		<xs:documentation>开始时间</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="14"/>
+																			<xs:minLength value="14"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="END_DATE">
+																	<xs:annotation>
+																		<xs:documentation>结束时间</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="14"/>
+																			<xs:minLength value="14"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="DEFAULT_TAG">
+																	<xs:annotation>
+																		<xs:documentation>是否取默认构成</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:maxLength value="1"/>
+																			<xs:minLength value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="PRODUCT_PACKAGE" maxOccurs="unbounded">
+																	<xs:annotation>
+																		<xs:documentation>产品构成信息</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="PACKAGE_ID">
+																				<xs:annotation>
+																					<xs:documentation>构成/包标识</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="20"/>
+																						<xs:minLength value="0"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="START_DATE">
+																				<xs:annotation>
+																					<xs:documentation>生效时间</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="14"/>
+																						<xs:minLength value="14"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="END_DATE">
+																				<xs:annotation>
+																					<xs:documentation>结束时间</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="14"/>
+																						<xs:minLength value="14"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="DEFAULT_TAG">
+																				<xs:annotation>
+																					<xs:documentation>是否取默认业务和资费</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="1"/>
+																						<xs:minLength value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="SERVICE" minOccurs="0" maxOccurs="unbounded">
+																				<xs:annotation>
+																					<xs:documentation>业务信息</xs:documentation>
+																				</xs:annotation>
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="SERVICE_ID">
+																							<xs:annotation>
+																								<xs:documentation>服务标识</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="8"/>
+																									<xs:minLength value="0"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="SVC_TYPE">
+																							<xs:annotation>
+																								<xs:documentation>业务类型</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="1"/>
+																									<xs:minLength value="1"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="START_ENABLE">
+																							<xs:annotation>
+																								<xs:documentation>生效标识</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="1"/>
+																									<xs:minLength value="1"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="START_DATE">
+																							<xs:annotation>
+																								<xs:documentation>生效时间</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="14"/>
+																									<xs:minLength value="14"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="END_DATE">
+																							<xs:annotation>
+																								<xs:documentation>结束时间</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="14"/>
+																									<xs:minLength value="14"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="SERVICE_ITEM" minOccurs="0" maxOccurs="unbounded">
+																							<xs:annotation>
+																								<xs:documentation>业务属性信息</xs:documentation>
+																							</xs:annotation>
+																							<xs:complexType>
+																								<xs:sequence>
+																									<xs:element name="ATTR_CODE">
+																										<xs:annotation>
+																											<xs:documentation>属性编码</xs:documentation>
+																										</xs:annotation>
+																										<xs:simpleType>
+																											<xs:restriction base="xs:string">
+																												<xs:maxLength value="100"/>
+																												<xs:minLength value="0"/>
+																											</xs:restriction>
+																										</xs:simpleType>
+																									</xs:element>
+																									<xs:element name="ATTR_VALUE" minOccurs="0">
+																										<xs:annotation>
+																											<xs:documentation>属性值</xs:documentation>
+																										</xs:annotation>
+																										<xs:simpleType>
+																											<xs:restriction base="xs:string">
+																												<xs:maxLength value="2000"/>
+																												<xs:minLength value="0"/>
+																											</xs:restriction>
+																										</xs:simpleType>
+																									</xs:element>
+																									<xs:element name="START_DATE">
+																										<xs:annotation>
+																											<xs:documentation>生效时间</xs:documentation>
+																										</xs:annotation>
+																										<xs:simpleType>
+																											<xs:restriction base="xs:string">
+																												<xs:maxLength value="14"/>
+																												<xs:minLength value="14"/>
+																											</xs:restriction>
+																										</xs:simpleType>
+																									</xs:element>
+																									<xs:element name="END_DATE">
+																										<xs:annotation>
+																											<xs:documentation>结束时间</xs:documentation>
+																										</xs:annotation>
+																										<xs:simpleType>
+																											<xs:restriction base="xs:string">
+																												<xs:maxLength value="14"/>
+																												<xs:minLength value="14"/>
+																											</xs:restriction>
+																										</xs:simpleType>
+																									</xs:element>
+																								</xs:sequence>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																			<xs:element name="CUST_DISCNT" minOccurs="0" maxOccurs="unbounded">
+																				<xs:annotation>
+																					<xs:documentation>资费信息</xs:documentation>
+																				</xs:annotation>
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="DISCNT_CODE">
+																							<xs:annotation>
+																								<xs:documentation>资费编码</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="8"/>
+																									<xs:minLength value="0"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="START_ENABLE">
+																							<xs:annotation>
+																								<xs:documentation>生效标识</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="1"/>
+																									<xs:minLength value="1"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="START_DATE">
+																							<xs:annotation>
+																								<xs:documentation>开始时间</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="14"/>
+																									<xs:minLength value="14"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="END_DATE">
+																							<xs:annotation>
+																								<xs:documentation>结束时间</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:maxLength value="14"/>
+																									<xs:minLength value="14"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="CUST_DISCNT_ITEM" minOccurs="0" maxOccurs="unbounded">
+																							<xs:annotation>
+																								<xs:documentation>资费属性信息</xs:documentation>
+																							</xs:annotation>
+																							<xs:complexType>
+																								<xs:sequence>
+																									<xs:element name="ATTR_CODE">
+																										<xs:annotation>
+																											<xs:documentation>属性编码</xs:documentation>
+																										</xs:annotation>
+																										<xs:simpleType>
+																											<xs:restriction base="xs:string">
+																												<xs:maxLength value="100"/>
+																												<xs:minLength value="0"/>
+																											</xs:restriction>
+																										</xs:simpleType>
+																									</xs:element>
+																									<xs:element name="ATTR_VALUE" minOccurs="0">
+																										<xs:annotation>
+																											<xs:documentation>属性值</xs:documentation>
+																										</xs:annotation>
+																										<xs:simpleType>
+																											<xs:restriction base="xs:string">
+																												<xs:maxLength value="2000"/>
+																												<xs:minLength value="0"/>
+																											</xs:restriction>
+																										</xs:simpleType>
+																									</xs:element>
+																									<xs:element name="START_DATE">
+																										<xs:annotation>
+																											<xs:documentation>开始时间</xs:documentation>
+																										</xs:annotation>
+																										<xs:simpleType>
+																											<xs:restriction base="xs:string">
+																												<xs:maxLength value="14"/>
+																												<xs:minLength value="14"/>
+																											</xs:restriction>
+																										</xs:simpleType>
+																									</xs:element>
+																									<xs:element name="END_DATE">
+																										<xs:annotation>
+																											<xs:documentation>结束时间</xs:documentation>
+																										</xs:annotation>
+																										<xs:simpleType>
+																											<xs:restriction base="xs:string">
+																												<xs:maxLength value="14"/>
+																												<xs:minLength value="14"/>
+																											</xs:restriction>
+																										</xs:simpleType>
+																									</xs:element>
+																								</xs:sequence>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="PRODUCT_ITEM" minOccurs="0" maxOccurs="unbounded">
+																	<xs:annotation>
+																		<xs:documentation>产品属性信息</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="ATTR_CODE">
+																				<xs:annotation>
+																					<xs:documentation>属性编码</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="100"/>
+																						<xs:minLength value="0"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="ATTR_VALUE" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>属性值</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="2000"/>
+																						<xs:minLength value="0"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="START_DATE">
+																				<xs:annotation>
+																					<xs:documentation>生效时间</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="14"/>
+																						<xs:minLength value="14"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="END_DATE">
+																				<xs:annotation>
+																					<xs:documentation>结束时间</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:string">
+																						<xs:maxLength value="14"/>
+																						<xs:minLength value="14"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="EPARCHY_CODE">
+														<xs:annotation>
+															<xs:documentation>城市代码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="6"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="CITY_CODE" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>营业区编码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="20"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="MEMBER_TYPE" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>成员类型</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="1"/>
+																<xs:minLength value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ORDER_STATUS" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>是否存在在途工单</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="1"/>
+																<xs:minLength value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="CUST_ID">
+														<xs:annotation>
+															<xs:documentation>客户标识</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="16"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="CUST_NAME">
+														<xs:annotation>
+															<xs:documentation>客户名称</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="100"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="SAME_LINE_NUMBER" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>共线号码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="40"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ARREARAGE_FEE" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>欠费金额（单位：分）</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:decimal">
+																<xs:totalDigits value="11"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="ACCT_INFO" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>组合产品账户信息</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ACCT_ID">
+											<xs:annotation>
+												<xs:documentation>账户标识</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="16"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="CUST_ID" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>客户标识</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="16"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="DEBUTY_USER_ID" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>代表用户标识</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="16"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="DEBUTY_CODE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>代表号码</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="40"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PAY_NAME">
+											<xs:annotation>
+												<xs:documentation>账户名称</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="100"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PAY_MODE_CODE">
+											<xs:annotation>
+												<xs:documentation>付费方式编码</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="1"/>
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PREPAY_TAG">
+											<xs:annotation>
+												<xs:documentation>预付费标识：</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="1"/>
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="ACCOUNT_CYCLE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>账务周期</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="2"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="IS_GROUP_ACCT" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>是否集团账户</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="1"/>
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="CONSIGN" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>托收信息</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="CONSIGN_MODE">
+														<xs:annotation>
+															<xs:documentation>托收方式</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="1"/>
+																<xs:minLength value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="SUPER_BANK_CODE">
+														<xs:annotation>
+															<xs:documentation>上级银行</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="20"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="BANK_CODE">
+														<xs:annotation>
+															<xs:documentation>开户银行编码</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="20"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="BANK_ACCT_NO">
+														<xs:annotation>
+															<xs:documentation>银行付费账号</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="30"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="AGREEMENT_NO" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>托收协议号</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="40"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ACCT_BALANCE_ID" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>账本标识</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="16"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="BANK_ACCT_NAME" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>托收名称</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="100"/>
+																<xs:minLength value="0"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="PROVINCE_CODE">
+											<xs:annotation>
+												<xs:documentation>省份编码</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="2"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="EPARCHY_CODE">
+											<xs:annotation>
+												<xs:documentation>地市编码</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="6"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="CITY_CODE">
+											<xs:annotation>
+												<xs:documentation>营业区编码</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="20"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="SCORE_VALUE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>账户积分</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="12"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="CONTRACT_NO" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>账户合同号</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="40"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="OPEN_DATE">
+											<xs:annotation>
+												<xs:documentation>开户时间</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="14"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="REMOVE_DATE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>销户时间</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="14"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="UPDATE_TIME" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>更新时间</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="14"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="UPDATE_DEPART_ID" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>更新部门</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="20"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="UPDATE_STAFF_ID" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>更新员工</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="20"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="COMP_USER_INFO" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>用户信息</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="USER_ID">
+								<xs:annotation>
+									<xs:documentation>用户编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="16"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USER_STATE">
+								<xs:annotation>
+									<xs:documentation>用户状态</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="2"/>
+										<xs:minLength value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="BRAND_CODE">
+								<xs:annotation>
+									<xs:documentation>品牌取值见附录</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="4"/>
+										<xs:minLength value="4"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SERVICE_CLASS_CODE">
+								<xs:annotation>
+									<xs:documentation>电信类型</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="4"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="BRAND">
+								<xs:annotation>
+									<xs:documentation>品牌名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PROVINCE_CODE">
+								<xs:annotation>
+									<xs:documentation>省分编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="2"/>
+										<xs:minLength value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="EPARCHY_CODE">
+								<xs:annotation>
+									<xs:documentation>城市代码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CITY_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>营业区编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="OPEN_DATE">
+								<xs:annotation>
+									<xs:documentation>入网时间</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="LAND_LEVLE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>通话级别</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ROAM_STAT" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>漫游状态</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PRODUCT_ID">
+								<xs:annotation>
+									<xs:documentation>当前使用产品标识</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PRODUCT_NAME">
+								<xs:annotation>
+									<xs:documentation>当前使用产品名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="NEXT_PRODUCT_ID">
+								<xs:annotation>
+									<xs:documentation>下月使用产品标识</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="NEXT_PRODUCT_NAME">
+								<xs:annotation>
+									<xs:documentation>下月使用产品名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SUBSCRB_TYPE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>用户类型</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="INTENET_TYPE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>智能网标识</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USER_SCORE_AMOUNT" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>用户当前可用积分</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="11"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="LEAD_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>引示号</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CUST_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户标识</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USECUST_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>使用客户标识</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USECUST_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>使用客户名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USECUST_PSPT_TYPE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>使用客户证件类型</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USECUST_PSPT_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>使用客户证件号码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="X_EPARCHY_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>地市</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CITY_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>区域名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USER_PASSWD" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>密码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USER_DIFF_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>用户关系</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="4"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USER_TYPE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>用户类型</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SERIAL_NUMBER" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>号码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SCORE_VALUE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>积分</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CREDIT_CLASS" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>信用等级</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ACCT_TAG" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>账户标志</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="X_ACCT_TAG_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PREPAY_TAG" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>付费标志</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="X_PREPAY_TAG_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>付费标志名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IN_DATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>建档时间</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="OPEN_MODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>开户模式</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="X_OPEN_MODE_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>开户模式名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="OPEN_DEPART_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>开户部门</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="OPEN_STAFF_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>开户员工</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IN_DEPART_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>建档部门</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IN_STAFF_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>建档员工</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REMOVE_TAG" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>用户状态</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="X_REMOVE_TAG_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>用户状态名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DESTROY_TIME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>销户时间</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REMOVE_EPARCHY_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>销户地市</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REMOVE_CITY_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>销户区域</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REMOVE_DEPART_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>销户部门</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REMOVE_REASON_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>销户原因</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PRE_DESTROY_TIME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>预销户时间</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="FIRST_CALL_TIME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>首次通话时间</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="LAST_STOP_TIME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>最后停机时间</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="USER_STATE_CODESET" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>用户状态集</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="X_SVCSTATE_EXPLAIN" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>用户状态集名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="MPUTE_MONTH_FEE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>$primParam.paramChname</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="MPUTE_DATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>$primParam.paramChname</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ASSURE_CUST_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>担保客户</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ASSURE_TYPE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>担保类型编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="2"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ASSURE_DATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>担保日期</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEVELOP_STAFF_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>发展员工</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEVELOP_DATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>发展日期</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEVELOP_EPARCHY_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>发展地州编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEVELOP_CITY_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>发展业务区</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEVELOP_DEPART_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>发展部门ID</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEVELOP_NO" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>$primParam.paramChname</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CONTRACT_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>合同号</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CHANGEUSER_DATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>$primParam.paramChname</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IN_NET_MODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>入网方式</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PRODUCT_TYPE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>产品类型</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REMARK" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>备注</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="500"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SIM_CARD_NO" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>SIM/USIM卡号</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IMSI" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>IMSI号</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="FLAG_3G" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>是否3G</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ATTR_INFO" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>虚拟用户属性</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ATTR_CODE">
+											<xs:annotation>
+												<xs:documentation>属性编码</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="100"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="ATTR_VALUE">
+											<xs:annotation>
+												<xs:documentation>属性值</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="2000"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="START_DATE">
+											<xs:annotation>
+												<xs:documentation>开始时间</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="14"/>
+													<xs:minLength value="14"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="END_DATE">
+											<xs:annotation>
+												<xs:documentation>结束时间</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="14"/>
+													<xs:minLength value="14"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PRODUCT_INFO" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>融合产品基本信息</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="PRODUCT_ID">
+											<xs:annotation>
+												<xs:documentation>产品ID</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="8"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PRODUCT_NAME">
+											<xs:annotation>
+												<xs:documentation>产品名称</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="128"/>
+													<xs:minLength value="0"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PRODUCT_MODE">
+											<xs:annotation>
+												<xs:documentation>产品模式</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="2"/>
+													<xs:minLength value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PRODUCT_ACTIVE_TIME">
+											<xs:annotation>
+												<xs:documentation>生效时间</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="14"/>
+													<xs:minLength value="14"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PRODUCT_INACTIVE_TIME">
+											<xs:annotation>
+												<xs:documentation>失效时间</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="14"/>
+													<xs:minLength value="14"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="VPN_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>所属虚拟网名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="128"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="BASIC_CREDIT_VALUE">
+								<xs:annotation>
+									<xs:documentation>基本信用度</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="11"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CREDIT_VALUE">
+								<xs:annotation>
+									<xs:documentation>信用度</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="11"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CREDIT_RULE_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>信控规则标识</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="COMP_CUST_INFO" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>客户信息</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CUST_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户标识</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CUST_COMPL_FLAG" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户资料实录标志</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CUST_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CUST_TYPE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户类型编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CUST_STATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户状态编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CERT_END_DATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>证件有效期</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CERT_ADDR" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>证件地址</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="256"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CERT_TYPE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>证件类别编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="2"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CERT_TYPE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>证件类型名称</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CERT_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>证件号码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PROVINCE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>省份编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="2"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="EPARCHY_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>归属地市</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="AUDIT_NUM" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>稽核次数</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="10"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEVELOP_DEPART_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>发展渠道</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEVELOP_STAFF_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>发展员工</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IN_DEPART_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>建档渠道</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IN_STAFF_ID" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>建档员工</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="IN_DATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>建档时间</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REMOVE_DATE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>销档时间</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REMARK" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>备注</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="500"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CUST_CLASS_TYPE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户级别编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="3"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CUSTOMER_LEVEL" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户等级编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="3"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CREDIT_CLASS" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>信用等级</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="8"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CUSTOMER_LOC" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>本外地标志编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SEX" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>客户性别编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="BIRTHDAY" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>阳历生日</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="14"/>
+										<xs:minLength value="14"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="BIRTHDAY_LUNAR" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>阴历生日</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="50"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="BIRTHDAY_FLAG" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>阴阳历生日标记编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="1"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="POST_ADDRESS" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>通信地址</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="256"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="POST_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>邮政编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="6"/>
+										<xs:minLength value="6"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="POST_PERSON" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>收件人</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="50"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PHONE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>联系电话</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="FAX_NBR" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>传真号码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="EMAIL" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>电子邮件</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="50"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="HOME_ADDRESS" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>家庭地址</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="256"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="HOME_PHONE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>家庭电话</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CONTACT" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>联系人姓名</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="60"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CONTACT_PHONE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>联系人电话</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="NATIONALITY_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>国籍编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="4"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="LOCAL_NATIVE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>籍贯编码</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="4"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CONTACT_TYPE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>优先联系方式</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="WORK_NAME" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>工作单位</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="80"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="WORK_PHONE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>工作电话</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="WORK_ADDRESS" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>工作地址</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="JOB_TYPE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>职业类型</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="10"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="JOB" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>职位</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="10"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="MARRIAGE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>婚姻状况</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="2"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="FOLK_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>民族</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="2"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REVENUE_LEVEL_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>收入等级</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="4"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CHARACTER_TYPE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>性格类型</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="4"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="EDUCATE_DEGREE_CODE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>教育程度</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="6"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PARA" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>保留字段</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="PARA_ID">
+								<xs:annotation>
+									<xs:documentation>保留字段ID</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PARA_VALUE">
+								<xs:annotation>
+									<xs:documentation>保留字段值</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="60"/>
+										<xs:minLength value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

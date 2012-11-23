@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:head="http://ws.chinaunicom.cn/unibssHead" xmlns:attached="http://ws.chinaunicom.cn/unibssAttached" xmlns:body="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody" xmlns:qryCommonUserInfoReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryCommonUserInfoReq" xmlns:qryCommonUserInfoRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryCommonUserInfoRsp" xmlns:checkMemberNumReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkMemberNumReq" xmlns:checkMemberNumRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkMemberNumRsp" xmlns:checkUserInfoReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkUserInfoReq" xmlns:checkUserInfoRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkUserInfoRsp" xmlns:qryMultUserInfoReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryMultUserInfoReq" xmlns:qryMultUserInfoRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryMultUserInfoRsp" xmlns:qryUserSpInfoReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryUserSpInfoReq" xmlns:qryUserSpInfoRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryUserSpInfoRsp" xmlns:qryRelationInfoReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryRelationInfoReq" xmlns:qryRelationInfoRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryRelationInfoRsp" xmlns:qryUserAttrReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryUserAttrReq" xmlns:qryUserAttrRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryUserAttrRsp" xmlns:queryVagueInfoReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/queryVagueInfoReq" xmlns:queryVagueInfoRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/queryVagueInfoRsp" targetNamespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody" elementFormDefault="qualified" attributeFormDefault="unqualified">  
+  <xs:import namespace="http://ws.chinaunicom.cn/unibssHead" schemaLocation="unibssHead.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/unibssAttached" schemaLocation="unibssAttached.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryCommonUserInfoReq" schemaLocation="qryCommonUserInfoReq.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryCommonUserInfoRsp" schemaLocation="qryCommonUserInfoRsp.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkMemberNumReq" schemaLocation="checkMemberNumReq.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkMemberNumRsp" schemaLocation="checkMemberNumRsp.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkUserInfoReq" schemaLocation="checkUserInfoReq.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkUserInfoRsp" schemaLocation="checkUserInfoRsp.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryMultUserInfoReq" schemaLocation="qryMultUserInfoReq.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryMultUserInfoRsp" schemaLocation="qryMultUserInfoRsp.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryUserSpInfoReq" schemaLocation="qryUserSpInfoReq.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryUserSpInfoRsp" schemaLocation="qryUserSpInfoRsp.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryRelationInfoReq" schemaLocation="qryRelationInfoReq.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryRelationInfoRsp" schemaLocation="qryRelationInfoRsp.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryUserAttrReq" schemaLocation="qryUserAttrReq.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryUserAttrRsp" schemaLocation="qryUserAttrRsp.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/queryVagueInfoReq" schemaLocation="queryVagueInfoReq.xsd"/>  
+  <xs:import namespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/queryVagueInfoRsp" schemaLocation="queryVagueInfoRsp.xsd"/>  
+  <xs:element name="QRY_COMMON_USER_INFO_INPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryCommonUserInfoReq:QRY_COMMON_USER_INFO_REQ"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_COMMON_USER_INFO_OUTPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryCommonUserInfoRsp:QRY_COMMON_USER_INFO_RSP"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="CHCK_MEMBER_NUM_INPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="checkMemberNumReq:CHCK_MEMBER_NUM_REQ"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="CHCK_MEMBER_NUM_OUTPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="checkMemberNumRsp:CHCK_MEMBER_NUM_RSP"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="CHECK_USER_INFO_INPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="checkUserInfoReq:CHECK_USER_INFO_REQ"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="CHECK_USER_INFO_OUTPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="checkUserInfoRsp:CHECK_USER_INFO_RSP"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_MULT_USER_INFO_INPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryMultUserInfoReq:QRY_MULT_USER_INFO_REQ"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_MULT_USER_INFO_OUTPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryMultUserInfoRsp:QRY_MULT_USER_INFO_RSP"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_USERSPINFO_INPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryUserSpInfoReq:QRY_USERSPINFO_REQ"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_USERSPINFO_OUTPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryUserSpInfoRsp:QRY_USERSPINFO_RSP"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_RELATION_INFO_INPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryRelationInfoReq:QRY_RELATION_INFO_REQ"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_RELATION_INFO_OUTPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryRelationInfoRsp:QRY_RELATION_INFO_RSP"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_USER_ATTR_INFO_INPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryUserAttrReq:QRY_USER_ATTR_INFO_REQ"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QRY_USER_ATTR_INFO_OUTPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="qryUserAttrRsp:QRY_USER_ATTR_INFO_RSP"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QUERY_INFO_BY_VAGUE_INPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="queryVagueInfoReq:QUERY_INFO_BY_VAGUE_REQ"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="QUERY_INFO_BY_VAGUE_OUTPUT"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="head:UNI_BSS_HEAD"/>  
+        <xs:element name="UNI_BSS_BODY"> 
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element ref="queryVagueInfoRsp:QUERY_INFO_BY_VAGUE_RSP"/> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element ref="attached:UNI_BSS_ATTACHED"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element> 
+</xs:schema>
+

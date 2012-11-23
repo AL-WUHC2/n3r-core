@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:checkUserInfoReq="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkUserInfoReq" targetNamespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/checkUserInfoReq" elementFormDefault="qualified" attributeFormDefault="unqualified">  
+  <xs:element name="CHECK_USER_INFO_REQ"> 
+    <xs:annotation> 
+      <xs:documentation>区号：服务号码归属地的区号，如：010，仅固网进行填写，移网号码不需要填写该字段； 电信类型：参见ODS模型； 服务号码：如果是固话号码则是不含区号的服务号码；</xs:documentation> 
+    </xs:annotation>  
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element name="TRADE_TYPE_CODE" minOccurs="1" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>业务受理类型</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="SERVICE_CLASS_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>电信类型编码，编码见附录</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="4"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="AREA_CODE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>区号</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="6"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="SERIAL_NUMBER" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>服务号码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="40"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="SIM_CARD_NO" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>USIM卡号</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="20"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="INFO_TAG" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>获取信息列表标志集：</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="50"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="USER_STATE" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>0:正常用户</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="1"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="USER_PASSWD" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>用户密码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="30"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="USER_ID" minOccurs="0" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>$primParam.paramChname</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="16"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="PARA" minOccurs="0" maxOccurs="unbounded"> 
+          <xs:annotation> 
+            <xs:documentation>保留字段</xs:documentation> 
+          </xs:annotation>  
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element name="PARA_ID" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>保留字段ID</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="20"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="PARA_VALUE" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>保留字段值</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="60"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element> 
+</xs:schema>
+

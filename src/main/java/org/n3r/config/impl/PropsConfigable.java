@@ -11,13 +11,10 @@ import org.springframework.core.io.Resource;
 import com.google.common.base.Charsets;
 
 public class PropsConfigable extends DefaultConfigable {
-
-
     public PropsConfigable(Resource res) {
        super(buildProperties(res));
     }
 
-    @SuppressWarnings("resource")
     private static Properties buildProperties(Resource res) {
         PropsReader reader = null;
         Properties props = new Properties();

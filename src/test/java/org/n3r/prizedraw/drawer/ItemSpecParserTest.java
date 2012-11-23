@@ -19,6 +19,14 @@ public class ItemSpecParserTest {
         for (DayItem dayItem : dayItems)
             System.out.println(dayItem);
 
+        // 每天开
+        dayItems = ItemSpecParser.parseItemSpec("每天开5\r\n"
+                + "2012-09-10开20 10:10~12:30开10 12:30~15:00 5\r\n"
+                + "2012-09-10开20 10:10~12:30开10 12:30~15:00 5"
+                );
+        for (DayItem dayItem : dayItems)
+            System.out.println(dayItem);
+
         // 日期重复，重复部分被忽略
         dayItems = ItemSpecParser.parseItemSpec("每天开5\r\n"
                 + "2012-09-10开20 10:10~12:30开10 12:30~15:00 5\r\n"

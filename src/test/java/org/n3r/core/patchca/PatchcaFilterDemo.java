@@ -25,7 +25,7 @@ public class PatchcaFilterDemo extends JDialog implements ActionListener {
     public PatchcaFilterDemo() {
         super.setTitle("Patchca demo");
         setResizable(false);
-        setSize(300, 140);
+        setSize(500, 140);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (dim.width - this.getSize().width) / 2;
         int y = (dim.height - this.getSize().height) / 2;
@@ -36,16 +36,19 @@ public class PatchcaFilterDemo extends JDialog implements ActionListener {
         bottom.add(reloadButton);
         add(BorderLayout.SOUTH, bottom);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent we) {
                 dispose();
             }
         });
     }
 
+    @Override
     public void update(Graphics g) {
         paint(g);
     }
 
+    @Override
     public void paint(Graphics g) {
         if (img == null) {
             createImage();
@@ -64,8 +67,10 @@ public class PatchcaFilterDemo extends JDialog implements ActionListener {
             setTitle(captcha.getTips() + " 答案:" + captcha.getChallenge());
 
         }
-       
+
         img = captcha.getImage();
+
+
     }
 
     @Override

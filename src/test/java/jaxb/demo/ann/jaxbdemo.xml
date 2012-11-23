@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<customer id="100">
+    <age>20</age>
+    <contact id="1">
+        <addr>default</addr>
+        <postno>000000</postno>
+    </contact>
+    <NAME>jaxbExample</NAME>
+</customer>

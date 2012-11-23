@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qryRelationInfoRsp="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryRelationInfoRsp" targetNamespace="http://ws.chinaunicom.cn/UsrForNorthSer/unibssBody/qryRelationInfoRsp" elementFormDefault="qualified" attributeFormDefault="unqualified">  
+  <xs:element name="QRY_RELATION_INFO_RSP"> 
+    <xs:annotation> 
+      <xs:documentation>号码区号：服务号码为固话时必填，移网侧号码不需要填写此字段。 号码A：对于固话号码不填写区号。如：84832344；</xs:documentation> 
+    </xs:annotation>  
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element name="RESP_CODE" minOccurs="1" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>应答编码</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="4"/>  
+              <xs:minLength value="4"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RESP_DESC" minOccurs="1" maxOccurs="1"> 
+          <xs:annotation> 
+            <xs:documentation>应答描述</xs:documentation> 
+          </xs:annotation>  
+          <xs:simpleType> 
+            <xs:restriction base="xs:string"> 
+              <xs:maxLength value="500"/>  
+              <xs:minLength value="0"/> 
+            </xs:restriction> 
+          </xs:simpleType> 
+        </xs:element>  
+        <xs:element name="RELATIONS_LIST" minOccurs="0" maxOccurs="unbounded"> 
+          <xs:annotation> 
+            <xs:documentation>用户关系记录记录</xs:documentation> 
+          </xs:annotation>  
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element name="CUST_NAME" minOccurs="0" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>集团名称</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="100"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="SERIAL_NUMBER_A" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>服务号码A，虚拟用户的服务号码</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="40"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="SERIAL_NUMBER_B" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>服务号码B，成员的服务号码</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="40"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="USER_ID_A" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>虚拟用户群标识</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="16"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="USER_ID_B" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>成员用户标识</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="16"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="ROLE_CODE_B" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>角色类型B</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="2"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="SHORT_CODE" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>成员短号码</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="20"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="RELATION_ATTR" minOccurs="0" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>关系标记</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="1"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="ROLE_CODE_A" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>角色类型A</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="1"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="RELATION_TYPE_CODE" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>用户关系类型</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="4"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="RELATION_TYPE_NAME" minOccurs="0" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>用户关系类型名称</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="100"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="START_DATE" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>生效时间。</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="14"/>  
+                    <xs:minLength value="14"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="END_DATE" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>失效时间。</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="14"/>  
+                    <xs:minLength value="14"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="X_RECORDNUM" minOccurs="0" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>记录条数</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="4"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element>  
+        <xs:element name="PARA" minOccurs="0" maxOccurs="unbounded"> 
+          <xs:annotation> 
+            <xs:documentation>保留字段</xs:documentation> 
+          </xs:annotation>  
+          <xs:complexType> 
+            <xs:sequence> 
+              <xs:element name="PARA_ID" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>保留字段ID</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="20"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element>  
+              <xs:element name="PARA_VALUE" minOccurs="1" maxOccurs="1"> 
+                <xs:annotation> 
+                  <xs:documentation>保留字段值</xs:documentation> 
+                </xs:annotation>  
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string"> 
+                    <xs:maxLength value="60"/>  
+                    <xs:minLength value="0"/> 
+                  </xs:restriction> 
+                </xs:simpleType> 
+              </xs:element> 
+            </xs:sequence> 
+          </xs:complexType> 
+        </xs:element> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element> 
+</xs:schema>
+

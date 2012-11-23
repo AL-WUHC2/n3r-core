@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+<!--         encoders are assigned by default the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 参考:http://logback.qos.ch/manual/appenders.html -->
+    <appender name="EOPLOG" class="org.n3r.logback.MultiKeysSiftingAppender">
+        <discriminator class="org.n3r.logback.MDCBasedMultiKeysDiscriminator">
+            <key>eopkey_key2</key>
+            <defaultValue>unknown</defaultValue>
+            <splitter>_</splitter>
+        </discriminator>
+        <sift>
+            <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${eopkey}/${key2}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <FileNamePattern>${eopkey}/${key2}.%d{yyyy-MM-dd}.%i.log.gz</FileNamePattern>
+                    <!-- keep 30 days' worth of history -->
+                    <maxHistory>30</maxHistory>
+                    <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                        <!-- or whenever the file size reaches 100MB -->
+                        <maxFileSize>100MB</maxFileSize>
+                    </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+
+                <encoder>
+                    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <root level="info">
+<!--         <level value="WARN" /> -->
+        <appender-ref ref="STDOUT" />
+    </root>
+
+<!--     <logger name="slf4j" additivity="false"> -->
+<!--         <level value="INFO" /> -->
+<!--         <appender-ref ref="EOPLOG" /> -->
+<!--     </root> -->
+</configuration>
+

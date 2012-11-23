@@ -1,0 +1,28 @@
+--create table TF_M_SESSION
+--(
+--  SESSION_KEY     VARCHAR2(50) not null,
+--  EXPIRED_TIME    NUMBER(20),
+--  BUSI_BIND       VARCHAR2(200),
+--  SESSION_CONTENT VARCHAR2(4000),
+--  PARTITION_ID    NUMBER(2) not null
+--);
+--comment on column TF_M_SESSION.PARTITION_ID
+--  is '分区字段：当前小时数';
+-- Create/Recreate primary, unique and foreign key constraints
+--alter table TF_M_SESSION
+--  add constraint PK_TF_M_SESSION primary key (SESSION_KEY);
+
+
+
+[phwSecurity.insertPhwSecurity]
+INSERT INTO TF_M_SESSION (SESSION_KEY, PARTITION_ID, EXPIRED_TIME, BUSI_BIND, SESSION_CONTENT)
+VALUES (#?#, 0, #?#, #?#, #?#)
+
+[phwSecurity.queryPhwSecurity]
+SELECT S.SESSION_CONTENT
+FROM   TF_M_SESSION S
+WHERE  S.SESSION_KEY = ##
+
+
+[phwSecurity.deletePhwSecurity]
+DELETE FROM TF_M_SESSION S WHERE S.SESSION_KEY = ##

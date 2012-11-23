@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+    <transactionManager type="JDBC">
+<!--         <dataSource type="SIMPLE"> -->
+        <dataSource type="C3P0">
+            <property name="JDBC.Driver" value="oracle.jdbc.driver.OracleDriver" />
+            <property name="JDBC.ConnectionURL" value="jdbc:oracle:thin:@10.142.195.62:1521:EcsMall" />
+            <property name="JDBC.Username" value="uop_hao_n601" />
+            <property name="JDBC.Password" value="uophaon601" />
+        </dataSource>
+    </transactionManager>
+    <!--
+    <transactionManager type="JDBC">
+        <dataSource type="SIMPLE">
+            <property name="JDBC.Driver" value="oracle.jdbc.driver.OracleDriver" />
+            <property name="JDBC.ConnectionURL" value="jdbc:oracle:thin:@127.0.0.1:1521:orcl" />
+            <property name="JDBC.Username" value="orcl" />
+            <property name="JDBC.Password" value="orcl" />
+        </dataSource>
+    </transactionManager>
+     <transactionManager type="JDBC" >
+        <dataSource type="JNDI">
+            <property name="context.java.naming.factory.initial" value="weblogic.jndi.WLInitialContextFactory" />
+            <property name="context.java.naming.provider.url" value="t3://localhost:7001" />
+            <property name="DataSource" value="orcl" />
+        </dataSource>
+    </transactionManager>
+ -->
+    <sqlMap resource="ibatis/sqlmap.xml" />
+</sqlMapConfig>
+

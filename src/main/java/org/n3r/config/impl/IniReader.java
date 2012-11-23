@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class IniReader {
     protected static final String COMMENT_CHARS = "#;";
-    protected static final String SEPARATOR_CHARS = "=:";
+    protected static final String SEPARATOR_CHARS = "=:(";
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static final String QUOTE_CHARACTERS = "\"'";
     private static final String LINE_CONT = "\\";
@@ -26,7 +26,7 @@ public class IniReader {
         BufferedReader bufferedReader = new BufferedReader(reader);
 
         String line = bufferedReader.readLine();
-      
+
         for (; line != null; line = bufferedReader.readLine()) {
             ++lineNumber;
             line = line.trim();
@@ -42,6 +42,9 @@ public class IniReader {
             if (index >= 0) {
                 key = line.substring(0, index);
                 value = parseValue(line.substring(index + 1), bufferedReader);
+
+                if (line.charAt(index) == '(' && value.charAt(value.length() - 1) == ')')
+                    value = value.substring(0, value.length() - 1);
             }
             else key = line;
             key = key.trim();
@@ -59,9 +62,22 @@ public class IniReader {
             sectionProps = new Properties();
             properties.put(lastSection, sectionProps);
         }
+        else {
+            String oldValue = (String) sectionProps.get(key);
+            if (oldValue != null)
+                putIncKeyAndValue(sectionProps, key, oldValue);
+        }
 
         sectionProps.put(key, value.trim());
     }
+
+    private void putIncKeyAndValue(Properties props, String key, String oldValue) {
+        int seq = 0;
+        while(props.contains(key + seq)) ++seq;
+
+        props.put(key + "." + seq, oldValue);
+    }
+
 
     private static String parseValue(String val, BufferedReader reader) throws IOException {
         StringBuilder propertyValue = new StringBuilder();

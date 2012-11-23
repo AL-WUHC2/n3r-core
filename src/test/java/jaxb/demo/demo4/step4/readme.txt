@@ -1,0 +1,1 @@
+泛型 + HashSet集合 + @XmlElementWrapper = ok
