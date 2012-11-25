@@ -17,6 +17,10 @@ public class PageStaticBuilder {
     private int httpSocketTimeoutSeconds = 30;
     private int rsyncTimeoutSeconds = 30;
 
+    public void validateConfig() {
+        if (rsyncDirs.size() == 0 || rsyncRemotes.size() == 0)
+            throw new RuntimeException("至少有一个addRsyncRemote和addRsyncDir的配置");
+    }
     public PageStaticBuilder addRsyncRemote(String romoteHost, String remoteUser) {
         rsyncRemotes.add(new RsyncRemote(romoteHost, remoteUser));
         return this;
@@ -48,12 +52,13 @@ public class PageStaticBuilder {
     }
 
     public PageStatic build() {
+        validateConfig();
         return new PageStatic(this);
     }
 
-    public PageStatic fromSpec(String specName) {
+    public PageStaticBuilder fromSpec(String specName) {
         new PageStaticSpecParser(specName).parse(this);
-        return new PageStatic(this);
+        return this;
     }
 
     public List<RsyncRemote> getRsyncRemotes() {

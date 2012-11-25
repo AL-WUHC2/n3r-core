@@ -66,7 +66,8 @@ public class PageStaticSpecParser {
         }
 
         String rsyncRemote = config.getStr(key);
-        addRsyncRemote(pageStaticBuilder, rsyncRemote);
+        if (StringUtils.isNotEmpty(rsyncRemote))
+            addRsyncRemote(pageStaticBuilder, rsyncRemote);
     }
 
     private void parseRsyncDir(PageStaticBuilder pageStaticBuilder, Configable config) {
@@ -78,7 +79,8 @@ public class PageStaticSpecParser {
         }
 
         String rsyncDir = config.getStr(key);
-        addRsyncDir(pageStaticBuilder, rsyncDir);
+        if (StringUtils.isNotEmpty(rsyncDir))
+            addRsyncDir(pageStaticBuilder, rsyncDir);
     }
 
     private void addRsyncRemote(PageStaticBuilder pageStaticBuilder, String rsyncRemote) {

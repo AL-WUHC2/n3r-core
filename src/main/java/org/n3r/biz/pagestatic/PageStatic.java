@@ -41,7 +41,7 @@ public class PageStatic implements PageService{
     }
 
     public void directContentUpload(String content, String localFileName) {
-        putQueue("direct://", pageHttpClient.getContent(), localFileName);
+        putQueue("direct://", content, localFileName);
     }
 
     public void urlStaticAndUpload(final String url, final String localFileName) {
