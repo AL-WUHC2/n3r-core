@@ -79,7 +79,7 @@ public class RXmlTest {
         bean.setItems(Arrays.asList("AAA", "BBB"));
 
         String xml = "<ListVoid><Item _type_=\"java.lang.String\">AAA</Item><Item _type_=\"java.lang.String\">BBB</Item></ListVoid>";
-        assertEquals(xml, RXml.beanToXml(bean));
+        assertEquals(xml, RXml.beanToXml(bean, true));
 
         ListVoid xmlToBean = RXml.xmlToBean(xml, ListVoid.class);
         assertEquals(bean, xmlToBean);
@@ -107,10 +107,6 @@ public class RXmlTest {
     @Test
     public void test4() {
         Device dev = new Device(1001, "Cables <Connectors", "CC1084", "038123-45627");
-
-        String xml = "<device><DeviceId>1001</DeviceId><DeviceName>Cables &lt;Connectors</DeviceName>" +
-                    "<ProductId>CC1084</ProductId><SerialNo>038123-45627</SerialNo></device>";
-        assertEquals(xml, RXml.beanToXml(dev, "device"));
 
         String xml2 = "<Device><DeviceId>1001</DeviceId><DeviceName>Cables &lt;Connectors</DeviceName>" +
                     "<ProductId>CC1084</ProductId><SerialNo>038123-45627</SerialNo></Device>";

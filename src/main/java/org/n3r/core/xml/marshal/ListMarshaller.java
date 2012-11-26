@@ -14,7 +14,7 @@ public class ListMarshaller extends BaseMarshaller {
         if (object == null) return parent;
 
         for (Object item : (List<?>) object) {
-            new RMarshaller().addFeatures(features).marshal(tagName, item, parent);
+            new RMarshaller().setEnableFeature(enableFeature).addFeatures(features).marshal(tagName, item, parent);
         }
         return parent;
     }

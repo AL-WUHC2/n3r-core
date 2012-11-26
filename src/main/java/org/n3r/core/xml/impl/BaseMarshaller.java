@@ -13,18 +13,25 @@ import static org.n3r.core.xmltool.XMLDoc.*;
 public abstract class BaseMarshaller extends FieldsTraverser implements XMarshalAware {
 
     protected List<RXFeature> features = new ArrayList<RXFeature>();
+    protected boolean enableFeature;
 
     public BaseMarshaller addFeatures(List<RXFeature> features) {
         this.features.addAll(features);
         return this;
     }
 
+    public BaseMarshaller setEnableFeature(boolean enableFeature) {
+        this.enableFeature = enableFeature;
+        return this;
+    }
+
     protected XMLTag buildCurrentTag(String tagName, XMLTag parent) {
-        return parent == null ? newDocument(false).addRoot(tagName) : tagName == null ? parent : parent.addTag(tagName);
+        return parent == null ? newDocument(true).addRoot(tagName) : tagName == null ? parent : parent.addTag(tagName);
     }
 
     protected void writeObjectClass(Class<?> clazz, XMLTag tag) {
-        if (features.contains(RXFeature.WrithObjectClass)) tag.addAttribute("_type_", clazz.getCanonicalName());
+        if (enableFeature && features.contains(RXFeature.WrithObjectClass)) tag.addAttribute("_type_", clazz
+                .getCanonicalName());
     }
 
 }

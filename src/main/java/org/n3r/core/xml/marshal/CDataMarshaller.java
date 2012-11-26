@@ -11,7 +11,7 @@ public class CDataMarshaller extends BaseMarshaller {
         parent = buildCurrentTag(tagName, parent);
         writeObjectClass(object.getClass(), parent);
 
-        return parent.addCDATA(RXml.beanToXml(object));
+        return parent.addCDATA(RXml.beanToXml(object, enableFeature));
     }
 
 }

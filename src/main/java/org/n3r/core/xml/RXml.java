@@ -12,21 +12,29 @@ import static org.n3r.core.xmltool.XMLDoc.*;
 public class RXml {
 
     public static String beanToXml(Object obj) {
-        return beanToXml(obj, getRootName(obj));
+        return beanToXml(obj, false);
     }
 
-    public static String beanToXml(Object obj, String rootName) {
+    public static String beanToXml(Object obj, boolean enableFeature) {
+        return beanToXml(obj, getRootName(obj), enableFeature);
+    }
+
+    public static String beanToXml(Object obj, String rootName, boolean enableFeature) {
         XMLTag result = null;
-        return formatXml(new RMarshaller().marshal(rootName, obj, result));
+        return formatXml(new RMarshaller().setEnableFeature(enableFeature).marshal(rootName, obj, result));
     }
 
     public static String beanToXmlWithFormat(Object obj) {
-        return beanToXmlWithFormat(obj, getRootName(obj));
+        return beanToXmlWithFormat(obj, false);
     }
 
-    public static String beanToXmlWithFormat(Object obj, String rootName) {
+    public static String beanToXmlWithFormat(Object obj, boolean enableFeature) {
+        return beanToXmlWithFormat(obj, getRootName(obj), enableFeature);
+    }
+
+    public static String beanToXmlWithFormat(Object obj, String rootName, boolean enableFeature) {
         XMLTag result = null;
-        return toStr(new RMarshaller().marshal(rootName, obj, result));
+        return toStr(new RMarshaller().setEnableFeature(enableFeature).marshal(rootName, obj, result));
     }
 
     public static <T> T xmlToBean(String xml, Class<T> clazz) {

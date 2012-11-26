@@ -26,9 +26,6 @@ public class RMarshallerTest {
         String xml = RXml.beanToXml(person);
         assertEquals("<Person><Age>12</Age><Name>aaa</Name></Person>", xml);
 
-        xml = RXml.beanToXml(person, "People");
-        assertEquals("<People><Age>12</Age><Name>aaa</Name></People>", xml);
-
         String separtor = System.getProperty("line.separator");
         xml = RXml.beanToXmlWithFormat(person);
 
@@ -38,12 +35,6 @@ public class RMarshallerTest {
                 + "    <Name>aaa</Name>" + separtor
                 + "</Person>" + separtor, xml);
 
-        xml = RXml.beanToXmlWithFormat(person, "People");
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + separtor
-                + "<People>" + separtor
-                + "    <Age>12</Age>" + separtor
-                + "    <Name>aaa</Name>" + separtor
-                + "</People>" + separtor, xml);
     }
 
     @Test
@@ -132,7 +123,7 @@ public class RMarshallerTest {
                 + "<Normal2><Normal>normal8</Normal></Normal2>"
                 + "<SubField><Sub _type_=\"org.n3r.core.xml.bean.NormalSub\"><Normal>normal3</Normal></Sub></SubField>"
                 + "</GenericBean>";
-        String xml = RXml.beanToXml(gen);
+        String xml = RXml.beanToXml(gen, true);
         assertEquals(expectXml, xml);
     }
 
@@ -175,7 +166,7 @@ public class RMarshallerTest {
                 + "<Normal2><Normal>normal8</Normal></Normal2>"
                 + "<SubField><Sub _type_=\"java.lang.String\">normal3</Sub></SubField>"
                 + "</GenericBean>";
-        String xml = RXml.beanToXml(gen);
+        String xml = RXml.beanToXml(gen, true);
         assertEquals(expectXml, xml);
     }
 }

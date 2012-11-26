@@ -32,7 +32,8 @@ public class RMarshaller extends BaseMarshaller {
     public XMLTag marshal(String tagName, Object object, XMLTag parent) {
         Class<?> objClass = object.getClass();
         BaseMarshaller marshaller = getMarshaller(objClass);
-        if (marshaller != null) return marshaller.addFeatures(features).marshal(tagName, object, parent);
+        if (marshaller != null) return marshaller.setEnableFeature(enableFeature)
+                .addFeatures(features).marshal(tagName, object, parent);
 
         currObject = object;
         currTag = buildCurrentTag(tagName, parent);
@@ -79,7 +80,8 @@ public class RMarshaller extends BaseMarshaller {
 
         // CDATA字段
         if (field.isAnnotationPresent(RXCData.class)) {
-            new CDataMarshaller().addFeatures(fParams).marshal(elementName, fieldValue, currTag);
+            new CDataMarshaller().setEnableFeature(enableFeature)
+                    .addFeatures(fParams).marshal(elementName, fieldValue, currTag);
             return;
         }
 
@@ -87,6 +89,6 @@ public class RMarshaller extends BaseMarshaller {
         BaseMarshaller marshaller = getMarshaller(fieldValue == null ? field.getType() : fieldValue.getClass());
         if (marshaller == null) marshaller = new RMarshaller();
 
-        marshaller.addFeatures(fParams).marshal(elementName, fieldValue, currTag);
+        marshaller.setEnableFeature(enableFeature).addFeatures(fParams).marshal(elementName, fieldValue, currTag);
     }
 }
